@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:gravity="center">
+
+        <!-- Nombre, Apellidos y Foto de Perfil -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <!-- Entrada de Nombre -->
+                <EditText
+                    android:id="@+id/inputName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Tu Nombre"
+                    android:backgroundTint="#D3D3D3"
+                    android:textColor="#000000" />
+
+                <!-- Entrada de Apellidos -->
+                <EditText
+                    android:id="@+id/inputLastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Tus Apellidos"
+                    android:backgroundTint="#D3D3D3"
+                    android:textColor="#000000"
+                    android:layout_marginTop="10dp"/>
+            </LinearLayout>
+
+            <!-- Botón de Foto de Perfil -->
+            <Button
+                android:id="@+id/btnProfilePhoto"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="20dp"
+                android:text="Foto"
+                android:backgroundTint="#8cc4df"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+
+        <!-- Usuario -->
+        <EditText
+            android:id="@+id/inputUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Usuario"
+            android:backgroundTint="#cccccc"
+            android:textColor="#000000"
+            android:layout_marginTop="16dp" />
+
+        <!-- Teléfono -->
+        <EditText
+            android:id="@+id/inputPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Teléfono"
+            android:inputType="phone"
+            android:backgroundTint="#cccccc"
+            android:textColor="#000000"
+            android:layout_marginTop="8dp" />
+
+        <!-- Email -->
+        <EditText
+            android:id="@+id/inputEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:backgroundTint="#cccccc"
+            android:textColor="#000000"
+            android:layout_marginTop="8dp" />
+
+        <!-- Contraseña -->
+        <EditText
+            android:id="@+id/inputPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:backgroundTint="#cccccc"
+            android:textColor="#000000"
+            android:layout_marginTop="8dp" />
+
+        <!-- Selects de Cas preferida y Vehículo -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+
+            <Spinner
+                android:id="@+id/selectCasa"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#cccccc" />
+
+            <Spinner
+                android:id="@+id/selectVehiculo"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="#cccccc" />
+        </LinearLayout>
+
+        <!-- Selects de Hobbies y Domicilio -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <Spinner
+                android:id="@+id/selectHobbies"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#cccccc" />
+
+            <Spinner
+                android:id="@+id/selectDomicilio"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="#cccccc" />
+        </LinearLayout>
+
+        <!-- Date Picker -->
+        <DatePicker
+            android:id="@+id/datePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#8cc4df" />
+
+        <!-- Pregunta: ¿Qué quieres hacer? -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¿Qué quieres hacer?"
+            android:textColor="#8cc4df"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp" />
+
+        <!-- Checkboxes Propietario y Alquilar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/checkboxPropietario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Propietario"
+                android:textColor="#8cc4df" />
+
+            <CheckBox
+                android:id="@+id/checkboxAlquilar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Alquilar"
+                android:layout_marginStart="16dp"
+                android:textColor="#8cc4df" />
+        </LinearLayout>
+
+        <!-- Inputs dinámicos: Cuenta IBAN / Información de tarjeta -->
+        <LinearLayout
+            android:id="@+id/propietarioSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:id="@+id/inputIban"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Cuenta IBAN"
+                android:backgroundTint="#cccccc"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/alquilarSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:id="@+id/inputCardNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Número de tarjeta"
+                android:backgroundTint="#cccccc"
+                android:textColor="#000000" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <DatePicker
+                    android:id="@+id/expDatePicker"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/inputCVV"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:hint="CVV"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="#cccccc"
+                    android:textColor="#000000" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/inputCardHolder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Titular de la tarjeta"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="#cccccc"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <!-- Check Terms & Conditions -->
+        <CheckBox
+            android:id="@+id/checkboxTerms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I agree to the Terms of Services and Privacy Policy."
+            android:textColor="#8cc4df"
+            android:layout_marginTop="16dp" />
+
+        <!-- Botón Crear Cuenta -->
+        <Button
+            android:id="@+id/btnCreateAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Crear Cuenta"
+            android:textColor="#ffffff"
+            android:backgroundTint="#8cc4df"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
+</ScrollView>
