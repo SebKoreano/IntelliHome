@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputLayout;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         Button btnLogin = findViewById(R.id.btnLogin);
         TextView btnAlreadyHaveAccount = findViewById(R.id.btnAlreadyHaveAccount);
         TextView btnRecoverPassword = findViewById(R.id.btnRecoverPassword);
+        TextInputLayout Email = findViewById(R.id.email);
 
         // Lógica para los botones (si lo necesitas más adelante)
         btnLogin.setOnClickListener(v -> {

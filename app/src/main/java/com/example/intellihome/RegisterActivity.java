@@ -8,12 +8,16 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText inputFirstName, inputLastName, inputUsername, inputPhone, inputEmail, inputPassword;
+    private EditText inputFirstName, inputLastName, inputUsername, inputPhone, inputEmail, inputPassword, inputRepeatPassword;
     private Spinner selectCasa, selectVehiculo, selectHobbies, selectDomicilio;
     private DatePicker datePicker, expDatePicker;
     private CheckBox checkboxPropietario, checkboxAlquilar, checkboxTerms;
@@ -32,6 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
         inputPhone = findViewById(R.id.inputPhone);
         inputEmail = findViewById(R.id.inputEmail);
         inputPassword = findViewById(R.id.inputPassword);
+        inputRepeatPassword = findViewById(R.id.inputRepeatPassword);
         selectCasa = findViewById(R.id.selectCasa);
         selectVehiculo = findViewById(R.id.selectVehiculo);
         selectHobbies = findViewById(R.id.selectHobbies);
@@ -56,8 +61,6 @@ public class RegisterActivity extends AppCompatActivity {
         checkboxPropietario.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 propietarioSection.setVisibility(View.VISIBLE);
-                alquilarSection.setVisibility(View.GONE);
-                checkboxAlquilar.setChecked(false);
             } else {
                 propietarioSection.setVisibility(View.GONE);
             }
@@ -66,8 +69,6 @@ public class RegisterActivity extends AppCompatActivity {
         checkboxAlquilar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 alquilarSection.setVisibility(View.VISIBLE);
-                propietarioSection.setVisibility(View.GONE);
-                checkboxPropietario.setChecked(false);
             } else {
                 alquilarSection.setVisibility(View.GONE);
             }
@@ -77,11 +78,12 @@ public class RegisterActivity extends AppCompatActivity {
         Button btnCreateAccount = findViewById(R.id.btnCreateAccount);
         btnCreateAccount.setOnClickListener(view -> {
             if (checkboxTerms.isChecked()) {
-                // Aquí puedes añadir la lógica para crear la cuenta
-                // Por ejemplo, guardar los datos o validarlos
-                crearCuenta();
+                // Validar email, contraseña y coincidencia de contraseñas
+                if (validarEmail(inputEmail.getText().toString()) && validarPassword(inputPassword.getText().toString()) && validarContraseñasIguales()) {
+                    crearCuenta();
+                }
             } else {
-                // Mostrar mensaje de error o advertencia
+                Toast.makeText(this, "Debe aceptar los Términos y Condiciones", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -95,18 +97,57 @@ public class RegisterActivity extends AppCompatActivity {
         String email = inputEmail.getText().toString();
         String password = inputPassword.getText().toString();
 
-        // Dependiendo si es Propietario o Alquila, puedes hacer algo diferente
         if (checkboxPropietario.isChecked()) {
             String iban = inputIban.getText().toString();
             // Guardar el IBAN o hacer algo con él
-        } else if (checkboxAlquilar.isChecked()) {
+        }
+
+        if (checkboxAlquilar.isChecked()) {
             String cardNumber = inputCardNumber.getText().toString();
             String cvv = inputCVV.getText().toString();
             String cardHolder = inputCardHolder.getText().toString();
             // Guardar los datos de la tarjeta o hacer algo con ellos
         }
 
-        // Aquí puedes manejar los demás datos
+        Toast.makeText(this, "Cuenta creada con éxito", Toast.LENGTH_SHORT).show();
+    }
+
+    // Método para validar el email
+    private boolean validarEmail(String email) {
+        final String emailRegex = "([a-zA-Z0-9]+)([\\_\\.\\-{1}])*([a-zA-Z0-9]+)\\@([a-zA-Z0-9]+)([\\.])([a-zA-Z\\.]+)";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+
+        if (!matcher.matches()) {
+            Toast.makeText(this, "Email inválido", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    // Método para validar la contraseña
+    private boolean validarPassword(String password) {
+        final String passwordRegex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[\\W]).{8,}$";
+        Pattern pattern = Pattern.compile(passwordRegex);
+        Matcher matcher = pattern.matcher(password);
+
+        if (!matcher.matches()) {
+            Toast.makeText(this, "Contraseña inválida. ", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    // Método para validar que ambas contraseñas coinciden
+    private boolean validarContraseñasIguales() {
+        String password = inputPassword.getText().toString();
+        String repeatPassword = inputRepeatPassword.getText().toString();
+
+        if (!password.equals(repeatPassword)) {
+            Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 }
 
