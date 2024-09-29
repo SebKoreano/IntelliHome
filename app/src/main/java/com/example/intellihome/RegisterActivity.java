@@ -18,11 +18,14 @@ import java.util.regex.Pattern;
 import android.text.TextUtils;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.io.PrintWriter;
 import java.util.*;
 import android.widget.Toast;
 import java.time.LocalDate;
 import java.time.Period;
+import java.net.Socket;
 import java.util.Calendar;
+import android.util.Log;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -33,6 +36,9 @@ public class RegisterActivity extends AppCompatActivity {
     private CheckBox checkboxPropietario, checkboxAlquilar, checkboxTerms;
     private LinearLayout propietarioSection, alquilarSection;
     private EditText inputIban, inputCardNumber, inputCVV, inputCardHolder;
+    private Socket socket; // Socket para la conexión
+    private PrintWriter out; // PrintWriter para enviar datos
+    private Scanner in;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +69,9 @@ public class RegisterActivity extends AppCompatActivity {
         inputCardHolder = findViewById(R.id.inputCardHolder);
         expDatePicker = findViewById(R.id.expDatePicker);
 
+        // Conectar al servidor
+        connectToServer("192.168.18.206", 1717);
+
         // Ocultar inicialmente las secciones de Propietario y Alquilar
         propietarioSection.setVisibility(View.GONE);
         alquilarSection.setVisibility(View.GONE);
@@ -90,6 +99,7 @@ public class RegisterActivity extends AppCompatActivity {
             if (checkboxTerms.isChecked()) {
                 if (validarDatos() && validarEmail(inputEmail) && validarPassword(inputPassword) && validarContraseñasIguales() && verificarEdad()) {
                     obtenerDatos();
+                    sendMessage(concatenarDatos()); // Enviar mensaje al servidor
                     mostrarMensaje("Cuenta creada con éxito");
                     regresarLogIn();
                 }
@@ -97,6 +107,39 @@ public class RegisterActivity extends AppCompatActivity {
                 mostrarMensaje("Debe aceptar los Términos y Condiciones");
             }
         });
+    }
+
+    private void connectToServer(String ip, int port) {
+        new Thread(() -> {
+            try {
+                socket = new Socket(ip, port);
+                out = new PrintWriter(socket.getOutputStream(), true);
+                in = new Scanner(socket.getInputStream());
+
+                while (true) {
+                    if (in.hasNextLine()) {
+                        String message = in.nextLine();
+                        runOnUiThread(() -> {
+                            Log.d("RegisterActivity", "Mensaje recibido: " + message);
+                        });
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void sendMessage(String message) {
+        new Thread(() -> {
+            try {
+                if (out != null) {
+                    out.println(message);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     private void mostrarMensaje(String mensaje) {
@@ -128,6 +171,37 @@ public class RegisterActivity extends AppCompatActivity {
             String cvv = inputCVV.getText().toString();
             String cardHolder = inputCardHolder.getText().toString();
         }
+    }
+    private String concatenarDatos() {
+        String firstName = inputFirstName.getText().toString();
+        String lastName = inputLastName.getText().toString();
+        String username = inputUsername.getText().toString();
+        String phone = inputPhone.getText().toString();
+        String email = inputEmail.getText().toString();
+        String password = inputPassword.getText().toString();
+        String repeatPassword = inputRepeatPassword.getText().toString();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(firstName).append("_");
+        sb.append(lastName).append("_");
+        sb.append(username).append("_");
+        sb.append(phone).append("_");
+        sb.append(email).append("_");
+        sb.append(password).append("_");
+        sb.append(repeatPassword);
+
+        // Agregar información de las secciones de propietario y alquilar si están visibles
+        if (checkboxPropietario.isChecked()) {
+            String iban = inputIban.getText().toString();
+            sb.append("_").append(iban);
+        }
+
+        if (checkboxAlquilar.isChecked()) {
+            String cardNumber = inputCardNumber.getText().toString();
+            sb.append("_").append(cardNumber);
+        }
+
+        return sb.toString();
     }
 
     //Método para verificar que todos los datos esten completos
