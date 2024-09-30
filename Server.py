@@ -84,19 +84,19 @@ class ChatServer:
         self.chat_display.insert(tk.END, f"Cliente: {message}\n")
         self.chat_display.config(state='disabled')
 
-        for client in self.clients:
-            if client != sender_socket:  # No enviar al remitente
-                try:
-                    client.send(message.encode('utf-8'))
-                except:
-                    client.close()
-                    self.clients.remove(client)
+        try:
+            sender_socket.send(message.encode('utf-8'))
+        except:
+            sender_socket.close()
+            self.clients.remove(sender_socket)
 
-    def send_message_to_respond_request(self, client_socket, message, status_code):
+    def send_message_to_respond_request(self, client_socket, message):
         """Enviar una respuesta al cliente con el estado del inicio de sesión."""
-        response_message = f"{status_code}:{message}"
-        self.broadcast(response_message, client_socket)  # Enviar al cliente que hizo la solicitud
-        self.message_entry.delete(0, tk.END) 
+        threading.Thread(target=self.broadcast, args=(message +"\n", client_socket)).start()
+
+
+     # Enviar al cliente que hizo la solicitud
+
 
     def write_message_to_file(self, message):
         """Escribir un mensaje en el archivo usuarios.txt."""
@@ -130,8 +130,8 @@ class ChatServer:
         """Verifica si la contraseña proporcionada coincide con la almacenada."""
         mat = self.matriz_usuarios
         if mat[i][5] == contra:  # Verificar la contraseña
-            return self.send_message_to_respond_request(client_socket, "Se ingresó con éxito", 1)
-        return self.send_message_to_respond_request(client_socket, "Fallo en contraseña", 0)
+            return self.send_message_to_respond_request(client_socket, "Se ingresó con éxito")
+        return self.send_message_to_respond_request(client_socket, "Fallo en contraseña")
 
     def agregar_usuario_a_matriz(self):
         """Leer usuarios del archivo y agregarlos a la matriz."""
@@ -145,7 +145,6 @@ class ChatServer:
             print("El archivo usuarios.txt no se encontró.")
         except Exception as e:
             print(f"Ocurrió un error al leer el archivo: {e}")
-
 
     def buscar_login(self, mensaje, client_socket): 
         """Buscar el usuario en la matriz y verificar la contraseña."""
@@ -168,9 +167,8 @@ class ChatServer:
             if mat[i][4] == indicador:  # Verificar correo
                 return self.revisar_contraseña(i, contra, client_socket)  # Revisar contraseña
         
-        return self.send_message_to_respond_request(client_socket, "Fallo en usuario", 0)
-
-    
+        return self.send_message_to_respond_request(client_socket, "Fallo en usuario")
+   
     def close_server(self):
         for client in self.clients:
             client.close()
