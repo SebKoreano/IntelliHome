@@ -182,11 +182,12 @@ public class RegisterActivity extends AppCompatActivity {
         String repeatPassword = inputRepeatPassword.getText().toString();
 
         StringBuilder sb = new StringBuilder();
+        sb.append("CrearCuenta").append("_");
         sb.append(firstName).append("_");
         sb.append(lastName).append("_");
-        sb.append(username).append("_");
-        sb.append(phone).append("_");
-        sb.append(email).append("_");
+        sb.append("USER").append(username).append("_");
+        sb.append("TEL").append(phone).append("_");
+        sb.append("MAIL").append(email).append("_");
         sb.append(password).append("_");
         sb.append(repeatPassword);
 

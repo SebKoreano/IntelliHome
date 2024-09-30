@@ -10,19 +10,17 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import java.net.Socket;
 import java.io.PrintWriter;
+import androidx.appcompat.app.AlertDialog;
 import java.util.Scanner;
 
 import com.google.android.material.textfield.TextInputLayout;
-
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
 
     private Socket socket;
     private PrintWriter out;
     private Scanner in;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,10 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 while (true) {
                     if (in.hasNextLine()) {
                         String message = in.nextLine();
-                        runOnUiThread(() -> {
-                            // Registrar el mensaje recibido
-                            Log.d("MainActivity", "Mensaje recibido: " + message);
-                        });
+                        handleServerResponse(message); // Llama a handleServerResponse con el mensaje recibido
                     }
                 }
             } catch (Exception e) {
@@ -59,13 +54,27 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
 
-
-        // Lógica para los botones (si lo necesitas más adelante)
+        // Lógica para el botón de Login
         btnLogin.setOnClickListener(v -> {
             // Acciones para el botón de Login
             String email = inputEmail.getText().toString();
             String password = inputPassword.getText().toString();
-            // Validar y procesar el login
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("Login").append("_");
+            sb.append(email).append("_");
+            sb.append(password);
+            String message = sb.toString();
+
+            new Thread(() -> {
+                try {
+                    if (out != null) {
+                        out.println(message);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
         });
 
         btnAlreadyHaveAccount.setOnClickListener(v -> {
@@ -76,6 +85,21 @@ public class MainActivity extends AppCompatActivity {
         btnRecoverPassword.setOnClickListener(v -> {
             // Acción para "Recuperar contraseña"
             // Abrir actividad o enviar una solicitud de recuperación
+        });
+    }
+
+    // Método para manejar la respuesta del servidor
+    private void handleServerResponse(String response) {
+        // Registrar el mensaje recibido
+        Log.d("MainActivity", "Mensaje recibido: " + response);
+
+        // Mostrar la respuesta en un AlertDialog
+        runOnUiThread(() -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("Respuesta del Servidor");
+            builder.setMessage(response);
+            builder.setPositiveButton("OK", null);
+            builder.show();
         });
     }
 }
