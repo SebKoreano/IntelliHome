@@ -93,8 +93,6 @@ class ChatServer:
     def send_message_to_respond_request(self, client_socket, message):
         """Enviar una respuesta al cliente con el estado del inicio de sesión."""
         threading.Thread(target=self.broadcast, args=(message +"\n", client_socket)).start()
-
-
      # Enviar al cliente que hizo la solicitud
 
 
