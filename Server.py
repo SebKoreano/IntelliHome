@@ -95,12 +95,10 @@ class ChatServer:
         threading.Thread(target=self.broadcast, args=(message +"\n", client_socket)).start()
      # Enviar al cliente que hizo la solicitud
 
-
     def write_message_to_file(self, message):
         """Escribir un mensaje en el archivo usuarios.txt."""
         with open("usuarios.txt", "a") as file:  # Abrir en modo append
             file.write(message + "\n") 
-
 
     def procesar_usuario(self, mensaje):
         # Dividimos el mensaje en partes usando el delimitador '_'
@@ -109,10 +107,10 @@ class ChatServer:
         # Asignamos cada parte a una variable sin omitir letras
         nombre = datos_usuario[0]
         apellido = datos_usuario[1]
-        usuario = datos_usuario[2]  # No se omite el "USER"
-        telefono = datos_usuario[3]  # No se omite el "TEL"
-        email = datos_usuario[4]     # No se omite el "MAIL"
-        contrasena = datos_usuario[5]  # Contraseña
+        usuario = datos_usuario[2]  
+        telefono = datos_usuario[3] 
+        email = datos_usuario[4]    
+        contrasena = datos_usuario[5] 
         confirmar_contrasena = datos_usuario[6]  # Confirmación de contraseña
         codigo_recuperacion = datos_usuario[7] 
 
