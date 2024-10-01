@@ -214,7 +214,7 @@ class ChatServer:
         print("NO SE ENCONTRÓ CORREO")
         return self.send_message_to_respond_request(client_socket, "Error, no se encontró el correo")
 
-    def cambiar_Contraseña(self, correo, string):
+    def cambiar_Contraseña(self, correo, string): #Esto cambia matriz, falta volver a poner matriz en usuarios.txt
         self.agregar_usuario_a_matriz()
         mat = self.matriz_usuarios
         for i in range(len(mat)):
@@ -230,10 +230,9 @@ class ChatServer:
         # Crear una instancia de Usuario y probar el envío
         print("Enviado")
         usuario = Usuario()
-        new_pass = self.generar_nueva_contraseña()
+        new_pass = "A" #self.generar_nueva_contraseña()
         usuario.send_password_reset_email(correo, new_pass)
         self.cambiar_Contraseña(correo, new_pass)
-        self.send_message_to_respond_request(client_socket, "Se envio correo con nueva contraseña")
 
 
 if __name__ == "__main__":
