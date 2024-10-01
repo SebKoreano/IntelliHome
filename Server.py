@@ -225,7 +225,23 @@ class ChatServer:
                 break
         self.CambiosATxt()  # Guardar los cambios en el archivo
 
-    def generar_nueva_contraseña(A):
+    def CambiosATxt(self):
+        mat = self.matriz_usuarios
+        with open("usuarios.txt", "w") as file:  # Abrir en modo escritura para sobrescribir
+            for fila in mat:
+                message = "_".join(fila)  # Unir elementos de la fila con "_"
+                file.write(message + "\n")
+
+    def recuperar_contraseña(self, correo, client_socket):
+        # Crear una instancia de Usuario y probar el envío
+        usuario = Usuario()
+        new_pass = generar_nueva_contraseña()  # Asegúrate de que esta función esté definida correctamente
+        print(f"Nueva contraseña: {new_pass}")  # Imprimir la nueva contraseña
+        usuario.send_password_reset_email(correo, new_pass)  # Enviar el correo
+        self.cambiar_Contraseña(correo, new_pass)  # Cambiar la contraseña en la matriz
+
+def generar_nueva_contraseña():
+        print("entro")
         while True:
             # Asegurar que se incluye al menos un carácter de cada tipo
             print("entro")
@@ -253,23 +269,6 @@ class ChatServer:
                 any(char in digitos for char in contraseña) and
                 any(char in caracteresEspeciales for char in contraseña)):
                 return contraseña
-
-    def CambiosATxt(self):
-        mat = self.matriz_usuarios
-        with open("usuarios.txt", "w") as file:  # Abrir en modo escritura para sobrescribir
-            for fila in mat:
-                message = "_".join(fila)  # Unir elementos de la fila con "_"
-                file.write(message + "\n")
-
-    def recuperar_contraseña(self, correo, client_socket):
-        # Crear una instancia de Usuario y probar el envío
-        usuario = Usuario()
-        print("que pasa?")
-        new_pass = self.generar_nueva_contraseña("A")  # Asegúrate de que esta función esté definida correctamente
-        print(f"Nueva contraseña: {new_pass}")  # Imprimir la nueva contraseña
-        usuario.send_password_reset_email(correo, new_pass)  # Enviar el correo
-        self.cambiar_Contraseña(correo, new_pass)  # Cambiar la contraseña en la matriz
-
 
 # Definir parametros para la contraseña random
 letrasMayusculas = string.ascii_uppercase  
