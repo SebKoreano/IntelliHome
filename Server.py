@@ -2,6 +2,8 @@ import socket
 import threading
 import tkinter as tk
 from tkinter import scrolledtext
+import secrets
+import string
 
 #Para envio de email.
 import smtplib
@@ -223,7 +225,32 @@ class ChatServer:
         self.CambiosATxt()
 
     def generar_nueva_contraseña():
-        return "NuevaContrasena1234!"
+        
+        while True:
+            # Asegurar que se incluye al menos un carácter de cada tipo
+            password = [
+                secrets.choice(letrasMayusculas),
+                secrets.choice(letrasMinusculas),
+                secrets.choice(digitos),
+                secrets.choice(caracteresEspeciales)
+            ]
+
+            # Rellenar el resto de la contraseña con caracteres aleatorios del alfabeto completo
+            alfabeto = letrasMayusculas + letrasMinusculas + digitos + caracteresEspeciales
+            password += [secrets.choice(alfabeto) for _ in range(longitudContraseña - 4)]
+            
+            # Mezclar la contraseña para que no siempre aparezcan los caracteres especiales, números, etc. al principio
+            secrets.SystemRandom().shuffle(password)
+            
+            # Convertir la lista en una cadena
+            contraseña = ''.join(password)
+
+            # Verificar que la contraseña cumple con todos los requisitos
+            if (any(char in letrasMayusculas for char in contraseña) and
+                any(char in letrasMinusculas for char in contraseña) and
+                any(char in digitos for char in contraseña) and
+                any(char in caracteresEspeciales for char in contraseña)):
+                return contraseña
     
     def CambiosATxt(self):
         mat = self.matriz_usuarios
@@ -240,6 +267,12 @@ class ChatServer:
         usuario.send_password_reset_email(correo, new_pass)
         self.cambiar_Contraseña(correo, new_pass)
 
+# Definir parametros para la contraseña random
+letrasMayusculas = string.ascii_uppercase  
+letrasMinusculas = string.ascii_lowercase  
+digitos = string.digits  
+caracteresEspeciales = string.punctuation  
+longitudContraseña = 8
 
 if __name__ == "__main__":
     ChatServer()
