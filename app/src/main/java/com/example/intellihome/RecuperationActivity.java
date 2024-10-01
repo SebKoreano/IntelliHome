@@ -3,10 +3,9 @@ package com.example.intellihome;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.PrintWriter;
@@ -24,7 +23,7 @@ public class RecuperationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.recuperarcontra); // Asegúrate de que el nombre del layout sea correcto
+        setContentView(R.layout.activity_recoverpassword); // Asegúrate de que el nombre del layout sea correcto
 
         Correo = findViewById(R.id.correorecuper); // Cambia esto por el ID correcto de tu EditText
         confirmation_but = findViewById(R.id.button_recuerpa); // Cambia esto por el ID correcto de tu Button

@@ -15,11 +15,16 @@
     <!-- Input para email/usuario/telefono -->
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="122dp"
-        android:layout_height="113dp"
-        app:srcCompat="@drawable/ic_launcher_foreground"
-        tools:srcCompat="@mipmap/logo" />
+        android:id="@+id/imageView2"
+        android:layout_width="210dp"
+        android:layout_height="115dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.108"
+        app:srcCompat="@drawable/logo" />
 
     <EditText
         android:id="@+id/inputEmail"
