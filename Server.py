@@ -41,6 +41,7 @@ class ChatServer:
         self.server_socket.bind((host, port))
         self.server_socket.listen(5)
         self.clients = []
+        self.agregar_usuario_a_matriz()
 
         # Configuración de la interfaz gráfica
         self.root = tk.Tk()
@@ -177,7 +178,6 @@ class ChatServer:
 
     def buscar_login(self, mensaje, client_socket): 
         """Buscar el usuario en la matriz y verificar la contraseña."""
-        self.agregar_usuario_a_matriz()
         mat = self.matriz_usuarios
         datos_login = mensaje.split("_")
 
@@ -205,7 +205,6 @@ class ChatServer:
         self.root.destroy()
 
     def existe_correo(self, string, client_socket):
-        self.agregar_usuario_a_matriz()
         mat = self.matriz_usuarios
         for i in range(len(mat)):
             if mat[i][4] == string:  # Verificar correo
@@ -215,22 +214,29 @@ class ChatServer:
         return self.send_message_to_respond_request(client_socket, "Error, no se encontró el correo")
 
     def cambiar_Contraseña(self, correo, string): #Esto cambia matriz, falta volver a poner matriz en usuarios.txt
-        self.agregar_usuario_a_matriz()
         mat = self.matriz_usuarios
         for i in range(len(mat)):
             if mat[i][4] == correo:  # Verificar correo
                 mat[i][5] = string
                 mat[i][6] = string
                 break
+        self.CambiosATxt()
 
     def generar_nueva_contraseña():
         return "NuevaContrasena1234!"
     
+    def CambiosATxt(self):
+        mat = self.matriz_usuarios
+        with open("usuarios2.txt", "a") as file:  # Abrir en modo append
+            for fila in mat:
+                message = "_".join(fila)  # Unir elementos de la fila con "_"
+                file.write(message + "\n")
+
     def recuperar_contraseña(self, correo, client_socket):
         # Crear una instancia de Usuario y probar el envío
         print("Enviado")
         usuario = Usuario()
-        new_pass = "A" #self.generar_nueva_contraseña()
+        new_pass = "A"
         usuario.send_password_reset_email(correo, new_pass)
         self.cambiar_Contraseña(correo, new_pass)
 
