@@ -3,6 +3,36 @@ import threading
 import tkinter as tk
 from tkinter import scrolledtext
 
+#Para envio de email.
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+#Clase para manejo de usuario para recuperación de contraseña
+class Usuario:
+    def send_password_reset_email(self, recipient_email, new_password):
+        sender_email = 'intellihome.non.response@gmail.com'
+        sender_password = 'dqzm rmmn hyjp ilqj'
+
+        msg = MIMEMultipart()
+        msg['From'] = sender_email
+        msg['To'] = recipient_email
+        msg['Subject'] = 'Recuperación de contraseña'
+
+        message_body = f'Su nueva contraseña es: {new_password}'
+        msg.attach(MIMEText(message_body, 'plain'))
+
+        try:
+            server = smtplib.SMTP('smtp.gmail.com', 587)
+            server.starttls()
+            server.login(sender_email, sender_password)
+            server.sendmail(sender_email, recipient_email, msg.as_string())
+            print(f'Correo enviado con éxito a {recipient_email}')
+        except Exception as e:
+            print(f'Error al enviar el correo: {e}')  # Imprimir el error
+        finally:
+            server.quit()
+
 class ChatServer:
     def __init__(self, host='0.0.0.0', port=1717):
         
@@ -64,9 +94,10 @@ class ChatServer:
                         self.chat_display.insert(tk.END, "Procesando login...\n")
                         self.buscar_login(message[len("Login_"):], client_socket)
 
-                    elif message.startswith("Recuperación_"):
+                    elif message.startswith("Recuperacion_"):
                         self.chat_display.insert(tk.END, "Procesando recuperación...\n")
-                        self.handle_recuperacion(message[len("Recuperación_"):])
+                        print(message)
+                        self.existe_correo(message[len("Recuperacion_"):], client_socket)
 
                     else:
                         self.chat_display.insert(tk.END, "No sirvió, pero llegó\n")
@@ -90,11 +121,13 @@ class ChatServer:
             sender_socket.close()
             self.clients.remove(sender_socket)
 
+    #Envia mensaje a socket 
     def send_message_to_respond_request(self, client_socket, message):
         """Enviar una respuesta al cliente con el estado del inicio de sesión."""
         threading.Thread(target=self.broadcast, args=(message +"\n", client_socket)).start()
      # Enviar al cliente que hizo la solicitud
 
+    #Escriba cuenta creada en .txt
     def write_message_to_file(self, message):
         """Escribir un mensaje en el archivo usuarios.txt."""
         with open("usuarios.txt", "a") as file:  # Abrir en modo append
@@ -170,6 +203,38 @@ class ChatServer:
             client.close()
         self.server_socket.close()
         self.root.destroy()
+
+    def existe_correo(self, string, client_socket):
+        self.agregar_usuario_a_matriz()
+        mat = self.matriz_usuarios
+        for i in range(len(mat)):
+            if mat[i][4] == string:  # Verificar correo
+                print("CORREO EXISTE EN MATRIZ")
+                return self.recuperar_contraseña(string, client_socket)
+        print("NO SE ENCONTRÓ CORREO")
+        return self.send_message_to_respond_request(client_socket, "Error, no se encontró el correo")
+
+    def cambiar_Contraseña(self, correo, string):
+        self.agregar_usuario_a_matriz()
+        mat = self.matriz_usuarios
+        for i in range(len(mat)):
+            if mat[i][4] == correo:  # Verificar correo
+                mat[i][5] = string
+                mat[i][6] = string
+                break
+
+    def generar_nueva_contraseña():
+        return "NuevaContrasena1234!"
+    
+    def recuperar_contraseña(self, correo, client_socket):
+        # Crear una instancia de Usuario y probar el envío
+        print("Enviado")
+        usuario = Usuario()
+        new_pass = self.generar_nueva_contraseña()
+        usuario.send_password_reset_email(correo, new_pass)
+        self.cambiar_Contraseña(correo, new_pass)
+        self.send_message_to_respond_request(client_socket, "Se envio correo con nueva contraseña")
+
 
 if __name__ == "__main__":
     ChatServer()

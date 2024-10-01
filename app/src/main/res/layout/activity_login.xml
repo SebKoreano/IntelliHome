@@ -19,7 +19,7 @@
         android:layout_width="122dp"
         android:layout_height="113dp"
         app:srcCompat="@drawable/ic_launcher_foreground"
-        tools:srcCompat="@drawable/logo" />
+        tools:srcCompat="@mipmap/logo" />
 
     <EditText
         android:id="@+id/inputEmail"
@@ -66,6 +66,8 @@
         android:layout_marginTop="16dp" />
 
     <!-- Botón sin relieve: recuperar contraseña -->
+
+    <!-- Botón sin relieve: ya tienes una cuenta? -->
     <TextView
         android:id="@+id/btnRecoverPassword"
         android:layout_width="wrap_content"
@@ -75,7 +77,6 @@
         android:text="Recuperar contraseña"
         android:textColor="#ffffff" />
 
-    <!-- Botón sin relieve: ya tienes una cuenta? -->
     <TextView
         android:id="@+id/btnAlreadyHaveAccount"
         android:layout_width="wrap_content"

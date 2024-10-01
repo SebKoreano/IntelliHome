@@ -83,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnRecoverPassword.setOnClickListener(v -> {
-            // Acción para "Recuperar contraseña"
-            // Abrir actividad o enviar una solicitud de recuperación
+            Intent intent = new Intent(MainActivity.this, RecuperationActivity.class);
+            startActivity(intent);
         });
     }
 
