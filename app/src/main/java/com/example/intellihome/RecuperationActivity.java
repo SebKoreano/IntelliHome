@@ -9,7 +9,11 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Enumeration;
 import java.util.Scanner;
 
 public class RecuperationActivity extends AppCompatActivity {
@@ -28,8 +32,14 @@ public class RecuperationActivity extends AppCompatActivity {
         Correo = findViewById(R.id.correorecuper); // Cambia esto por el ID correcto de tu EditText
         confirmation_but = findViewById(R.id.button_recuerpa); // Cambia esto por el ID correcto de tu Button
 
-        // Conectar al servidor
-        connectToServer("172.18.193.124", 1717);
+        // Obtener la IP de forma asíncrona
+        new Thread(() -> {
+            String deviceIP = Utils.getIPAddress(true);
+            runOnUiThread(() -> {
+                // Una vez que se obtiene la IP, conectarse al servidor
+                connectToServer(deviceIP, 1717);
+            });
+        }).start();
 
         confirmation_but.setOnClickListener(view -> {
             StringBuilder sb = new StringBuilder();
