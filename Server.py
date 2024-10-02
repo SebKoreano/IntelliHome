@@ -34,7 +34,7 @@ class Usuario:
             server.quit()
 
 class ChatServer:
-    def __init__(self, host='0.0.0.0', port=1717):
+    def __init__(self, host='172.18.224.102', port=3535):
         
         self.matriz_usuarios = [] 
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -131,7 +131,7 @@ class ChatServer:
     #Escriba cuenta creada en .txt
     def write_message_to_file(self, message):
         """Escribir un mensaje en el archivo usuarios.txt."""
-        with open("server\usuarios.txt", "a") as file:  # Abrir en modo append
+        with open("usuarios.txt", "a") as file:  # Abrir en modo append
             file.write(message + "\n") 
 
     def procesar_usuario(self, mensaje):
@@ -166,7 +166,7 @@ class ChatServer:
     def agregar_usuario_a_matriz(self):
         """Leer usuarios del archivo y agregarlos a la matriz."""
         try:
-            with open("server\usuarios.txt", "r") as file:  # Abrir el archivo en modo lectura
+            with open("usuarios.txt", "r") as file:  # Abrir el archivo en modo lectura
                 for line in file:
                     mensaje = line.strip()  # Limpiar espacios en blanco
                     usuario_fila = self.procesar_usuario(mensaje)  # Procesar la línea
@@ -227,7 +227,7 @@ class ChatServer:
     
     def CambiosATxt(self):
         mat = self.matriz_usuarios
-        with open("server\usuarios2.txt", "a") as file:  # Abrir en modo append
+        with open("usuarios2.txt", "a") as file:  # Abrir en modo append
             for fila in mat:
                 message = "_".join(fila)  # Unir elementos de la fila con "_"
                 file.write(message + "\n")

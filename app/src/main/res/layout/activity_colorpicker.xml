@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".ColorWheel">
 
     <ImageView
@@ -12,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:paddingTop="45dp"
-        android:src="@drawable/colorwheel" />
+        android:src="@drawable/colorwheel"
+        android:contentDescription="Color Wheel Image" />
 
     <TextView
         android:id="@+id/displayValues"
@@ -21,13 +23,15 @@
         android:layout_gravity="center"
         android:paddingTop="20dp"
         android:paddingBottom="30dp"
-        android:text="HEX: \nRBG:"
-        android:textSize="24sp" />
+        android:text="HEX: \nRGB:"
+        android:textSize="24sp"
+        android:textAlignment="center" />
 
     <View
         android:id="@+id/displayColor"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:background="@android:color/darker_gray" />
 
 </LinearLayout>

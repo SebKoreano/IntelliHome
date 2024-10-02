@@ -85,7 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
         expDatePicker = findViewById(R.id.expDatePicker);
         profileImage = findViewById(R.id.profileImageView);
         // Conectar al servidor
-        connectToServer("172.18.193.124", 1717);
+        connectToServer("172.18.224.102", 3535);
 
         // Ocultar inicialmente las secciones de Propietario y Alquilar
         propietarioSection.setVisibility(View.GONE);
