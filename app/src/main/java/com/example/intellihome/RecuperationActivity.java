@@ -34,10 +34,9 @@ public class RecuperationActivity extends AppCompatActivity {
 
         // Obtener la IP de forma asíncrona
         new Thread(() -> {
-            String deviceIP = Utils.getIPAddress(true);
             runOnUiThread(() -> {
                 // Una vez que se obtiene la IP, conectarse al servidor
-                connectToServer(deviceIP, 3535);
+                connectToServer("192.168.18.206", 3535);
             });
         }).start();
 

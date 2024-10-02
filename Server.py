@@ -2,6 +2,8 @@ import socket
 import threading
 import tkinter as tk
 from tkinter import scrolledtext
+import secrets
+import string
 
 #Para envio de email.
 import smtplib
@@ -34,7 +36,7 @@ class Usuario:
             server.quit()
 
 class ChatServer:
-    def __init__(self, host='172.18.224.102', port=3535):
+    def __init__(self, host="192.168.18.206", port=3535):
         
         self.matriz_usuarios = [] 
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -221,25 +223,58 @@ class ChatServer:
                 mat[i][6] = string
                 break
         self.CambiosATxt()
-
-    def generar_nueva_contraseña():
-        return "NuevaContrasena1234!"
     
     def CambiosATxt(self):
         mat = self.matriz_usuarios
-        with open("usuarios2.txt", "a") as file:  # Abrir en modo append
+        with open("usuarios2.txt", "w") as file:  # Abrir en modo append
             for fila in mat:
                 message = "_".join(fila)  # Unir elementos de la fila con "_"
                 file.write(message + "\n")
 
     def recuperar_contraseña(self, correo, client_socket):
         # Crear una instancia de Usuario y probar el envío
-        print("Enviado")
         usuario = Usuario()
-        new_pass = "A"
-        usuario.send_password_reset_email(correo, new_pass)
-        self.cambiar_Contraseña(correo, new_pass)
+        new_pass = generar_nueva_contraseña()  # Asegúrate de que esta función esté definida correctamente
+        print(f"Nueva contraseña: {new_pass}")  # Imprimir la nueva contraseña
+        usuario.send_password_reset_email(correo, new_pass)  # Enviar el correo
+        self.cambiar_Contraseña(correo, new_pass)  # Cambiar la contraseña en la matriz
 
+def generar_nueva_contraseña():
+    print("entro")
+    while True:
+        # Asegurar que se incluye al menos un carácter de cada tipo
+        print("entro")
+        password = [
+            secrets.choice(letrasMayusculas),
+            secrets.choice(letrasMinusculas),
+            secrets.choice(digitos),
+            secrets.choice(caracteresEspeciales)
+        ]
+
+        # Rellenar el resto de la contraseña con caracteres aleatorios del alfabeto completo
+        alfabeto = letrasMayusculas + letrasMinusculas + digitos + caracteresEspeciales
+        password += [secrets.choice(alfabeto) for _ in range(longitudContraseña - 4)]
+        
+        # Mezclar la contraseña para que no siempre aparezcan los caracteres especiales, números, etc. al principio
+        secrets.SystemRandom().shuffle(password)
+        
+        # Convertir la lista en una cadena
+        contraseña = ''.join(password)
+        print(f"Contraseña generada: {contraseña}")  # Imprimir la contraseña generada
+
+        # Verificar que la contraseña cumple con todos los requisitos
+        if (any(char in letrasMayusculas for char in contraseña) and
+            any(char in letrasMinusculas for char in contraseña) and
+            any(char in digitos for char in contraseña) and
+            any(char in caracteresEspeciales for char in contraseña)):
+            return contraseña
+
+# Definir parametros para la contraseña random
+letrasMayusculas = string.ascii_uppercase  
+letrasMinusculas = string.ascii_lowercase  
+digitos = string.digits  
+caracteresEspeciales = string.punctuation  
+longitudContraseña = 8
 
 if __name__ == "__main__":
     ChatServer()
