@@ -192,55 +192,55 @@ public class RegisterActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                // Aquí puedes manejar la imagen capturada
-                Bundle extras = data.getExtras();
-                if (extras != null) {
-                    Bitmap imageBitmap = (Bitmap) extras.get("data");
-                    profileImage.setImageBitmap(imageBitmap); // Mostrar la imagen en el ImageView
-
-                    // Convertir la imagen a bytes
-                    imageBytes = convertBitmapToBytes(imageBitmap);
-
-                    // Aquí estoy enviando la imagen al server para verificar que se esta creando
-                    //sendMessage("Imagen capturada: " + Arrays.toString(imageBytes));
-                }
+                handleCapturedImage(data);
             } else if (requestCode == PICK_IMAGE) {
-                // Aquí puedes manejar la imagen seleccionada de la galería
-                Uri selectedImage = data.getData();
-                profileImage.setImageURI(selectedImage); // Mostrar la imagen en el ImageView
-
-                try {
-                    // Obtener el bitmap de la imagen seleccionada
-                    Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-
-                    // Convertir la imagen a bytes
-                    imageBytes = convertBitmapToBytes(imageBitmap);
-
-                    // Aquí estoy enviando la imagen al server para verificar que se esta creando
-                    //sendMessage("Imagen seleccionada: " + Arrays.toString(imageBytes));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                handleSelectedImage(data);
             }
         }
     }
 
-    
-
-    //Metodo para transforma una imagen a bytes
-    // La entrada es una imagen en bitmap y la salida es una imagen en bytes
-    private byte[] convertBitmapToBytes(Bitmap bitmap) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        return stream.toByteArray();
+    // Manejar la imagen capturada desde la cámara
+    private void handleCapturedImage(Intent data) {
+        Bundle extras = data.getExtras();
+        if (extras != null) {
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            displayImage(imageBitmap);  // Mostrar la imagen en el ImageView
+            imageBytes = convertBitmapToBytes(imageBitmap);  // Convertir la imagen a bytes
+            // sendMessage("Imagen capturada: " + Arrays.toString(imageBytes));
+        }
     }
 
+    // Manejar la imagen seleccionada desde la galería
+    private void handleSelectedImage(Intent data) {
+        Uri selectedImage = data.getData();
+        if (selectedImage != null) {
+            try {
+                Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                displayImage(imageBitmap);  // Mostrar la imagen en el ImageView
+                imageBytes = convertBitmapToBytes(imageBitmap);  // Convertir la imagen a bytes
+                // sendMessage("Imagen seleccionada: " + Arrays.toString(imageBytes));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Mostrar la imagen en el ImageView
+    private void displayImage(Bitmap imageBitmap) {
+        profileImage.setImageBitmap(imageBitmap);
+    }
+
+    // Convertir un Bitmap a un array de bytes
+    private byte[] convertBitmapToBytes(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);  // Puedes ajustar el formato y la calidad
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    // Convertir bytes a Bitmap para mostrar la imagen nuevamente
     private Bitmap convertBytesToBitmap(byte[] imageBytes) {
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
     }
-
-
-
 
     // Manejar la solicitud de permisos
     @Override
