@@ -12,6 +12,10 @@ import java.net.Socket;
 import java.io.PrintWriter;
 import androidx.appcompat.app.AlertDialog;
 import java.util.Scanner;
+import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.text.format.Formatter;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -39,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         // Iniciar el hilo para conectarse al servidor y recibir mensajes
         new Thread(() -> {
             try {
-                socket = new Socket("172.18.193.124", 1717);
+                socket = new Socket("192.168.18.206", 1717); //192.168.18.206
                 out = new PrintWriter(socket.getOutputStream(), true);
                 in = new Scanner(socket.getInputStream());
 
@@ -87,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
-
     // Método para manejar la respuesta del servidor
     private void handleServerResponse(String response) {
         // Registrar el mensaje recibido

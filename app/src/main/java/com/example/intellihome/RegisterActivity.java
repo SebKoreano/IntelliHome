@@ -2,6 +2,7 @@ package com.example.intellihome;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -24,8 +25,18 @@ import android.widget.Toast;
 import java.time.LocalDate;
 import java.time.Period;
 import java.net.Socket;
-import java.util.Calendar;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
+import androidx.appcompat.app.AlertDialog;
+import android.content.pm.PackageManager;
+import android.widget.ImageView;
+import android.os.Build;
+import androidx.core.app.ActivityCompat; // Para manejar permisos
+import androidx.core.content.ContextCompat; // Para verificar permisos
+import android.Manifest; // Para usar los permisos de Android, incluyendo READ_MEDIA_IMAGES
+import androidx.annotation.Nullable; // Para la anotación Nullable
+
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -39,6 +50,10 @@ public class RegisterActivity extends AppCompatActivity {
     private Socket socket; // Socket para la conexión
     private PrintWriter out; // PrintWriter para enviar datos
     private Scanner in;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int PICK_IMAGE = 2;
+    private static final int REQUEST_CAMERA_PERMISSION = 3;
+    private ImageView profileImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +83,8 @@ public class RegisterActivity extends AppCompatActivity {
         inputCVV = findViewById(R.id.inputCVV);
         inputCardHolder = findViewById(R.id.inputCardHolder);
         expDatePicker = findViewById(R.id.expDatePicker);
-
+        profileImage = findViewById(R.id.profileImageView);
+        
         // Conectar al servidor
         connectToServer("172.18.193.124", 1717);
 
@@ -93,6 +109,11 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        //Boton para tomar foto
+        Button btnProfilePhoto = findViewById(R.id.btnProfilePhoto);
+        btnProfilePhoto.setOnClickListener(view -> showPhotoSelectionDialog());
+
+
         // Manejar el botón de crear cuenta
         Button btnCreateAccount = findViewById(R.id.btnCreateAccount);
         btnCreateAccount.setOnClickListener(view -> {
@@ -109,6 +130,90 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+
+    // Mostrar un diálogo para elegir entre tomar una foto o seleccionar de la galería
+    private void showPhotoSelectionDialog() {
+        String[] options = {"Tomar foto", "Seleccionar de la galería"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Seleccionar imagen")
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) {
+                        dispatchTakePictureIntent();
+                    } else {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
+                                    != PackageManager.PERMISSION_GRANTED) {
+                                ActivityCompat.requestPermissions(this,
+                                        new String[]{Manifest.permission.READ_MEDIA_IMAGES},
+                                        PICK_IMAGE);
+                            } else {
+                                openGallery();
+                            }
+                        } else {
+                            openGallery();
+                        }
+                    }
+                });
+        builder.show();
+    }
+
+    // Método para abrir la cámara
+    private void dispatchTakePictureIntent() {
+        // Verifica si se necesita permiso para la cámara
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Solicita el permiso si no está concedido
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+        } else {
+            // Permiso ya concedido, abre la cámara
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+
+    // Método para seleccionar imagen de la galería
+    private void openGallery() {
+        Intent pickPhotoIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhotoIntent, PICK_IMAGE);
+    }
+
+    // Manejar el resultado de la toma de foto o selección de imagen
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                // Aquí puedes manejar la imagen capturada
+                Bundle extras = data.getExtras();
+                if (extras != null) {
+                    Bitmap imageBitmap = (Bitmap) extras.get("data");
+                    profileImage.setImageBitmap(imageBitmap); // Mostrar la imagen en el ImageView
+                }
+            } else if (requestCode == PICK_IMAGE) {
+                // Aquí puedes manejar la imagen seleccionada de la galería
+                Uri selectedImage = data.getData();
+                profileImage.setImageURI(selectedImage); // Mostrar la imagen en el ImageView
+            }
+        }
+    }
+
+    // Manejar la solicitud de permisos
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PICK_IMAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openGallery();
+            } else {
+                Toast.makeText(this, "Permiso de acceso a imágenes denegado", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
     private void connectToServer(String ip, int port) {
         new Thread(() -> {
             try {
