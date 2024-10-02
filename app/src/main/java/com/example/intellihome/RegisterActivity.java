@@ -84,6 +84,7 @@ public class RegisterActivity extends AppCompatActivity {
         inputCardHolder = findViewById(R.id.inputCardHolder);
         expDatePicker = findViewById(R.id.expDatePicker);
         profileImage = findViewById(R.id.profileImageView);
+        
         // Conectar al servidor
         connectToServer("172.18.193.124", 1717);
 
