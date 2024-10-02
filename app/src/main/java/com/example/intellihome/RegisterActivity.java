@@ -1,6 +1,7 @@
 package com.example.intellihome;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -54,6 +57,7 @@ public class RegisterActivity extends AppCompatActivity {
     private static final int PICK_IMAGE = 2;
     private static final int REQUEST_CAMERA_PERMISSION = 3;
     private ImageView profileImage;
+    private byte[] imageBytes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
         profileImage = findViewById(R.id.profileImageView);
         
         // Conectar al servidor
-        connectToServer("172.18.193.124", 1717);
+        connectToServer("192.168.0.114", 1717);
 
         // Ocultar inicialmente las secciones de Propietario y Alquilar
         propietarioSection.setVisibility(View.GONE);
@@ -193,14 +197,50 @@ public class RegisterActivity extends AppCompatActivity {
                 if (extras != null) {
                     Bitmap imageBitmap = (Bitmap) extras.get("data");
                     profileImage.setImageBitmap(imageBitmap); // Mostrar la imagen en el ImageView
+
+                    // Convertir la imagen a bytes
+                    imageBytes = convertBitmapToBytes(imageBitmap);
+
+                    // Aquí estoy enviando la imagen al server para verificar que se esta creando
+                    //sendMessage("Imagen capturada: " + Arrays.toString(imageBytes));
                 }
             } else if (requestCode == PICK_IMAGE) {
                 // Aquí puedes manejar la imagen seleccionada de la galería
                 Uri selectedImage = data.getData();
                 profileImage.setImageURI(selectedImage); // Mostrar la imagen en el ImageView
+
+                try {
+                    // Obtener el bitmap de la imagen seleccionada
+                    Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+
+                    // Convertir la imagen a bytes
+                    imageBytes = convertBitmapToBytes(imageBitmap);
+
+                    // Aquí estoy enviando la imagen al server para verificar que se esta creando
+                    //sendMessage("Imagen seleccionada: " + Arrays.toString(imageBytes));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
+
+    
+
+    //Metodo para transforma una imagen a bytes
+    // La entrada es una imagen en bitmap y la salida es una imagen en bytes
+    private byte[] convertBitmapToBytes(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
+    }
+
+    private Bitmap convertBytesToBitmap(byte[] imageBytes) {
+        return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+    }
+
+
+
 
     // Manejar la solicitud de permisos
     @Override
