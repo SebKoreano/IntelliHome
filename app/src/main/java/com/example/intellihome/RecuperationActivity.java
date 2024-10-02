@@ -8,7 +8,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Enumeration;
 import java.util.Scanner;
 
 public class RecuperationActivity extends AppCompatActivity {
