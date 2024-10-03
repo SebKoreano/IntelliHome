@@ -36,7 +36,7 @@ public class ConfigActivity extends AppCompatActivity {
 
         // Configura los botones
         btnHelp.setOnClickListener(view -> showHelp());
-        btnTheme.setOnClickListener(view -> changeTheme());
+        btnTheme.setOnClickListener(view -> CambiarTema());
     }
 
     private void connectToServer(String ip, int port) {
@@ -63,9 +63,9 @@ public class ConfigActivity extends AppCompatActivity {
         Toast.makeText(this, "Ayuda solicitada", Toast.LENGTH_SHORT).show();
     }
 
-    private void changeTheme() {
-        // Lógica para cambiar tema
-        Toast.makeText(this, "Tema cambiado", Toast.LENGTH_SHORT).show();
+    private void CambiarTema() {
+        Intent intent = new Intent(ConfigActivity.this, ColorWheel.class);
+        startActivity(intent);
     }
 
     @Override

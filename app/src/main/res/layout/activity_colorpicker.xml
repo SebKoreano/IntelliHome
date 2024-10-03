@@ -34,4 +34,11 @@
         android:layout_gravity="center"
         android:background="@android:color/darker_gray" />
 
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Guardar Color"
+        android:layout_gravity="center" />
+
 </LinearLayout>

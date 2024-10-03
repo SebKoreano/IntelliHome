@@ -1,5 +1,6 @@
 package com.example.intellihome;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,12 +9,14 @@ import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Bitmap;
+import android.widget.Button;
 import android.widget.ImageView;
 
 public class ColorWheel extends AppCompatActivity {
     ImageView imgView;
     TextView mColorValues;
     View mColorViews;
+    private Button btnSave;
 
     Bitmap bitmap;
 
@@ -24,6 +27,7 @@ public class ColorWheel extends AppCompatActivity {
         imgView = findViewById(R.id.colorwheel);
         mColorValues = findViewById(R.id.displayValues);
         mColorViews = findViewById(R.id.displayColor);
+        btnSave = findViewById(R.id.btnSave);
 
         imgView.setDrawingCacheEnabled(true);
         imgView.buildDrawingCache(true);
@@ -49,6 +53,12 @@ public class ColorWheel extends AppCompatActivity {
                 }
                 return true;
             }
+        });
+
+        btnSave.setOnClickListener(v -> {
+            Intent intent = new Intent(ColorWheel.this, MainActivity.class);
+            startActivity(intent);
+            finish(); // Regresar a la actividad anterior.
         });
     }
 }

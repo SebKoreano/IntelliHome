@@ -40,7 +40,7 @@
     <View
         android:layout_width="350dp"
         android:layout_height="1.5dp"
-        android:background="#666666" />
+        android:background="?attr/android:textColor" />
 
     <EditText
         android:id="@+id/inputPassword"
@@ -53,7 +53,7 @@
     <View
         android:layout_width="350dp"
         android:layout_height="1.5dp"
-        android:background="#666666" />
+        android:background="?attr/android:textColor" />
 
     <CheckBox
         android:id="@+id/rememberMeCheckbox"

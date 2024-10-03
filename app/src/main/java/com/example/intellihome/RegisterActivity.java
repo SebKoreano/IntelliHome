@@ -37,8 +37,6 @@ import androidx.core.content.ContextCompat; // Para verificar permisos
 import android.Manifest; // Para usar los permisos de Android, incluyendo READ_MEDIA_IMAGES
 import androidx.annotation.Nullable; // Para la anotación Nullable
 
-
-
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText inputFirstName, inputLastName, inputUsername, inputPhone, inputEmail, inputPassword, inputRepeatPassword;
@@ -121,11 +119,12 @@ public class RegisterActivity extends AppCompatActivity {
                     obtenerDatos();
                     sendMessage(concatenarDatos()); // Enviar mensaje al servidor
                     mostrarMensaje("Cuenta creada con éxito");
-                    regresarAConfig();
                 }
             } else {
                 mostrarMensaje("Debe aceptar los Términos y Condiciones");
             }
+
+            regresarAConfig();
         });
     }
 
