@@ -15,6 +15,6 @@
     <string name="numtarjetaRegister">Número de tarjeta</string>
     <string name="cvvRegister">CVV</string>
     <string name="titulartarjetaRegister">Titular de la tarjeta</string>
-    <string name="termsycondRegister">Estoy de acuerdo con los términos de condiciones y políticas de privacidad</string>
+    <string name="termsycondRegister">Estoy de acuerdo con los términos de condiciones y políticas de privacidad.</string>
     <string name="crearcuentaRegister">Crear cuenta</string>
 </resources>
