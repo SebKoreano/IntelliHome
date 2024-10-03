@@ -17,4 +17,7 @@
     <string name="titulartarjetaRegister">Titular de la tarjeta</string>
     <string name="termsycondRegister">Estoy de acuerdo con los términos de condiciones y políticas de privacidad.</string>
     <string name="crearcuentaRegister">Crear cuenta</string>
+    <string name="prompt_casa_preferida">Casa preferida</string>
+    <string name="prompt_vehiculo">Vehículo</string>
+    <string name="prompt_domicilio">Domicilio</string>
 </resources>

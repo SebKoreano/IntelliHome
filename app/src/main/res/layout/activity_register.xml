@@ -91,13 +91,34 @@
             android:inputType="textEmailAddress"
             android:layout_marginTop="8dp" />
 
-        <EditText
-            android:id="@+id/inputPassword"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/contrasenaRegister"
-            android:inputType="textPassword"
-            android:layout_marginTop="8dp" />
+
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <!-- Campo de texto para la contraseña -->
+            <EditText
+                android:id="@+id/inputPassword"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:hint="@string/contrasenaRegister"
+                android:inputType="textPassword"
+                android:layout_marginEnd="8dp" />
+
+            <!-- Ícono de ayuda -->
+            <ImageView
+                android:id="@+id/iconHelpPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_help_circle"
+                android:contentDescription="Ayuda para contraseña"
+                android:layout_gravity="center_vertical"
+                android:padding="8dp" />
+        </LinearLayout>
+
 
         <EditText
             android:id="@+id/inputRepeatPassword"
@@ -115,23 +136,28 @@
             android:layout_marginTop="16dp"
             android:gravity="center"> <!-- Centrar contenido -->
 
-            <Spinner
-                android:id="@+id/selectCasa"
+            <!-- Spinner de Casa preferida -->
+            <EditText
+                android:id="@+id/inputHobbies"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/mainColor" />
+                android:layout_weight="1"
+                android:hint="Hobbies"
+                android:inputType="text" />
 
+            <!-- Spinner de Vehículo -->
             <Spinner
                 android:id="@+id/selectVehiculo"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:prompt="@string/prompt_vehiculo"
                 android:backgroundTint="@color/mainColor" />
+
         </LinearLayout>
 
-        <!-- Selects de Hobbies y Domicilio -->
+        <!-- Select de Domicilio y campo de texto para Hobbies -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -139,11 +165,16 @@
             android:layout_marginTop="8dp"
             android:gravity="center"> <!-- Centrar contenido -->
 
+            <!-- Campo de texto para Hobbies -->
+
+            <!-- Spinner de Domicilio -->
             <Spinner
-                android:id="@+id/selectHobbies"
+                android:id="@+id/selectCasa"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_height="wrap_content" />
+                android:backgroundTint="@color/mainColor"
+                android:prompt="@string/prompt_casa_preferida" />
 
             <Spinner
                 android:id="@+id/selectDomicilio"
@@ -151,8 +182,11 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:prompt="@string/prompt_domicilio"
                 android:backgroundTint="@color/mainColor" />
         </LinearLayout>
+
+
 
         <!-- Date Picker -->
         <DatePicker

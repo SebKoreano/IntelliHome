@@ -17,11 +17,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import android.text.TextUtils;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.io.PrintWriter;
 import java.util.*;
-import android.widget.Toast;
 import java.time.LocalDate;
 import java.time.Period;
 import java.net.Socket;
@@ -36,13 +34,14 @@ import androidx.core.app.ActivityCompat; // Para manejar permisos
 import androidx.core.content.ContextCompat; // Para verificar permisos
 import android.Manifest; // Para usar los permisos de Android, incluyendo READ_MEDIA_IMAGES
 import androidx.annotation.Nullable; // Para la anotación Nullable
+import android.widget.ArrayAdapter;
 
 
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText inputFirstName, inputLastName, inputUsername, inputPhone, inputEmail, inputPassword, inputRepeatPassword;
-    private Spinner selectCasa, selectVehiculo, selectHobbies, selectDomicilio;
+    private EditText inputFirstName, inputLastName, inputUsername, inputPhone, inputEmail, inputPassword, inputRepeatPassword, inputHobbies;
+    private Spinner selectCasa, selectVehiculo, selectDomicilio;
     private DatePicker datePicker, expDatePicker;
     private CheckBox checkboxPropietario, checkboxAlquilar, checkboxTerms;
     private LinearLayout propietarioSection, alquilarSection;
@@ -53,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int PICK_IMAGE = 2;
     private static final int REQUEST_CAMERA_PERMISSION = 3;
-    private ImageView profileImage;
+    private ImageView profileImage, iconHelpPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
         inputRepeatPassword = findViewById(R.id.inputRepeatPassword);
         selectCasa = findViewById(R.id.selectCasa);
         selectVehiculo = findViewById(R.id.selectVehiculo);
-        selectHobbies = findViewById(R.id.selectHobbies);
+        inputHobbies = findViewById(R.id.inputHobbies);
         selectDomicilio = findViewById(R.id.selectDomicilio);
         datePicker = findViewById(R.id.datePicker);
         checkboxPropietario = findViewById(R.id.checkboxPropietario);
@@ -84,6 +83,8 @@ public class RegisterActivity extends AppCompatActivity {
         inputCardHolder = findViewById(R.id.inputCardHolder);
         expDatePicker = findViewById(R.id.expDatePicker);
         profileImage = findViewById(R.id.profileImageView);
+        iconHelpPassword = findViewById(R.id.iconHelpPassword);
+
         // Conectar al servidor
         connectToServer("192.168.18.5", 3535);
 
@@ -108,6 +109,31 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        // Configurar el evento onClick para mostrar el cuadro de diálogo
+        iconHelpPassword.setOnClickListener(v -> {
+            // Mostrar el cuadro de diálogo con los requerimientos de la contraseña
+            showPasswordRequirementsDialog();
+        });
+
+        // Spinner de Casa
+        String[] casas = {"Apartamento", "Casa en el campo", "Casa en la playa", "Cabaña", "Piso en la ciudad"};
+        ArrayAdapter<String> casaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, casas);
+        casaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectCasa.setAdapter(casaAdapter);
+
+        // Spinner de Vehículo
+        String[] vehiculos = {"4x4", "Pickup", "Sedán", "SUV", "Camioneta"};
+        ArrayAdapter<String> vehiculoAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, vehiculos);
+        vehiculoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectVehiculo.setAdapter(vehiculoAdapter);
+
+        // Spinner de Domicilio
+        String[] domicilios = {"San José", "Alajuela", "Heredia", "Limón", "Puntarenas", "Guanacaste", "Cartago"};
+        ArrayAdapter<String> domicilioAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, domicilios);
+        domicilioAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectDomicilio.setAdapter(domicilioAdapter);
+
+
         //Boton para tomar foto
         Button btnProfilePhoto = findViewById(R.id.btnProfilePhoto);
         btnProfilePhoto.setOnClickListener(view -> showPhotoSelectionDialog());
@@ -129,7 +155,20 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-
+    // Método para mostrar los requerimientos de la contraseña en un AlertDialog
+    private void showPasswordRequirementsDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Requerimientos de la contraseña")
+                .setMessage("La contraseña debe contener:\n" +
+                        "• Al menos 1 letra mayúscula\n" +
+                        "• Al menos 1 letra minúscula\n" +
+                        "• Al menos 1 número\n" +
+                        "• Al menos 1 símbolo\n" +
+                        "• Mínimo 8 caracteres")
+                .setPositiveButton("OK", null)
+                .show();
+    }
+    
     // Mostrar un diálogo para elegir entre tomar una foto o seleccionar de la galería
     private void showPhotoSelectionDialog() {
         String[] options = {"Tomar foto", "Seleccionar de la galería"};
