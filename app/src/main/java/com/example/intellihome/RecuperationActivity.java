@@ -31,9 +31,15 @@ public class RecuperationActivity extends AppCompatActivity {
         Correo = findViewById(R.id.correorecuper);
         confirmation_but = findViewById(R.id.button_recuerpa);
 
-        // Conectar al servidor
-        connectToServer("192.168.0.114", 1717);
 
+        // Obtener la IP de forma asíncrona
+        new Thread(() -> {
+            String deviceIP = Utils.getIPAddress(true);
+            runOnUiThread(() -> {
+                // Una vez que se obtiene la IP, conectarse al servidor
+                connectToServer("192.168.0.114", 1717); //"192.168.0.114"
+            });
+        }).start();
         confirmation_but.setOnClickListener(view -> {
             String phone = Correo.getText().toString();
             if (!phone.isEmpty()) {
