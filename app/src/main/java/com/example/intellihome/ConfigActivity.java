@@ -3,11 +3,18 @@ package com.example.intellihome;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -62,9 +69,37 @@ public class ConfigActivity extends AppCompatActivity {
     }
 
     private void showHelp() {
-        // Lógica para mostrar ayuda
-        Toast.makeText(this, "Ayuda solicitada", Toast.LENGTH_SHORT).show();
+        // Inflar el layout del diálogo personalizado
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.help, null);
+
+        // Construir el AlertDialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // Establecer la vista inflada
+        builder.setView(dialogView);
+
+        // Crear el mensaje de ayuda
+        String mensaje = "Funcionalidad general de aplicación:\n\n" +
+                "Acceso a cuenta:\n" +
+                "Login: Ingrese las credenciales solicitadas para dirigirse al menú principal de la aplicación.\n" +
+                "Crear Cuenta: Cree una cuenta con diferentes credenciales que le serán solicitadas.\n" +
+                "Recuperación: En caso de olvidar contraseña, ingrese el correo que utilizó para crear cuenta, se enviará una nueva contraseña.\n\n" +
+                "Personalización:\n" +
+                "   Cambiar paleta de colores: Se puede cambiar la paleta de colores de la aplicación.\n" +
+                "   Idioma: Este se adaptará al que utilice en su dispositivo.";
+
+        // Buscar el TextView dentro del layout inflado y establecer el texto
+        TextView textView = dialogView.findViewById(R.id.helpMe);
+        textView.setText(mensaje);
+
+        // Agregar el botón de cerrar
+        builder.setPositiveButton(getString(R.string.msjabtActivity), (dialog, id) -> dialog.dismiss());
+
+        // Mostrar el cuadro de diálogo
+        builder.create().show();
     }
+
 
     private void changeTheme() {
         Intent intent = new Intent(ConfigActivity.this, ColorWheel.class);
