@@ -17,4 +17,7 @@
     <string name="titulartarjetaRegister">Card holder</string>
     <string name="termsycondRegister">I agree to the terms of conditions and privacy policies.</string>
     <string name="crearcuentaRegister">Create Account</string>
+    <string name="prompt_casa_preferida">Preferred House</string>
+    <string name="prompt_vehiculo">Vehícle</string>
+    <string name="prompt_domicilio">Home</string>
 </resources>
