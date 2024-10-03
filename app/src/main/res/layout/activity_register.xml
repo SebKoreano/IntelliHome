@@ -51,20 +51,12 @@
 
             <!-- Botón de Foto de Perfil -->
 
-            <ImageView
-                android:id="@+id/profileImageView"
-                android:layout_width="102dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="10dp"
-                app:srcCompat="@drawable/logo" />
-
             <Button
                 android:id="@+id/btnProfilePhoto"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="20dp"
-                android:backgroundTint="@color/mainColor"
-                android:text="@string/fotoRegister" />
+                android:background="@drawable/baseline_photo_camera_24"/>
         </LinearLayout>
 
         <!-- Campos de entrada -->

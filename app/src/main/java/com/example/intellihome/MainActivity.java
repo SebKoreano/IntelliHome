@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         // Mostrar el cuadro de diálogo
         builder.create().show();
     }
-    
+
     // Método para manejar la respuesta del servidor
     private void handleServerResponse(String response) {
         // Registrar el mensaje recibido

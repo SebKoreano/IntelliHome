@@ -1,6 +1,8 @@
 package com.example.intellihome;
 
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -53,6 +55,7 @@ public class RegisterActivity extends AppCompatActivity {
     private static final int PICK_IMAGE = 2;
     private static final int REQUEST_CAMERA_PERMISSION = 3;
     private ImageView profileImage, iconHelpPassword;
+    private Button btnCreateAccount, btnProfilePhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,8 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         // Inicializar elementos
+        btnCreateAccount = findViewById(R.id.btnCreateAccount);
+        btnProfilePhoto = findViewById(R.id.btnProfilePhoto);
         inputFirstName = findViewById(R.id.inputName);
         inputLastName = findViewById(R.id.inputLastName);
         inputUsername = findViewById(R.id.inputUsername);
@@ -82,7 +87,6 @@ public class RegisterActivity extends AppCompatActivity {
         inputCVV = findViewById(R.id.inputCVV);
         inputCardHolder = findViewById(R.id.inputCardHolder);
         expDatePicker = findViewById(R.id.expDatePicker);
-        profileImage = findViewById(R.id.profileImageView);
         iconHelpPassword = findViewById(R.id.iconHelpPassword);
 
         // Conectar al servidor
@@ -135,12 +139,10 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         //Boton para tomar foto
-        Button btnProfilePhoto = findViewById(R.id.btnProfilePhoto);
         btnProfilePhoto.setOnClickListener(view -> showPhotoSelectionDialog());
 
 
         // Manejar el botón de crear cuenta
-        Button btnCreateAccount = findViewById(R.id.btnCreateAccount);
         btnCreateAccount.setOnClickListener(view -> {
             if (checkboxTerms.isChecked()) {
                 if (validarDatos() && validarEmail(inputEmail) && validarPassword(inputPassword) && validarContraseñasIguales() && verificarEdad()) {
@@ -219,25 +221,47 @@ public class RegisterActivity extends AppCompatActivity {
         startActivityForResult(pickPhotoIntent, PICK_IMAGE);
     }
 
-    // Manejar el resultado de la toma de foto o selección de imagen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                // Aquí puedes manejar la imagen capturada
-                Bundle extras = data.getExtras();
-                if (extras != null) {
-                    Bitmap imageBitmap = (Bitmap) extras.get("data");
-                    profileImage.setImageBitmap(imageBitmap); // Mostrar la imagen en el ImageView
-                }
+                handleCameraImage(data);
             } else if (requestCode == PICK_IMAGE) {
-                // Aquí puedes manejar la imagen seleccionada de la galería
-                Uri selectedImage = data.getData();
-                profileImage.setImageURI(selectedImage); // Mostrar la imagen en el ImageView
+                handleGalleryImage(data);
             }
         }
     }
+
+    // Método para manejar la imagen tomada con la cámara
+    private void handleCameraImage(@Nullable Intent data) {
+        Bundle extras = data.getExtras();
+        if (extras != null) {
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            // Convertir el Bitmap a Drawable y establecerlo como fondo
+            setButtonBackgroundFromBitmap(imageBitmap);
+        }
+    }
+
+    // Método para manejar la imagen seleccionada de la galería
+    private void handleGalleryImage(@Nullable Intent data) {
+        Uri selectedImage = data.getData();
+        try {
+            Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+            // Convertir el Bitmap a Drawable y establecerlo como fondo
+            setButtonBackgroundFromBitmap(imageBitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Método para convertir el Bitmap en Drawable y establecerlo como fondo del botón
+    private void setButtonBackgroundFromBitmap(Bitmap bitmap) {
+        Drawable drawableImage = new BitmapDrawable(getResources(), bitmap);
+        btnProfilePhoto.setBackground(drawableImage);
+        btnProfilePhoto.setBackgroundTintList(null); // Quitar la tint para evitar que afecte la imagen
+    }
+
 
     // Manejar la solicitud de permisos
     @Override
