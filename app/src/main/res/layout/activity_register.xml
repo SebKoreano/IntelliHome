@@ -91,13 +91,33 @@
             android:inputType="textEmailAddress"
             android:layout_marginTop="8dp" />
 
-        <EditText
-            android:id="@+id/inputPassword"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Contraseña"
-            android:inputType="textPassword"
-            android:layout_marginTop="8dp" />
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <!-- Campo de texto para la contraseña -->
+            <EditText
+                android:id="@+id/inputPassword"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:hint="Contraseña"
+                android:inputType="textPassword"
+                android:layout_marginEnd="8dp" />
+
+            <!-- Ícono de ayuda -->
+            <ImageView
+                android:id="@+id/iconHelpPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_help_circle"
+                android:contentDescription="Ayuda para contraseña"
+                android:layout_gravity="center_vertical"
+                android:padding="8dp" />
+        </LinearLayout>
+
 
         <EditText
             android:id="@+id/inputRepeatPassword"

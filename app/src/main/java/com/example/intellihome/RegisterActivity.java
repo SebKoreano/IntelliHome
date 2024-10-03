@@ -52,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int PICK_IMAGE = 2;
     private static final int REQUEST_CAMERA_PERMISSION = 3;
-    private ImageView profileImage;
+    private ImageView profileImage, iconHelpPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
         inputCardHolder = findViewById(R.id.inputCardHolder);
         expDatePicker = findViewById(R.id.expDatePicker);
         profileImage = findViewById(R.id.profileImageView);
+        iconHelpPassword = findViewById(R.id.iconHelpPassword);
 
         // Conectar al servidor
         connectToServer("192.168.18.5", 3535);
@@ -106,6 +107,12 @@ public class RegisterActivity extends AppCompatActivity {
             } else {
                 alquilarSection.setVisibility(View.GONE);
             }
+        });
+
+        // Configurar el evento onClick para mostrar el cuadro de diálogo
+        iconHelpPassword.setOnClickListener(v -> {
+            // Mostrar el cuadro de diálogo con los requerimientos de la contraseña
+            showPasswordRequirementsDialog();
         });
 
         // Spinner de Casa
@@ -148,7 +155,20 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-
+    // Método para mostrar los requerimientos de la contraseña en un AlertDialog
+    private void showPasswordRequirementsDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Requerimientos de la contraseña")
+                .setMessage("La contraseña debe contener:\n" +
+                        "• Al menos 1 letra mayúscula\n" +
+                        "• Al menos 1 letra minúscula\n" +
+                        "• Al menos 1 número\n" +
+                        "• Al menos 1 símbolo\n" +
+                        "• Mínimo 8 caracteres")
+                .setPositiveButton("OK", null)
+                .show();
+    }
+    
     // Mostrar un diálogo para elegir entre tomar una foto o seleccionar de la galería
     private void showPhotoSelectionDialog() {
         String[] options = {"Tomar foto", "Seleccionar de la galería"};
