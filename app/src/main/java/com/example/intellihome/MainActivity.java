@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             if (isChecked) {
                 // Mover a ConfigActivity cuando el CheckBox está marcado
                 Intent intent = new Intent(MainActivity.this, ConfigActivity.class);
-                startActivity(intent);
+                //startActivity(intent);
             }
         });
 

@@ -35,7 +35,12 @@
         android:layout_height="wrap_content"
         android:hint="Email, Usuario o Teléfono"
         android:inputType="textEmailAddress"
-        android:padding="12dp" />
+        android:padding="4dp" />
+
+    <View
+        android:layout_width="350dp"
+        android:layout_height="1.5dp"
+        android:background="#666666" />
 
     <EditText
         android:id="@+id/inputPassword"
@@ -44,7 +49,11 @@
         android:layout_marginTop="16dp"
         android:hint="Contraseña"
         android:inputType="textPassword"
-        android:padding="12dp" />
+        android:padding="4dp" />
+    <View
+        android:layout_width="350dp"
+        android:layout_height="1.5dp"
+        android:background="#666666" />
 
     <CheckBox
         android:id="@+id/rememberMeCheckbox"
