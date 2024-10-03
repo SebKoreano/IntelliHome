@@ -112,7 +112,8 @@ public class MainActivity extends AppCompatActivity {
         LayoutInflater inflater = getLayoutInflater();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(inflater.inflate(R.layout.dialog_about, null))
-                .setPositiveButton("Cerrar", (dialog, id) -> dialog.dismiss());
+                // Reemplaza el texto del botón "Cerrar" con el string de recursos
+                .setPositiveButton(getString(R.string.msjabtActivity), (dialog, id) -> dialog.dismiss());
 
         // Mostrar el cuadro de diálogo
         builder.create().show();

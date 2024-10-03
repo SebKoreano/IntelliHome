@@ -20,4 +20,5 @@
     <string name="prompt_casa_preferida">Preferred House</string>
     <string name="prompt_vehiculo">Vehícle</string>
     <string name="prompt_domicilio">Home</string>
+    <string name="msjabtActivity">Close</string>
 </resources>
