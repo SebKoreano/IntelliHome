@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -86,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
         profileImage = findViewById(R.id.profileImageView);
         
         // Conectar al servidor
-        connectToServer("172.18.193.124", 1717);
+        connectToServer("192.168.0.114", 1717);
 
         // Ocultar inicialmente las secciones de Propietario y Alquilar
         propietarioSection.setVisibility(View.GONE);
@@ -113,6 +115,14 @@ public class RegisterActivity extends AppCompatActivity {
         Button btnProfilePhoto = findViewById(R.id.btnProfilePhoto);
         btnProfilePhoto.setOnClickListener(view -> showPhotoSelectionDialog());
 
+        //ChackBox de los terminos y condiciones
+        checkboxTerms.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                // Mostrar el diálogo con los términos y condiciones
+                showTermsAndConditionsDialog();
+            }
+        });
+
 
         // Manejar el botón de crear cuenta
         Button btnCreateAccount = findViewById(R.id.btnCreateAccount);
@@ -128,6 +138,25 @@ public class RegisterActivity extends AppCompatActivity {
                 mostrarMensaje("Debe aceptar los Términos y Condiciones");
             }
         });
+    }
+
+    private void showTermsAndConditionsDialog() {
+        // Inflar el layout del diálogo
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.activity_terms_and_conditions, null);
+        dialogBuilder.setView(dialogView);
+
+        AlertDialog dialog = dialogBuilder.create();
+
+        // Inicializar los elementos del layout
+
+        Button btnContinue = dialogView.findViewById(R.id.btnContinue);
+
+
+        // Botón de continuar cierra el diálogo
+        btnContinue.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
     }
 
 

@@ -194,9 +194,10 @@
                 android:id="@+id/checkboxAlquilar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Alquilar"
                 android:layout_marginStart="16dp"
+                android:text="Alquilar"
                 android:textColor="#8cc4df" />
+
         </LinearLayout>
 
         <!-- Inputs dinámicos: Cuenta IBAN / Información de tarjeta -->
