@@ -145,6 +145,14 @@ public class RegisterActivity extends AppCompatActivity {
         //Boton para tomar foto
         btnProfilePhoto.setOnClickListener(view -> showPhotoSelectionDialog());
 
+        //ChackBox de los terminos y condiciones
+                checkboxTerms.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (isChecked) {
+                        // Mostrar el diálogo con los términos y condiciones
+                        showTermsAndConditionsDialog();
+                    }
+                });
+
 
         // Manejar el botón de crear cuenta
         btnCreateAccount.setOnClickListener(view -> {
@@ -161,6 +169,24 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    private void showTermsAndConditionsDialog() {
+        // Inflar el layout del diálogo
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.activity_terms_and_conditions, null);
+        dialogBuilder.setView(dialogView);
+
+        AlertDialog dialog = dialogBuilder.create();
+
+        // Inicializar los elementos del layout
+
+        Button btnContinue = dialogView.findViewById(R.id.btnContinue);
+
+
+        // Botón de continuar cierra el diálogo
+        btnContinue.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
     // Método para mostrar los requerimientos de la contraseña en un AlertDialog
     private void showPasswordRequirementsDialog() {
         new AlertDialog.Builder(this)
