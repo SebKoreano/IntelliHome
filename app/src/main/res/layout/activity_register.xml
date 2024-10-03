@@ -194,7 +194,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/quehacerRegister"
-            android:textColor="@color/mainColor"
             android:textSize="16sp"
             android:layout_marginTop="16dp" />
 
@@ -209,18 +208,14 @@
                 android:id="@+id/checkboxPropietario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/propietarioRegister"
-                android:textColor="@color/mainColor"
-                android:buttonTint="@color/mainColor"/>
+                android:text="@string/propietarioRegister" />
 
             <CheckBox
                 android:id="@+id/checkboxAlquilar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/alquilarRegister"
-                android:layout_marginStart="16dp"
-                android:textColor="@color/mainColor"
-                android:buttonTint="@color/mainColor"/>
+                android:layout_marginStart="16dp" />
         </LinearLayout>
 
         <!-- Inputs dinámicos: Cuenta IBAN / Información de tarjeta -->
@@ -290,7 +285,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/termsycondRegister"
-            android:textColor="@color/mainColor"
             android:layout_marginTop="16dp" />
 
         <!-- Botón Crear Cuenta -->

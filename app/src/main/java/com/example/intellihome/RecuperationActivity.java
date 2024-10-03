@@ -32,6 +32,10 @@ public class RecuperationActivity extends AppCompatActivity {
         Correo = findViewById(R.id.correorecuper); // Cambia esto por el ID correcto de tu EditText
         confirmation_but = findViewById(R.id.button_recuerpa); // Cambia esto por el ID correcto de tu Button
 
+        GlobalColor globalVariables = (GlobalColor) getApplicationContext();
+        int currentColor = globalVariables.getCurrentColor();
+        confirmation_but.setBackgroundColor(currentColor);
+
         // Obtener la IP de forma asíncrona
         new Thread(() -> {
             runOnUiThread(() -> {

@@ -89,6 +89,10 @@ public class RegisterActivity extends AppCompatActivity {
         expDatePicker = findViewById(R.id.expDatePicker);
         iconHelpPassword = findViewById(R.id.iconHelpPassword);
 
+        GlobalColor globalVariables = (GlobalColor) getApplicationContext();
+        int currentColor = globalVariables.getCurrentColor();
+        btnCreateAccount.setBackgroundColor(currentColor);
+
         // Conectar al servidor
         connectToServer("192.168.18.5", 3535);
 

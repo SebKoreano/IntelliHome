@@ -26,10 +26,13 @@ public class ConfigActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customization); // Asegúrate de que el nombre del layout sea correcto
 
-        // Inicializa los elementos de la interfaz
-        radioGroupLanguage = findViewById(R.id.radioGroupLanguage);
         btnHelp = findViewById(R.id.btnHelp);
         btnTheme = findViewById(R.id.btnTheme);
+
+        GlobalColor globalVariables = (GlobalColor) getApplicationContext();
+        int currentColor = globalVariables.getCurrentColor();
+        btnHelp.setBackgroundColor(currentColor);
+        btnTheme.setBackgroundColor(currentColor);
 
         // Conexión al servidor
         connectToServer("192.168.18.5", 3535);
@@ -64,8 +67,8 @@ public class ConfigActivity extends AppCompatActivity {
     }
 
     private void changeTheme() {
-        // Lógica para cambiar tema
-        Toast.makeText(this, "Tema cambiado", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(ConfigActivity.this, ColorWheel.class);
+        startActivity(intent);
     }
 
     @Override

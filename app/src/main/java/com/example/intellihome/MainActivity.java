@@ -43,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
         TextInputLayout Email = findViewById(R.id.email);
         ImageView btnAbout = findViewById(R.id.btnAbout);
 
+        GlobalColor globalVariables = (GlobalColor) getApplicationContext();
+        int currentColor = globalVariables.getCurrentColor();
+        btnLogin.setBackgroundColor(currentColor);
+
         // Iniciar el hilo para conectarse al servidor y recibir mensajes
         new Thread(() -> {
             try {

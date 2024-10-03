@@ -1,10 +1,13 @@
 package com.example.intellihome;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Bitmap;
@@ -14,6 +17,7 @@ public class ColorWheel extends AppCompatActivity {
     ImageView imgView;
     TextView mColorValues;
     View mColorViews;
+    Button btnSelectColor; // Agregamos el botón
 
     Bitmap bitmap;
 
@@ -24,11 +28,13 @@ public class ColorWheel extends AppCompatActivity {
         imgView = findViewById(R.id.colorwheel);
         mColorValues = findViewById(R.id.displayValues);
         mColorViews = findViewById(R.id.displayColor);
+        btnSelectColor = findViewById(R.id.btnSelectColor); // Inicializamos el botón
 
-        imgView.setDrawingCacheEnabled(true);
-        imgView.buildDrawingCache(true);
+        GlobalColor globalVariables = (GlobalColor) getApplicationContext();
+        int currentColor = globalVariables.getCurrentColor();
+        btnSelectColor.setBackgroundColor(currentColor);
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.colorwheel);
+        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.colorwheel);
 
         imgView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -48,6 +54,25 @@ public class ColorWheel extends AppCompatActivity {
                     }
                 }
                 return true;
+            }
+        });
+
+        btnSelectColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Obtener el color de mColorViews
+                if (mColorViews.getBackground() instanceof ColorDrawable) {
+                    int color = ((ColorDrawable) mColorViews.getBackground()).getColor();
+
+                    // Cambiar el color global
+                    GlobalColor globalColor = (GlobalColor) getApplication();
+                    globalColor.setCurrentColor(color);
+
+                    // Regresar a MainActivity
+                    Intent intent = new Intent(ColorWheel.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
     }
