@@ -1,7 +1,5 @@
 import socket
 import threading
-import tkinter as tk
-from tkinter import scrolledtext
 import secrets
 import string
 
@@ -36,7 +34,7 @@ class Usuario:
             server.quit()
 
 class ChatServer:
-    def __init__(self, host="192.168.18.5", port=3535):
+    def __init__(self, host="172.18.251.41", port=3535):
         
         self.matriz_usuarios = [] 
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -45,36 +43,14 @@ class ChatServer:
         self.clients = []
         self.agregar_usuario_a_matriz()
 
-        # Configuración de la interfaz gráfica
-        self.root = tk.Tk()
-        self.root.title("Servidor de Chat")
-
-        self.chat_display = scrolledtext.ScrolledText(self.root, state='disabled', width=50, height=20)
-        self.chat_display.pack(pady=10)
-
-        self.message_entry = tk.Entry(self.root, width=40)
-        self.message_entry.pack(pady=5)
-
-        self.send_button = tk.Button(self.root, text="Enviar")
-        self.send_button.pack(pady=5)
-
-        self.quit_button = tk.Button(self.root, text="Salir", command=self.close_server)
-        self.quit_button.pack(pady=5)
 
         # Hilo para manejar el servidor
         self.thread = threading.Thread(target=self.accept_connections)
         self.thread.start()
-
-        self.root.protocol("WM_DELETE_WINDOW", self.close_server)
-        self.root.mainloop()
-
     def accept_connections(self):
         while True:
             client_socket, addr = self.server_socket.accept()
             self.clients.append(client_socket)
-            self.chat_display.config(state='normal')
-            self.chat_display.insert(tk.END, f"Conexión de {addr}\n")
-            self.chat_display.config(state='disabled')
             threading.Thread(target=self.handle_client, args=(client_socket,)).start()
 
     def handle_client(self, client_socket):
@@ -84,40 +60,33 @@ class ChatServer:
                 if message:
                     message = message.strip()
 
-                    self.chat_display.config(state='normal')
-                    self.chat_display.insert(tk.END, f"Mensaje recibido: {repr(message)}\n")  
-                    self.chat_display.config(state='disabled')
+                    print("Llegó: "+message)
 
                     # Verificar el prefijo del mensaje
                     if message.startswith("CrearCuenta_"):  # Nuevo usuario
-                        self.chat_display.insert(tk.END, "Procesando nueva cuenta...\n")
+                        print(message)
                         self.write_message_to_file(message[len("CrearCuenta_"):])
 
                     elif message.startswith("Login_"):
-                        self.chat_display.insert(tk.END, "Procesando login...\n")
+                        print(message)
                         self.buscar_login(message[len("Login_"):], client_socket)
 
                     elif message.startswith("Recuperacion_"):
-                        self.chat_display.insert(tk.END, "Procesando recuperación...\n")
                         print(message)
                         self.existe_correo(message[len("Recuperacion_"):], client_socket)
 
                     else:
-                        self.chat_display.insert(tk.END, "No sirvió, pero llegó\n")
+                        print("No llegó mensaje relevante")
                         
                 else:
-                    self.chat_display.insert(tk.END, "No sirvió Lol, nisiquiera llegó\n")
+                    print("Error!")
             except Exception as e:
-                self.chat_display.insert(tk.END, f"Error: {e}\n")
+                print("error")
                 break
         client_socket.close()
         self.clients.remove(client_socket)
 
     def broadcast(self, message, sender_socket):
-        self.chat_display.config(state='normal')
-        self.chat_display.insert(tk.END, f"Cliente: {message}\n")
-        self.chat_display.config(state='disabled')
-
         try:
             sender_socket.send(message.encode('utf-8'))
         except:
