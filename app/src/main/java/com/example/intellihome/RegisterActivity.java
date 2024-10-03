@@ -85,7 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
         expDatePicker = findViewById(R.id.expDatePicker);
         profileImage = findViewById(R.id.profileImageView);
         // Conectar al servidor
-        connectToServer("192.168.18.206", 3535);
+        connectToServer("192.168.18.5", 3535);
 
         // Ocultar inicialmente las secciones de Propietario y Alquilar
         propietarioSection.setVisibility(View.GONE);
@@ -121,7 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
                     obtenerDatos();
                     sendMessage(concatenarDatos()); // Enviar mensaje al servidor
                     mostrarMensaje("Cuenta creada con éxito");
-                    regresarLogIn();
+                    regresarAConfig();
                 }
             } else {
                 mostrarMensaje("Debe aceptar los Términos y Condiciones");
@@ -173,7 +173,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
     }
-
 
     // Método para seleccionar imagen de la galería
     private void openGallery() {
@@ -250,9 +249,9 @@ public class RegisterActivity extends AppCompatActivity {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
     }
 
-    //Pasar al LogIn
-    private void regresarLogIn(){
-        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+    //Pasar al ConfigActivity
+    private void regresarAConfig() {
+        Intent intent = new Intent(RegisterActivity.this, ConfigActivity.class);
         startActivity(intent);
     }
 
