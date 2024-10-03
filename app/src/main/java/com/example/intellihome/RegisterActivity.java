@@ -17,11 +17,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import android.text.TextUtils;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.io.PrintWriter;
 import java.util.*;
-import android.widget.Toast;
 import java.time.LocalDate;
 import java.time.Period;
 import java.net.Socket;
@@ -36,13 +34,14 @@ import androidx.core.app.ActivityCompat; // Para manejar permisos
 import androidx.core.content.ContextCompat; // Para verificar permisos
 import android.Manifest; // Para usar los permisos de Android, incluyendo READ_MEDIA_IMAGES
 import androidx.annotation.Nullable; // Para la anotación Nullable
+import android.widget.ArrayAdapter;
 
 
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText inputFirstName, inputLastName, inputUsername, inputPhone, inputEmail, inputPassword, inputRepeatPassword;
-    private Spinner selectCasa, selectVehiculo, selectHobbies, selectDomicilio;
+    private EditText inputFirstName, inputLastName, inputUsername, inputPhone, inputEmail, inputPassword, inputRepeatPassword, inputHobbies;
+    private Spinner selectCasa, selectVehiculo, selectDomicilio;
     private DatePicker datePicker, expDatePicker;
     private CheckBox checkboxPropietario, checkboxAlquilar, checkboxTerms;
     private LinearLayout propietarioSection, alquilarSection;
@@ -70,7 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
         inputRepeatPassword = findViewById(R.id.inputRepeatPassword);
         selectCasa = findViewById(R.id.selectCasa);
         selectVehiculo = findViewById(R.id.selectVehiculo);
-        selectHobbies = findViewById(R.id.selectHobbies);
+        inputHobbies = findViewById(R.id.inputHobbies);
         selectDomicilio = findViewById(R.id.selectDomicilio);
         datePicker = findViewById(R.id.datePicker);
         checkboxPropietario = findViewById(R.id.checkboxPropietario);
@@ -84,6 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
         inputCardHolder = findViewById(R.id.inputCardHolder);
         expDatePicker = findViewById(R.id.expDatePicker);
         profileImage = findViewById(R.id.profileImageView);
+
         // Conectar al servidor
         connectToServer("192.168.18.5", 3535);
 
@@ -107,6 +107,25 @@ public class RegisterActivity extends AppCompatActivity {
                 alquilarSection.setVisibility(View.GONE);
             }
         });
+
+        // Spinner de Casa
+        String[] casas = {"Apartamento", "Casa en el campo", "Casa en la playa", "Cabaña", "Piso en la ciudad"};
+        ArrayAdapter<String> casaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, casas);
+        casaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectCasa.setAdapter(casaAdapter);
+
+        // Spinner de Vehículo
+        String[] vehiculos = {"4x4", "Pickup", "Sedán", "SUV", "Camioneta"};
+        ArrayAdapter<String> vehiculoAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, vehiculos);
+        vehiculoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectVehiculo.setAdapter(vehiculoAdapter);
+
+        // Spinner de Domicilio
+        String[] domicilios = {"San José", "Alajuela", "Heredia", "Limón", "Puntarenas", "Guanacaste", "Cartago"};
+        ArrayAdapter<String> domicilioAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, domicilios);
+        domicilioAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectDomicilio.setAdapter(domicilioAdapter);
+
 
         //Boton para tomar foto
         Button btnProfilePhoto = findViewById(R.id.btnProfilePhoto);
