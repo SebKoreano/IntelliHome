@@ -168,7 +168,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .setPositiveButton("OK", null)
                 .show();
     }
-    
+
     // Mostrar un diálogo para elegir entre tomar una foto o seleccionar de la galería
     private void showPhotoSelectionDialog() {
         String[] options = {"Tomar foto", "Seleccionar de la galería"};

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/logoApp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/logo"
+        android:layout_gravity="center"
+        android:contentDescription="App Logo" />
+
+    <TextView
+        android:id="@+id/appName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre de la App"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/creadores"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Creadores: Nombre1, Nombre2, Nombre3"
+        android:textSize="16sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:id="@+id/ultimaFechaModificacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Última modificación: 3 de octubre de 2024"
+        android:textSize="16sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp" />
+
+</LinearLayout>

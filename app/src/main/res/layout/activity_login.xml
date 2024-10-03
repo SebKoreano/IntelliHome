@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,6 +9,26 @@
     android:gravity="center"
     android:orientation="vertical">
 
+    <!-- Botón de "About" arriba a la izquierda -->
+
+    <ImageView
+        android:id="@+id/btnAbout"
+        android:layout_width="54dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="Ayuda para contraseña"
+        android:padding="8dp"
+        android:layout_marginLeft="330dp"
+        android:layout_marginRight="30dp"
+        android:src="@drawable/about" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="start">
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
