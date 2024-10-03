@@ -40,13 +40,13 @@
             android:id="@+id/btnHelp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ayuda" />
+            android:text="@string/ayudaActivityCustom" />
 
         <Button
             android:id="@+id/btnTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tema" />
+            android:text="@string/temaActivityCustom" />
 
     </LinearLayout>
 
@@ -54,7 +54,7 @@
         android:id="@+id/lblLanguage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Idioma"
+        android:text="@string/idiomaActivityCustom"
         android:textSize="18sp"
         android:textStyle="bold"
         android:paddingTop="45dp"
@@ -76,19 +76,19 @@
             android:id="@+id/radioEnglish"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Inglés" />
+            android:text="@string/inglesActivityCustom" />
 
         <RadioButton
             android:id="@+id/radioSpanish"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Español" />
+            android:text="@string/espanolActivityCustom" />
 
         <RadioButton
             android:id="@+id/radioPortuguese"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Portugués" />
+            android:text="@string/portuActivityCustom" />
 
     </RadioGroup>
 

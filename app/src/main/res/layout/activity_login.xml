@@ -54,7 +54,7 @@
         android:id="@+id/inputEmail"
         android:layout_width="348dp"
         android:layout_height="wrap_content"
-        android:hint="Email, Usuario o Teléfono"
+        android:hint="@string/emailusuariotelefonoActivityLogin"
         android:inputType="textEmailAddress"
         android:padding="4dp" />
 
@@ -68,7 +68,7 @@
         android:layout_width="349dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Contraseña"
+        android:hint="@string/contraActivityLogin"
         android:inputType="textPassword"
         android:padding="4dp" />
     <View
@@ -81,7 +81,7 @@
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginTop="16dp"
-        android:text="Mantener sesión"
+        android:text="@string/mantenersesActivityLogin"
         android:buttonTint="@color/mainColor"/>
 
     <Button
@@ -91,7 +91,7 @@
         android:layout_marginTop="16dp"
         android:padding="12dp"
         android:backgroundTint="@color/mainColor"
-        android:text="Iniciar sesión"
+        android:text="@string/inicsesActivityLogin"
         android:textColor="?attr/android:background" />
 
     <TextView
@@ -100,7 +100,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:padding="16dp"
-        android:text="Recuperar contraseña" />
+        android:text="@string/recucontraActivityLogin" />
 
     <TextView
         android:id="@+id/btnAlreadyHaveAccount"
@@ -108,7 +108,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:padding="16dp"
-        android:text="¿No tiene cuenta?" />
+        android:text="@string/nousuarioActivityLogin" />
 
     <TextView
         android:id="@+id/hola"
@@ -116,7 +116,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:padding="16dp"
-        android:text="Iniciar Sesión con" />
+        android:text="@string/inicsesconActivityLogin" />
 
     <LinearLayout
         android:layout_width="wrap_content"
