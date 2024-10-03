@@ -37,7 +37,7 @@ public class RecuperationActivity extends AppCompatActivity {
             String deviceIP = Utils.getIPAddress(true);
             runOnUiThread(() -> {
                 // Una vez que se obtiene la IP, conectarse al servidor
-                connectToServer(deviceIP, 1717);
+                connectToServer("192.168.0.114", 1717); //"192.168.0.114"
             });
         }).start();
 
