@@ -37,7 +37,7 @@
                     android:id="@+id/inputName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Su Nombre" />
+                    android:hint="@string/nombreRegister" />
 
                 <!-- Entrada de Apellidos -->
                 <EditText
@@ -45,7 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:hint="Sus Apellidos" />
+                    android:hint="@string/apellidosRegister" />
 
             </LinearLayout>
 
@@ -64,7 +64,7 @@
                 android:layout_height="100dp"
                 android:layout_marginStart="20dp"
                 android:backgroundTint="@color/mainColor"
-                android:text="Foto" />
+                android:text="@string/fotoRegister" />
         </LinearLayout>
 
         <!-- Campos de entrada -->
@@ -72,14 +72,14 @@
             android:id="@+id/inputUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Usuario"
+            android:hint="@string/usuarioRegister"
             android:layout_marginTop="16dp" />
 
         <EditText
             android:id="@+id/inputPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Teléfono"
+            android:hint="@string/telefonoRegister"
             android:inputType="phone"
             android:layout_marginTop="8dp" />
 
@@ -87,7 +87,7 @@
             android:id="@+id/inputEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
+            android:hint="@string/emailRegister"
             android:inputType="textEmailAddress"
             android:layout_marginTop="8dp" />
 
@@ -95,7 +95,7 @@
             android:id="@+id/inputPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Contraseña"
+            android:hint="@string/contrasenaRegister"
             android:inputType="textPassword"
             android:layout_marginTop="8dp" />
 
@@ -103,7 +103,7 @@
             android:id="@+id/inputRepeatPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Repite tu contraseña"
+            android:hint="@string/recontrasenaRegister"
             android:inputType="textPassword"
             android:layout_marginTop="8dp" />
 
@@ -167,7 +167,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="¿Qué quieres hacer?"
+            android:text="@string/quehacerRegister"
             android:textColor="@color/mainColor"
             android:textSize="16sp"
             android:layout_marginTop="16dp" />
@@ -183,7 +183,7 @@
                 android:id="@+id/checkboxPropietario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Propietario"
+                android:text="@string/propietarioRegister"
                 android:textColor="@color/mainColor"
                 android:buttonTint="@color/mainColor"/>
 
@@ -191,7 +191,7 @@
                 android:id="@+id/checkboxAlquilar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Alquilar"
+                android:text="@string/alquilarRegister"
                 android:layout_marginStart="16dp"
                 android:textColor="@color/mainColor"
                 android:buttonTint="@color/mainColor"/>
@@ -210,7 +210,7 @@
                 android:id="@+id/inputIban"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Cuenta IBAN" />
+                android:hint="@string/ibanRegister" />
         </LinearLayout>
 
         <LinearLayout
@@ -225,7 +225,7 @@
                 android:id="@+id/inputCardNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Número de tarjeta" />
+                android:hint="@string/numtarjetaRegister" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -246,7 +246,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:hint="CVV"
+                    android:hint="@string/cvvRegister"
                     android:layout_marginStart="8dp" />
             </LinearLayout>
 
@@ -254,7 +254,7 @@
                 android:id="@+id/inputCardHolder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Titular de la tarjeta"
+                android:hint="@string/titulartarjetaRegister"
                 android:layout_marginTop="8dp" />
         </LinearLayout>
 
@@ -263,7 +263,7 @@
             android:id="@+id/checkboxTerms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="I agree to the Terms of Services and Privacy Policy."
+            android:text="@string/termsycondRegister"
             android:textColor="@color/mainColor"
             android:layout_marginTop="16dp" />
 
@@ -272,7 +272,7 @@
             android:id="@+id/btnCreateAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Crear Cuenta"
+            android:text="@string/crearcuentaRegister"
             android:backgroundTint="@color/mainColor"
             android:layout_marginTop="16dp" />
     </LinearLayout>

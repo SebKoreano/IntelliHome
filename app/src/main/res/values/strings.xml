@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">IntelliHome</string>
+    <string name="nombreRegister">Su Nombre</string>
+    <string name="apellidosRegister">Sus Apellidos</string>
+    <string name="fotoRegister">Foto</string>
+    <string name="usuarioRegister">Usuario</string>
+    <string name="telefonoRegister">Teléfono</string>
+    <string name="emailRegister">Email</string>
+    <string name="contrasenaRegister">Contraseña</string>
+    <string name="recontrasenaRegister">Repite tú contraseña</string>
+    <string name="quehacerRegister">¿Qué quieres hacer?</string>
+    <string name="propietarioRegister">Propietario</string>
+    <string name="alquilarRegister">Alquilar</string>
+    <string name="ibanRegister">Cuenta IBAN</string>
+    <string name="numtarjetaRegister">Número de tarjeta</string>
+    <string name="cvvRegister">CVV</string>
+    <string name="titulartarjetaRegister">Titular de la tarjeta</string>
+    <string name="termsycondRegister">Estoy de acuerdo con los términos de condiciones y políticas de privacidad</string>
+    <string name="crearcuentaRegister">Crear cuenta</string>
 </resources>
