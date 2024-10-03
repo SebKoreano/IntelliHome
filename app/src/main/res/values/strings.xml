@@ -5,7 +5,7 @@
     <string name="fotoRegister">Foto</string>
     <string name="usuarioRegister">Usuario</string>
     <string name="telefonoRegister">Teléfono</string>
-    <string name="emailRegister">Email</string>
+    <string name="emailRegister">Correo</string>
     <string name="contrasenaRegister">Contraseña</string>
     <string name="recontrasenaRegister">Repite tú contraseña</string>
     <string name="quehacerRegister">¿Qué quieres hacer?</string>
@@ -58,7 +58,7 @@
     <string name="fechavencsupRegisterActivity">La fecha de vencimiento debe ser posterior a la fecha actual </string>
     <string name="debe18tenerRegisterActivity">Debes tener al menos 18 años </string>
     <string name="ibaninvRegisterActivity">IBAN inválido </string>
-    <string name="emailinvRegisterActivity">Email inválido </string>
+    <string name="emailinvRegisterActivity">Correo inválido </string>
     <string name="contrainvRegisterActivity">Contraseña inválida </string>
     <string name="contranocoindiRegisterActivity">Las contraseñas no coinciden </string>
     <string name="ayudaActivityCustom">Ayuda </string>
@@ -68,7 +68,7 @@
     <string name="espanolActivityCustom">Español </string>
     <string name="portuActivityCustom">Portugués </string>
     <string name="hunActivityCustom">Húngaro </string>
-    <string name="emailusuariotelefonoActivityLogin">Email, Usuario o teléfono </string>
+    <string name="emailusuariotelefonoActivityLogin">Correo, Usuario o teléfono </string>
     <string name="contraActivityLogin">Contraseña </string>
     <string name="mantenersesActivityLogin">Mantener Sesión </string>
     <string name="inicsesActivityLogin">Iniciar Sesión </string>
