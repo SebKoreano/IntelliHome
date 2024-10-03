@@ -41,7 +41,7 @@
         android:layout_gravity="center"
         android:backgroundTint="@color/mainColor"
         android:padding="12dp"
-        android:text="Color"
+        android:text="@string/colorActivitypicker"
         android:textSize="18sp" />
 
 </LinearLayout>

@@ -80,5 +80,6 @@
     <string name="hobbiesRegister">Hobbies</string>
     <string name="creadoresDialogAbout">JsonITsolutions</string>
     <string name="fechaDialogAbout">Last modification: October 3, 2024</string>
+    <string name="colorActivitypicker">Color </string>
 
 </resources>

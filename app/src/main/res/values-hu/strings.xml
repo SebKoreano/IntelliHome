@@ -80,4 +80,5 @@
     <string name="hobbiesRegister">Hobbi</string>
     <string name="creadoresDialogAbout">JsonITsolutions</string>
     <string name="fechaDialogAbout">Utolsó módosítás: 2024. október 3.</string>
+    <string name="colorActivitypicker">szín </string>
 </resources>
