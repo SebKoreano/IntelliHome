@@ -5,9 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -27,35 +26,33 @@ public class RecuperationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recoverpassword); // Asegúrate de que el nombre del layout sea correcto
+        setContentView(R.layout.activity_recoverpassword);
 
-        Correo = findViewById(R.id.correorecuper); // Cambia esto por el ID correcto de tu EditText
-        confirmation_but = findViewById(R.id.button_recuerpa); // Cambia esto por el ID correcto de tu Button
+        Correo = findViewById(R.id.correorecuper);
+        confirmation_but = findViewById(R.id.button_recuerpa);
 
-        // Obtener la IP de forma asíncrona
-        new Thread(() -> {
-            String deviceIP = Utils.getIPAddress(true);
-            runOnUiThread(() -> {
-                // Una vez que se obtiene la IP, conectarse al servidor
-                connectToServer(deviceIP, 1717);
-            });
-        }).start();
+        // Conectar al servidor
+        connectToServer("192.168.0.114", 1717);
 
         confirmation_but.setOnClickListener(view -> {
-            StringBuilder sb = new StringBuilder();
             String phone = Correo.getText().toString();
-            sb.append("Recuperacion").append("_");
-            sb.append(phone);
-            String message = sb.toString();
-            sendMessage(message);
-            regresarLogIn();
+            if (!phone.isEmpty()) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("Recuperacion").append("_").append(phone);
+                String message = sb.toString();
+                sendMessage(message);
+                regresarLogIn();
+            } else {
+                Toast.makeText(RecuperationActivity.this, "Por favor ingrese un correo.", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
-    private void regresarLogIn(){
+    private void regresarLogIn() {
         Intent intent = new Intent(RecuperationActivity.this, MainActivity.class);
         startActivity(intent);
     }
+
     private void sendMessage(String message) {
         new Thread(() -> {
             try {
@@ -88,4 +85,17 @@ public class RecuperationActivity extends AppCompatActivity {
             }
         }).start();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            if (socket != null) {
+                socket.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
+
