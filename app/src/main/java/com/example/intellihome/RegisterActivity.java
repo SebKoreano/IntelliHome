@@ -89,7 +89,6 @@ public class RegisterActivity extends AppCompatActivity {
         inputCVV = findViewById(R.id.inputCVV);
         inputCardHolder = findViewById(R.id.inputCardHolder);
         expDatePicker = findViewById(R.id.expDatePicker);
-        profileImage = findViewById(R.id.profileImageView);
         iconHelpPassword = findViewById(R.id.iconHelpPassword);
 
         GlobalColor globalVariables = (GlobalColor) getApplicationContext();
