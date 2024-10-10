@@ -248,7 +248,7 @@ public class RegisterActivity extends AppCompatActivity {
         String[] options = {getString(R.string.tomarfotoRegisterActivity), getString(R.string.selectgaleRegisterActivity)};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Seleccionar imagen")
+        builder.setTitle(getString(R.string.selectimaRegisterActivity))
                 .setItems(options, (dialog, which) -> {
                     if (which == 0) {
                         dispatchTakePictureIntent();

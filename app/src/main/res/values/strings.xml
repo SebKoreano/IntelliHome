@@ -49,7 +49,7 @@
     <string name="mincaractcontraRegisterActivity">• Mínimo 8 caracteres</string>
     <string name="tomarfotoRegisterActivity">Tomar foto</string>
     <string name="selectgaleRegisterActivity">Seleccionar de la galería</string>
-    <string name="selectimaRegisterActivity">Seleccionar imagen</string>
+    <string name="selectimaRegisterActivity">Seleccionar imágen</string>
     <string name="accesoimaRegisterActivity">Permiso de acceso a imágenes denegado</string>
     <string name="elegirrolRegisterActivity">Debe elegir un rol en la aplicación</string>
     <string name="campoobliRegisterActivity">Este campo es obligatorio </string>
