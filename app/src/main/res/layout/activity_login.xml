@@ -1,148 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
-
-    <!-- Botón de "About" arriba a la izquierda -->
-
-    <ImageView
-        android:id="@+id/btnAbout"
-        android:layout_width="54dp"
-        android:layout_height="45dp"
-        android:layout_gravity="center_vertical"
-        android:contentDescription="Ayuda para contraseña"
-        android:padding="8dp"
-        android:layout_marginLeft="330dp"
-        android:layout_marginRight="30dp"
-        android:src="@drawable/about" />
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="start">
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical"
-        android:layout_marginTop="20dp">
+        android:padding="16dp">
 
+        <!-- Botón de "About" arriba a la izquierda -->
         <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="210dp"
-            android:layout_height="115dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.108"
-            app:srcCompat="@drawable/logo" />
+            android:id="@+id/btnAbout"
+            android:layout_width="54dp"
+            android:layout_height="45dp"
+            android:layout_gravity="end"
+            android:contentDescription="About"
+            android:padding="8dp"
+            android:src="@drawable/about" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="210dp"
+                android:layout_height="115dp"
+                app:srcCompat="@drawable/logo" />
+        </LinearLayout>
+
+        <!-- Campo de Email/Usuario/Teléfono -->
+        <EditText
+            android:layout_marginTop="30dp"
+            android:id="@+id/inputEmail"
+            android:layout_width="348dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/emailusuariotelefonoActivityLogin"
+            android:inputType="textEmailAddress"
+            android:padding="4dp" />
+
+        <View
+            android:layout_width="350dp"
+            android:layout_height="1.5dp"
+            android:background="#000000" />
+
+        <!-- Campo de Contraseña con el botón de ojo -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+
+            <EditText
+                android:id="@+id/inputPassword"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:hint="@string/contraActivityLogin"
+                android:inputType="textPassword"
+                android:padding="4dp" />
+
+            <ImageView
+                android:id="@+id/btnTogglePassword"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical"
+                android:padding="8dp"
+                android:src="@drawable/ic_eye_closed" /> <!-- Ojo cerrado por defecto -->
+        </LinearLayout>
+
+        <View
+            android:layout_width="350dp"
+            android:layout_height="1.5dp"
+            android:background="#000000" />
+
+        <CheckBox
+            android:id="@+id/rememberMeCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/mantenersesActivityLogin" />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="325dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="12dp"
+            android:backgroundTint="@color/mainColor"
+            android:text="@string/inicsesActivityLogin"
+            android:textColor="?attr/android:background" />
+
+        <TextView
+            android:id="@+id/btnRecoverPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:padding="16dp"
+            android:text="@string/recucontraActivityLogin" />
+
+        <TextView
+            android:id="@+id/btnAlreadyHaveAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:padding="16dp"
+            android:text="@string/nousuarioActivityLogin" />
+
+        <TextView
+            android:id="@+id/hola"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:padding="16dp"
+            android:text="@string/inicsesconActivityLogin" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <ImageView
+                android:id="@+id/img1"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/google" />
+
+            <ImageView
+                android:id="@+id/img2"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/facebook" />
+        </LinearLayout>
+
     </LinearLayout>
-
-    <EditText
-        android:layout_marginTop="30dp"
-        android:id="@+id/inputEmail"
-        android:layout_width="348dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/emailusuariotelefonoActivityLogin"
-        android:inputType="textEmailAddress"
-        android:padding="4dp" />
-
-    <View
-        android:layout_width="350dp"
-        android:layout_height="1.5dp"
-        android:background="#000000" />
-
-    <EditText
-        android:id="@+id/inputPassword"
-        android:layout_width="349dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="@string/contraActivityLogin"
-        android:inputType="textPassword"
-        android:padding="4dp" />
-    <View
-        android:layout_width="350dp"
-        android:layout_height="1.5dp"
-        android:background="#000000" />
-
-    <CheckBox
-        android:id="@+id/rememberMeCheckbox"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/mantenersesActivityLogin" />
-
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="325dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:padding="12dp"
-        android:backgroundTint="@color/mainColor"
-        android:text="@string/inicsesActivityLogin"
-        android:textColor="?attr/android:background" />
-
-    <TextView
-        android:id="@+id/btnRecoverPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:padding="16dp"
-        android:text="@string/recucontraActivityLogin" />
-
-    <TextView
-        android:id="@+id/btnAlreadyHaveAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:padding="16dp"
-        android:text="@string/nousuarioActivityLogin" />
-
-    <TextView
-        android:id="@+id/hola"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:padding="16dp"
-        android:text="@string/inicsesconActivityLogin" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
-
-        <ImageView
-            android:id="@+id/img1"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_margin="8dp"
-            android:src="@drawable/google" />
-
-        <ImageView
-            android:id="@+id/img2"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_margin="8dp"
-            android:src="@drawable/facebook" />
-    </LinearLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/email"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:errorEnabled="true" />
-
-</LinearLayout>
+</ScrollView>

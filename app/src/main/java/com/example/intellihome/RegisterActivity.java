@@ -1,10 +1,17 @@
 package com.example.intellihome;
 
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -56,8 +63,9 @@ public class RegisterActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int PICK_IMAGE = 2;
     private static final int REQUEST_CAMERA_PERMISSION = 3;
-    private ImageView profileImage, iconHelpPassword;
+    private ImageView profileImage, iconHelpPassword, btnTogglePassword, btnTogglePassword2;
     private Button btnCreateAccount, btnProfilePhoto;
+    private boolean isPasswordVisible = false, isPasswordVisible2 = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +98,8 @@ public class RegisterActivity extends AppCompatActivity {
         inputCardHolder = findViewById(R.id.inputCardHolder);
         expDatePicker = findViewById(R.id.expDatePicker);
         iconHelpPassword = findViewById(R.id.iconHelpPassword);
+        btnTogglePassword = findViewById(R.id.btnTogglePassword);
+        btnTogglePassword2 = findViewById(R.id.btnTogglePassword2);
 
         GlobalColor globalVariables = (GlobalColor) getApplicationContext();
         int currentColor = globalVariables.getCurrentColor();
@@ -168,6 +178,35 @@ public class RegisterActivity extends AppCompatActivity {
             } else {
                 mostrarMensaje(getString(R.string.debeacepterRegisterActivity));
             }
+        });
+
+        //Manejo de botones para ver la contraseña
+        btnTogglePassword.setOnClickListener(v -> {
+            if (isPasswordVisible) {
+                // Si la contraseña es visible, ocultarla
+                inputPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                btnTogglePassword.setImageResource(R.drawable.ic_eye_closed);  // Cambiar el ícono al ojo cerrado
+            } else {
+                // Si la contraseña está oculta, mostrarla
+                inputPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                btnTogglePassword.setImageResource(R.drawable.ic_eye_open);  // Cambiar el ícono al ojo abierto
+            }
+            isPasswordVisible = !isPasswordVisible; // Alternar el estado
+            inputPassword.setSelection(inputPassword.length()); // Mantener el cursor al final del texto
+        });
+
+        btnTogglePassword2.setOnClickListener(v -> {
+            if (isPasswordVisible) {
+                // Si la contraseña es visible, ocultarla
+                inputRepeatPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                btnTogglePassword2.setImageResource(R.drawable.ic_eye_closed);  // Cambiar el ícono al ojo cerrado
+            } else {
+                // Si la contraseña está oculta, mostrarla
+                inputRepeatPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                btnTogglePassword2.setImageResource(R.drawable.ic_eye_open);  // Cambiar el ícono al ojo abierto
+            }
+            isPasswordVisible = !isPasswordVisible; // Alternar el estado
+            inputRepeatPassword.setSelection(inputRepeatPassword.length()); // Mantener el cursor al final del texto
         });
     }
 
@@ -290,10 +329,46 @@ public class RegisterActivity extends AppCompatActivity {
 
     // Método para convertir el Bitmap en Drawable y establecerlo como fondo del botón
     private void setButtonBackgroundFromBitmap(Bitmap bitmap) {
-        Drawable drawableImage = new BitmapDrawable(getResources(), bitmap);
+        // Recortar el bitmap a una forma circular
+        Bitmap circularBitmap = getCircularBitmap(bitmap);
+
+        // Convertir el Bitmap redondeado a Drawable
+        Drawable drawableImage = new BitmapDrawable(getResources(), circularBitmap);
+
+        // Asegurarse de que el botón sea redondo
         btnProfilePhoto.setBackground(drawableImage);
-        btnProfilePhoto.setBackgroundTintList(null); // Quitar la tint para evitar que afecte la imagen
+        btnProfilePhoto.setBackgroundTintList(null);  // Quitar la tint para evitar que afecte la imagen
+
+        // Ajustar el tamaño del botón para que sea cuadrado (ancho = alto)
+        btnProfilePhoto.getLayoutParams().width = btnProfilePhoto.getLayoutParams().height;
+        btnProfilePhoto.requestLayout();  // Aplicar los nuevos parámetros de diseño
     }
+
+    // Método para recortar el Bitmap a una forma circular
+    private Bitmap getCircularBitmap(Bitmap bitmap) {
+        int width = Math.min(bitmap.getWidth(), bitmap.getHeight());
+        Bitmap output = Bitmap.createBitmap(width, width, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(output);
+
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, width, width);
+        final RectF rectF = new RectF(rect);
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(0xFF000000);  // Puedes cambiar el color si es necesario
+
+        // Dibujar un círculo
+        canvas.drawOval(rectF, paint);
+
+        // Aplicar el recorte circular al bitmap
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        return output;
+    }
+
 
 
     // Manejar la solicitud de permisos
