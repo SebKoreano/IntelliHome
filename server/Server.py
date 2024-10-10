@@ -36,7 +36,7 @@ class Usuario:
             server.quit()
 
 class ChatServer:
-    def __init__(self, host='0.0.0.0', port=1717):
+    def __init__(self, host="172.18.251.41", port=3535):
         
         self.matriz_usuarios = [] 
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -45,36 +45,14 @@ class ChatServer:
         self.clients = []
         self.agregar_usuario_a_matriz()
 
-        # Configuración de la interfaz gráfica
-        self.root = tk.Tk()
-        self.root.title("Servidor de Chat")
-
-        self.chat_display = scrolledtext.ScrolledText(self.root, state='disabled', width=50, height=20)
-        self.chat_display.pack(pady=10)
-
-        self.message_entry = tk.Entry(self.root, width=40)
-        self.message_entry.pack(pady=5)
-
-        self.send_button = tk.Button(self.root, text="Enviar")
-        self.send_button.pack(pady=5)
-
-        self.quit_button = tk.Button(self.root, text="Salir", command=self.close_server)
-        self.quit_button.pack(pady=5)
 
         # Hilo para manejar el servidor
         self.thread = threading.Thread(target=self.accept_connections)
         self.thread.start()
-
-        self.root.protocol("WM_DELETE_WINDOW", self.close_server)
-        self.root.mainloop()
-
     def accept_connections(self):
         while True:
             client_socket, addr = self.server_socket.accept()
             self.clients.append(client_socket)
-            self.chat_display.config(state='normal')
-            self.chat_display.insert(tk.END, f"Conexión de {addr}\n")
-            self.chat_display.config(state='disabled')
             threading.Thread(target=self.handle_client, args=(client_socket,)).start()
 
     def handle_client(self, client_socket):
@@ -84,40 +62,33 @@ class ChatServer:
                 if message:
                     message = message.strip()
 
-                    self.chat_display.config(state='normal')
-                    self.chat_display.insert(tk.END, f"Mensaje recibido: {repr(message)}\n")  
-                    self.chat_display.config(state='disabled')
+                    print("Llegó: "+message)
 
                     # Verificar el prefijo del mensaje
                     if message.startswith("CrearCuenta_"):  # Nuevo usuario
-                        self.chat_display.insert(tk.END, "Procesando nueva cuenta...\n")
+                        print(message)
                         self.write_message_to_file(message[len("CrearCuenta_"):])
 
                     elif message.startswith("Login_"):
-                        self.chat_display.insert(tk.END, "Procesando login...\n")
+                        print(message)
                         self.buscar_login(message[len("Login_"):], client_socket)
 
                     elif message.startswith("Recuperacion_"):
-                        self.chat_display.insert(tk.END, "Procesando recuperación...\n")
                         print(message)
                         self.existe_correo(message[len("Recuperacion_"):], client_socket)
                         #self.recuperar_contraseña(self,"sebasboza.cr@gmail.com",None) 
                     else:
-                        self.chat_display.insert(tk.END, "No sirvió, pero llegó\n")
+                        print("No llegó mensaje relevante")
                         
                 else:
-                    self.chat_display.insert(tk.END, "No sirvió Lol, nisiquiera llegó\n")
+                    print("Error!")
             except Exception as e:
-                self.chat_display.insert(tk.END, f"Error: {e}\n")
+                print("error")
                 break
         client_socket.close()
         self.clients.remove(client_socket)
 
     def broadcast(self, message, sender_socket):
-        self.chat_display.config(state='normal')
-        self.chat_display.insert(tk.END, f"Cliente: {message}\n")
-        self.chat_display.config(state='disabled')
-
         try:
             sender_socket.send(message.encode('utf-8'))
         except:
@@ -133,7 +104,7 @@ class ChatServer:
     #Escriba cuenta creada en .txt
     def write_message_to_file(self, message):
         """Escribir un mensaje en el archivo usuarios.txt."""
-        with open("usuarios.txt", "a") as file:  # Abrir en modo append
+        with open("server/usuarios.txt", "a") as file:  # Abrir en modo append
             file.write(message + "\n") 
 
     def procesar_usuario(self, mensaje):
@@ -168,7 +139,7 @@ class ChatServer:
     def agregar_usuario_a_matriz(self):
         """Leer usuarios del archivo y agregarlos a la matriz."""
         try:
-            with open("usuarios.txt", "r") as file:  # Abrir el archivo en modo lectura
+            with open("server/usuarios.txt", "r") as file:  # Abrir el archivo en modo lectura
                 for line in file:
                     mensaje = line.strip()  # Limpiar espacios en blanco
                     usuario_fila = self.procesar_usuario(mensaje)  # Procesar la línea
@@ -223,11 +194,11 @@ class ChatServer:
                 mat[i][5] = string  # Cambiar la contraseña
                 mat[i][6] = string  # Cambiar la contraseña de confirmación
                 break
-        self.CambiosATxt()  # Guardar los cambios en el archivo
-
+        self.CambiosATxt()
+    
     def CambiosATxt(self):
         mat = self.matriz_usuarios
-        with open("usuarios.txt", "w") as file:  # Abrir en modo escritura para sobrescribir
+        with open("server/usuarios2.txt", "w") as file:  # Abrir en modo append
             for fila in mat:
                 message = "_".join(fila)  # Unir elementos de la fila con "_"
                 file.write(message + "\n")
@@ -241,34 +212,34 @@ class ChatServer:
         self.cambiar_Contraseña(correo, new_pass)  # Cambiar la contraseña en la matriz
 
 def generar_nueva_contraseña():
+    print("entro")
+    while True:
+        # Asegurar que se incluye al menos un carácter de cada tipo
         print("entro")
-        while True:
-            # Asegurar que se incluye al menos un carácter de cada tipo
-            print("entro")
-            password = [
-                secrets.choice(letrasMayusculas),
-                secrets.choice(letrasMinusculas),
-                secrets.choice(digitos),
-                secrets.choice(caracteresEspeciales)
-            ]
+        password = [
+            secrets.choice(letrasMayusculas),
+            secrets.choice(letrasMinusculas),
+            secrets.choice(digitos),
+            secrets.choice(caracteresEspeciales)
+        ]
 
-            # Rellenar el resto de la contraseña con caracteres aleatorios del alfabeto completo
-            alfabeto = letrasMayusculas + letrasMinusculas + digitos + caracteresEspeciales
-            password += [secrets.choice(alfabeto) for _ in range(longitudContraseña - 4)]
-            
-            # Mezclar la contraseña para que no siempre aparezcan los caracteres especiales, números, etc. al principio
-            secrets.SystemRandom().shuffle(password)
-            
-            # Convertir la lista en una cadena
-            contraseña = ''.join(password)
-            print(f"Contraseña generada: {contraseña}")  # Imprimir la contraseña generada
+        # Rellenar el resto de la contraseña con caracteres aleatorios del alfabeto completo
+        alfabeto = letrasMayusculas + letrasMinusculas + digitos + caracteresEspeciales
+        password += [secrets.choice(alfabeto) for _ in range(longitudContraseña - 4)]
+        
+        # Mezclar la contraseña para que no siempre aparezcan los caracteres especiales, números, etc. al principio
+        secrets.SystemRandom().shuffle(password)
+        
+        # Convertir la lista en una cadena
+        contraseña = ''.join(password)
+        print(f"Contraseña generada: {contraseña}")  # Imprimir la contraseña generada
 
-            # Verificar que la contraseña cumple con todos los requisitos
-            if (any(char in letrasMayusculas for char in contraseña) and
-                any(char in letrasMinusculas for char in contraseña) and
-                any(char in digitos for char in contraseña) and
-                any(char in caracteresEspeciales for char in contraseña)):
-                return contraseña
+        # Verificar que la contraseña cumple con todos los requisitos
+        if (any(char in letrasMayusculas for char in contraseña) and
+            any(char in letrasMinusculas for char in contraseña) and
+            any(char in digitos for char in contraseña) and
+            any(char in caracteresEspeciales for char in contraseña)):
+            return contraseña
 
 # Definir parametros para la contraseña random
 letrasMayusculas = string.ascii_uppercase  
@@ -276,7 +247,6 @@ letrasMinusculas = string.ascii_lowercase
 digitos = string.digits  
 caracteresEspeciales = string.punctuation  
 longitudContraseña = 8
-
 
 if __name__ == "__main__":
     ChatServer()

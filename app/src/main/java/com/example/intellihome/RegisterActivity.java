@@ -1,6 +1,8 @@
 package com.example.intellihome;
 
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -19,11 +21,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import android.text.TextUtils;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.io.PrintWriter;
 import java.util.*;
-import android.widget.Toast;
 import java.time.LocalDate;
 import java.time.Period;
 import java.net.Socket;
@@ -38,13 +38,14 @@ import androidx.core.app.ActivityCompat; // Para manejar permisos
 import androidx.core.content.ContextCompat; // Para verificar permisos
 import android.Manifest; // Para usar los permisos de Android, incluyendo READ_MEDIA_IMAGES
 import androidx.annotation.Nullable; // Para la anotación Nullable
+import android.widget.ArrayAdapter;
 
 
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText inputFirstName, inputLastName, inputUsername, inputPhone, inputEmail, inputPassword, inputRepeatPassword;
-    private Spinner selectCasa, selectVehiculo, selectHobbies, selectDomicilio;
+    private EditText inputFirstName, inputLastName, inputUsername, inputPhone, inputEmail, inputPassword, inputRepeatPassword, inputHobbies;
+    private Spinner selectCasa, selectVehiculo, selectDomicilio;
     private DatePicker datePicker, expDatePicker;
     private CheckBox checkboxPropietario, checkboxAlquilar, checkboxTerms;
     private LinearLayout propietarioSection, alquilarSection;
@@ -55,7 +56,8 @@ public class RegisterActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int PICK_IMAGE = 2;
     private static final int REQUEST_CAMERA_PERMISSION = 3;
-    private ImageView profileImage;
+    private ImageView profileImage, iconHelpPassword;
+    private Button btnCreateAccount, btnProfilePhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,8 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         // Inicializar elementos
+        btnCreateAccount = findViewById(R.id.btnCreateAccount);
+        btnProfilePhoto = findViewById(R.id.btnProfilePhoto);
         inputFirstName = findViewById(R.id.inputName);
         inputLastName = findViewById(R.id.inputLastName);
         inputUsername = findViewById(R.id.inputUsername);
@@ -72,7 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
         inputRepeatPassword = findViewById(R.id.inputRepeatPassword);
         selectCasa = findViewById(R.id.selectCasa);
         selectVehiculo = findViewById(R.id.selectVehiculo);
-        selectHobbies = findViewById(R.id.selectHobbies);
+        inputHobbies = findViewById(R.id.inputHobbies);
         selectDomicilio = findViewById(R.id.selectDomicilio);
         datePicker = findViewById(R.id.datePicker);
         checkboxPropietario = findViewById(R.id.checkboxPropietario);
@@ -85,10 +89,14 @@ public class RegisterActivity extends AppCompatActivity {
         inputCVV = findViewById(R.id.inputCVV);
         inputCardHolder = findViewById(R.id.inputCardHolder);
         expDatePicker = findViewById(R.id.expDatePicker);
-        profileImage = findViewById(R.id.profileImageView);
-        
+        iconHelpPassword = findViewById(R.id.iconHelpPassword);
+
+        GlobalColor globalVariables = (GlobalColor) getApplicationContext();
+        int currentColor = globalVariables.getCurrentColor();
+        btnCreateAccount.setBackgroundColor(currentColor);
+
         // Conectar al servidor
-        connectToServer("192.168.0.114", 1717);
+        connectToServer("172.18.251.41", 3535);
 
         // Ocultar inicialmente las secciones de Propietario y Alquilar
         propietarioSection.setVisibility(View.GONE);
@@ -111,31 +119,54 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        // Configurar el evento onClick para mostrar el cuadro de diálogo
+        iconHelpPassword.setOnClickListener(v -> {
+            // Mostrar el cuadro de diálogo con los requerimientos de la contraseña
+            showPasswordRequirementsDialog();
+        });
+
+        // Spinner de Casa, usando recursos de strings
+        String[] casas = {getString(R.string.apartaRegisterActivity), getString(R.string.casacampRegisterActivity), getString(R.string.casaplaRegisterActivity), getString(R.string.cabañaRegisterActivity), getString(R.string.pisocciuRegisterActivity)};
+        ArrayAdapter<String> casaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, casas);
+        casaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectCasa.setAdapter(casaAdapter);
+
+        // Spinner de Vehículo
+        String[] vehiculos = {getString(R.string.x4RegisterActivity), getString(R.string.pickupRegisterActivity), getString(R.string.sedanRegisterActivity), getString(R.string.suvRegisterActivity), getString(R.string.camionetaRegisterActivity)};
+        ArrayAdapter<String> vehiculoAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, vehiculos);
+        vehiculoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectVehiculo.setAdapter(vehiculoAdapter);
+
+        // Spinner de Domicilio
+        String[] domicilios = {getString(R.string.sanjoseRegisterActivity), getString(R.string.alajuelaRegisterActivity), getString(R.string.herediaRegisterActivity), getString(R.string.limonRegisterActivity), getString(R.string.puntarenasRegisterActivity), getString(R.string.guanaRegisterActivity), getString(R.string.cartagoRegisterActivity)};
+        ArrayAdapter<String> domicilioAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, domicilios);
+        domicilioAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectDomicilio.setAdapter(domicilioAdapter);
+
+
         //Boton para tomar foto
-        Button btnProfilePhoto = findViewById(R.id.btnProfilePhoto);
         btnProfilePhoto.setOnClickListener(view -> showPhotoSelectionDialog());
 
         //ChackBox de los terminos y condiciones
-        checkboxTerms.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                // Mostrar el diálogo con los términos y condiciones
-                showTermsAndConditionsDialog();
-            }
-        });
+                checkboxTerms.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (isChecked) {
+                        // Mostrar el diálogo con los términos y condiciones
+                        showTermsAndConditionsDialog();
+                    }
+                });
 
 
         // Manejar el botón de crear cuenta
-        Button btnCreateAccount = findViewById(R.id.btnCreateAccount);
         btnCreateAccount.setOnClickListener(view -> {
             if (checkboxTerms.isChecked()) {
                 if (validarDatos() && validarEmail(inputEmail) && validarPassword(inputPassword) && validarContraseñasIguales() && verificarEdad()) {
                     obtenerDatos();
                     sendMessage(concatenarDatos()); // Enviar mensaje al servidor
-                    mostrarMensaje("Cuenta creada con éxito");
-                    regresarLogIn();
+                    mostrarMensaje(getString(R.string.cuentcreexRegisterActivity));
+                    regresarAConfig();
                 }
             } else {
-                mostrarMensaje("Debe aceptar los Términos y Condiciones");
+                mostrarMensaje(getString(R.string.debeacepterRegisterActivity));
             }
         });
     }
@@ -159,10 +190,23 @@ public class RegisterActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    // Método para mostrar los requerimientos de la contraseña en un AlertDialog
+    private void showPasswordRequirementsDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.requecontraRegisterActivity))
+                .setMessage(getString(R.string.contradebecontRegisterActivity) + "\n" +
+                        getString(R.string.mayusculacontraRegisterActivity) + "\n" +
+                        getString(R.string.minusculacontraRegisterActivity) + "\n" +
+                        getString(R.string.numcontraRegisterActivity) + "\n" +
+                        getString(R.string.simbocontraRegisterActivity) + "\n" +
+                        getString(R.string.mincaractcontraRegisterActivity))
+                .setPositiveButton("OK", null)
+                .show();
+    }
 
     // Mostrar un diálogo para elegir entre tomar una foto o seleccionar de la galería
     private void showPhotoSelectionDialog() {
-        String[] options = {"Tomar foto", "Seleccionar de la galería"};
+        String[] options = {getString(R.string.tomarfotoRegisterActivity), getString(R.string.selectgaleRegisterActivity)};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Seleccionar imagen")
@@ -204,32 +248,53 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-
     // Método para seleccionar imagen de la galería
     private void openGallery() {
         Intent pickPhotoIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(pickPhotoIntent, PICK_IMAGE);
     }
 
-    // Manejar el resultado de la toma de foto o selección de imagen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                // Aquí puedes manejar la imagen capturada
-                Bundle extras = data.getExtras();
-                if (extras != null) {
-                    Bitmap imageBitmap = (Bitmap) extras.get("data");
-                    profileImage.setImageBitmap(imageBitmap); // Mostrar la imagen en el ImageView
-                }
+                handleCameraImage(data);
             } else if (requestCode == PICK_IMAGE) {
-                // Aquí puedes manejar la imagen seleccionada de la galería
-                Uri selectedImage = data.getData();
-                profileImage.setImageURI(selectedImage); // Mostrar la imagen en el ImageView
+                handleGalleryImage(data);
             }
         }
     }
+
+    // Método para manejar la imagen tomada con la cámara
+    private void handleCameraImage(@Nullable Intent data) {
+        Bundle extras = data.getExtras();
+        if (extras != null) {
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            // Convertir el Bitmap a Drawable y establecerlo como fondo
+            setButtonBackgroundFromBitmap(imageBitmap);
+        }
+    }
+
+    // Método para manejar la imagen seleccionada de la galería
+    private void handleGalleryImage(@Nullable Intent data) {
+        Uri selectedImage = data.getData();
+        try {
+            Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+            // Convertir el Bitmap a Drawable y establecerlo como fondo
+            setButtonBackgroundFromBitmap(imageBitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Método para convertir el Bitmap en Drawable y establecerlo como fondo del botón
+    private void setButtonBackgroundFromBitmap(Bitmap bitmap) {
+        Drawable drawableImage = new BitmapDrawable(getResources(), bitmap);
+        btnProfilePhoto.setBackground(drawableImage);
+        btnProfilePhoto.setBackgroundTintList(null); // Quitar la tint para evitar que afecte la imagen
+    }
+
 
     // Manejar la solicitud de permisos
     @Override
@@ -239,7 +304,7 @@ public class RegisterActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openGallery();
             } else {
-                Toast.makeText(this, "Permiso de acceso a imágenes denegado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.accesoimaRegisterActivity), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -280,9 +345,9 @@ public class RegisterActivity extends AppCompatActivity {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
     }
 
-    //Pasar al LogIn
-    private void regresarLogIn(){
-        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+    //Pasar al ConfigActivity
+    private void regresarAConfig() {
+        Intent intent = new Intent(RegisterActivity.this, ConfigActivity.class);
         startActivity(intent);
     }
 
@@ -361,12 +426,12 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
         if (!(checkboxPropietario.isChecked() || checkboxAlquilar.isChecked())){
-            mostrarMensaje("Debe de elegir un rol en la aplicación");
+            mostrarMensaje(getString(R.string.elegirrolRegisterActivity));
             return false;
         }
         for (EditText campo : campos) {
             if (TextUtils.isEmpty(campo.getText().toString())) {
-                campo.setError("Este campo es obligatorio");
+                campo.setError(getString(R.string.campoobliRegisterActivity));
                 return false;
             }
         }
@@ -378,11 +443,11 @@ public class RegisterActivity extends AppCompatActivity {
         String cardNumber = inputCardNumber.getText().toString();
         String cvv = inputCVV.getText().toString();
         if (!(15 <= cardNumber.length() && cardNumber.length() <= 16)){
-            inputCardNumber.setError("Numero de tarjeta inválido");
+            inputCardNumber.setError(getString(R.string.numtarjetainvRegisterActivity));
             return false;
         }
         if (!(3 <= cvv.length() && cvv.length() <= 4)){
-            inputCVV.setError("CVV inválido");
+            inputCVV.setError(getString(R.string.cvvinvRegisterActivity));
             return false;
         }
 
@@ -396,7 +461,7 @@ public class RegisterActivity extends AppCompatActivity {
         int selectedMonth = expDatePicker.getMonth() + 1;
 
         if (selectedYear < currentYear || (selectedYear == currentYear && selectedMonth <= currentMonth)) {
-            mostrarMensaje("La fecha de vencimiento debe ser posterior a la fecha actual");
+            mostrarMensaje(getString(R.string.fechavencsupRegisterActivity));
             return false;
         }
 
@@ -417,7 +482,7 @@ public class RegisterActivity extends AppCompatActivity {
         if (edad >= 18) {
             return true;
         } else {
-            mostrarMensaje("Debes tener al menos 18 años");
+            mostrarMensaje(getString(R.string.debe18tenerRegisterActivity));
             return false;
         }
     }
@@ -438,7 +503,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Verificar si el IBAN coincide con la expresión regular
         if (!matcher.matches()) {
-            inputIban.setError("IBAN inválido");
+            inputIban.setError(getString(R.string.ibaninvRegisterActivity));
             return false;
         }
         return true;
@@ -452,7 +517,7 @@ public class RegisterActivity extends AppCompatActivity {
         Matcher matcher = pattern.matcher(email);
 
         if (!matcher.matches()) {
-            mostrarMensaje("Email inválido");
+            mostrarMensaje(getString(R.string.emailinvRegisterActivity));
             return false;
         }
         return true;
@@ -466,7 +531,7 @@ public class RegisterActivity extends AppCompatActivity {
         Matcher matcher = pattern.matcher(password);
 
         if (!matcher.matches()) {
-            mostrarMensaje("Contraseña inválida");
+            mostrarMensaje(getString(R.string.contrainvRegisterActivity));
             return false;
         }
         return true;
@@ -478,7 +543,7 @@ public class RegisterActivity extends AppCompatActivity {
         String repeatPassword = inputRepeatPassword.getText().toString();
 
         if (!password.equals(repeatPassword)) {
-            mostrarMensaje("Las contraseñas no coinciden");
+            mostrarMensaje(getString(R.string.contranocoindiRegisterActivity));
             return false;
         }
         return true;

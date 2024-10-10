@@ -3,9 +3,11 @@ package com.example.intellihome;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import java.net.Socket;
@@ -39,11 +41,16 @@ public class MainActivity extends AppCompatActivity {
         TextView btnAlreadyHaveAccount = findViewById(R.id.btnAlreadyHaveAccount);
         TextView btnRecoverPassword = findViewById(R.id.btnRecoverPassword);
         TextInputLayout Email = findViewById(R.id.email);
+        ImageView btnAbout = findViewById(R.id.btnAbout);
+
+        GlobalColor globalVariables = (GlobalColor) getApplicationContext();
+        int currentColor = globalVariables.getCurrentColor();
+        btnLogin.setBackgroundColor(currentColor);
 
         // Iniciar el hilo para conectarse al servidor y recibir mensajes
         new Thread(() -> {
             try {
-                socket = new Socket("192.168.0.114", 1717); //192.168.18.206
+                socket = new Socket("172.18.251.41", 3535); //192.168.18.206
                 out = new PrintWriter(socket.getOutputStream(), true);
                 in = new Scanner(socket.getInputStream());
 
@@ -57,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }).start();
+
+        // Configurar el evento onClick del botón para mostrar el diálogo "About"
+        btnAbout.setOnClickListener(v -> showAboutDialog());
 
         // Lógica para el botón de Login
         btnLogin.setOnClickListener(v -> {
@@ -81,6 +91,14 @@ public class MainActivity extends AppCompatActivity {
             }).start();
         });
 
+        rememberMeCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                // Mover a ConfigActivity cuando el CheckBox está marcado
+                Intent intent = new Intent(MainActivity.this, ConfigActivity.class);
+                //startActivity(intent);
+            }
+        });
+
         btnAlreadyHaveAccount.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
             startActivity(intent);
@@ -91,6 +109,20 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
+
+    // Método para mostrar el diálogo "About"
+    private void showAboutDialog() {
+        // Inflar el layout del diálogo personalizado
+        LayoutInflater inflater = getLayoutInflater();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(inflater.inflate(R.layout.dialog_about, null))
+                // Reemplaza el texto del botón "Cerrar" con el string de recursos
+                .setPositiveButton(getString(R.string.msjabtActivity), (dialog, id) -> dialog.dismiss());
+
+        // Mostrar el cuadro de diálogo
+        builder.create().show();
+    }
+
     // Método para manejar la respuesta del servidor
     private void handleServerResponse(String response) {
         // Registrar el mensaje recibido

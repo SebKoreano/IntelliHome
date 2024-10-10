@@ -12,6 +12,7 @@
 
     <application
         android:allowBackup="true"
+        android:name=".GlobalColor"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/logo"
@@ -23,6 +24,8 @@
 
         <activity android:name=".RegisterActivity" />
         <activity android:name=".RecuperationActivity" />
+        <activity android:name=".ConfigActivity" />
+        <activity android:name=".ColorWheel" />
 
         <activity
             android:name=".MainActivity"
