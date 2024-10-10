@@ -11,6 +11,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -62,8 +63,9 @@ public class RegisterActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int PICK_IMAGE = 2;
     private static final int REQUEST_CAMERA_PERMISSION = 3;
-    private ImageView profileImage, iconHelpPassword;
+    private ImageView profileImage, iconHelpPassword, btnTogglePassword, btnTogglePassword2;
     private Button btnCreateAccount, btnProfilePhoto;
+    private boolean isPasswordVisible = false, isPasswordVisible2 = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +98,8 @@ public class RegisterActivity extends AppCompatActivity {
         inputCardHolder = findViewById(R.id.inputCardHolder);
         expDatePicker = findViewById(R.id.expDatePicker);
         iconHelpPassword = findViewById(R.id.iconHelpPassword);
+        btnTogglePassword = findViewById(R.id.btnTogglePassword);
+        btnTogglePassword2 = findViewById(R.id.btnTogglePassword2);
 
         GlobalColor globalVariables = (GlobalColor) getApplicationContext();
         int currentColor = globalVariables.getCurrentColor();
@@ -174,6 +178,35 @@ public class RegisterActivity extends AppCompatActivity {
             } else {
                 mostrarMensaje(getString(R.string.debeacepterRegisterActivity));
             }
+        });
+
+        //Manejo de botones para ver la contraseña
+        btnTogglePassword.setOnClickListener(v -> {
+            if (isPasswordVisible) {
+                // Si la contraseña es visible, ocultarla
+                inputPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                btnTogglePassword.setImageResource(R.drawable.ic_eye_closed);  // Cambiar el ícono al ojo cerrado
+            } else {
+                // Si la contraseña está oculta, mostrarla
+                inputPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                btnTogglePassword.setImageResource(R.drawable.ic_eye_open);  // Cambiar el ícono al ojo abierto
+            }
+            isPasswordVisible = !isPasswordVisible; // Alternar el estado
+            inputPassword.setSelection(inputPassword.length()); // Mantener el cursor al final del texto
+        });
+
+        btnTogglePassword2.setOnClickListener(v -> {
+            if (isPasswordVisible) {
+                // Si la contraseña es visible, ocultarla
+                inputRepeatPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                btnTogglePassword2.setImageResource(R.drawable.ic_eye_closed);  // Cambiar el ícono al ojo cerrado
+            } else {
+                // Si la contraseña está oculta, mostrarla
+                inputRepeatPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                btnTogglePassword2.setImageResource(R.drawable.ic_eye_open);  // Cambiar el ícono al ojo abierto
+            }
+            isPasswordVisible = !isPasswordVisible; // Alternar el estado
+            inputRepeatPassword.setSelection(inputRepeatPassword.length()); // Mantener el cursor al final del texto
         });
     }
 

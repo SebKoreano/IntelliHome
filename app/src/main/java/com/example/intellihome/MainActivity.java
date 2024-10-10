@@ -2,6 +2,7 @@ package com.example.intellihome;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.Button;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private Socket socket;
     private PrintWriter out;
     private Scanner in;
+    private boolean isPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +42,28 @@ public class MainActivity extends AppCompatActivity {
         Button btnLogin = findViewById(R.id.btnLogin);
         TextView btnAlreadyHaveAccount = findViewById(R.id.btnAlreadyHaveAccount);
         TextView btnRecoverPassword = findViewById(R.id.btnRecoverPassword);
-        TextInputLayout Email = findViewById(R.id.email);
         ImageView btnAbout = findViewById(R.id.btnAbout);
+        ImageView btnTogglePassword = findViewById(R.id.btnTogglePassword);
 
         GlobalColor globalVariables = (GlobalColor) getApplicationContext();
         int currentColor = globalVariables.getCurrentColor();
         btnLogin.setBackgroundColor(currentColor);
+
+        //Accion del boton para ver o no la contraseña
+        btnTogglePassword.setOnClickListener(v -> {
+            if (isPasswordVisible) {
+                // Si la contraseña es visible, ocultarla
+                inputPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                btnTogglePassword.setImageResource(R.drawable.ic_eye_closed);  // Cambiar el ícono al ojo cerrado
+            } else {
+                // Si la contraseña está oculta, mostrarla
+                inputPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                btnTogglePassword.setImageResource(R.drawable.ic_eye_open);  // Cambiar el ícono al ojo abierto
+            }
+            isPasswordVisible = !isPasswordVisible; // Alternar el estado
+            inputPassword.setSelection(inputPassword.length()); // Mantener el cursor al final del texto
+        });
+
 
         // Iniciar el hilo para conectarse al servidor y recibir mensajes
         new Thread(() -> {
