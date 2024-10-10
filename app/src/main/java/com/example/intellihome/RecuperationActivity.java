@@ -32,12 +32,15 @@ public class RecuperationActivity extends AppCompatActivity {
         confirmation_but = findViewById(R.id.button_recuerpa);
 
 
+        GlobalColor globalVariables = (GlobalColor) getApplicationContext();
+        int currentColor = globalVariables.getCurrentColor();
+        confirmation_but.setBackgroundColor(currentColor);
+
         // Obtener la IP de forma asíncrona
         new Thread(() -> {
-            String deviceIP = Utils.getIPAddress(true);
             runOnUiThread(() -> {
                 // Una vez que se obtiene la IP, conectarse al servidor
-                connectToServer("192.168.0.114", 1717); //"192.168.0.114"
+                connectToServer("172.18.251.41", 3535);
             });
         }).start();
         confirmation_but.setOnClickListener(view -> {

@@ -16,7 +16,7 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Términos y Condiciones de Uso de Intellihome"
+            android:text="@string/title"
             android:textStyle="bold"
             android:textSize="18sp"
             android:paddingBottom="8dp"/>
@@ -26,7 +26,7 @@
             android:id="@+id/effective_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Fecha de entrada en vigor: 3/10/2024"
+            android:text="@string/effective_date"
             android:textSize="14sp"
             android:paddingBottom="16dp"/>
 
@@ -35,7 +35,7 @@
             android:id="@+id/introduction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bienvenido a Intellihome. Al acceder y utilizar nuestra aplicación, usted acepta cumplir con los siguientes términos y condiciones. Si no está de acuerdo con estos términos, le solicitamos que no utilice nuestra aplicación."
+            android:text="@string/introduction"
             android:textSize="14sp"
             android:paddingBottom="16dp"/>
 
@@ -44,7 +44,7 @@
             android:id="@+id/section1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="1. Definiciones"
+            android:text="@string/section1"
             android:textStyle="bold"
             android:textSize="16sp"
             android:paddingBottom="8dp"/>
@@ -53,7 +53,7 @@
             android:id="@+id/section1_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="• Intellihome: Se refiere a la aplicación móvil y/o plataforma web que facilita el alquiler de propiedades.\n\n• Usuario: Cualquier persona que se registre y utilice Intellihome.\n\n• Propiedad: Cualquier inmueble disponible para alquiler a través de Intellihome."
+            android:text="@string/section1_content"
             android:textSize="14sp"
             android:paddingBottom="16dp"/>
 
@@ -62,7 +62,7 @@
             android:id="@+id/section2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="2. Aceptación de Términos"
+            android:text="@string/section2"
             android:textStyle="bold"
             android:textSize="16sp"
             android:paddingBottom="8dp"/>
@@ -71,7 +71,7 @@
             android:id="@+id/section2_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Al registrarse y utilizar Intellihome, usted acepta estos términos y condiciones en su totalidad. Nos reservamos el derecho a modificar estos términos en cualquier momento, por lo que recomendamos revisarlos periódicamente."
+            android:text="@string/section2_content"
             android:textSize="14sp"
             android:paddingBottom="16dp"/>
 
@@ -80,7 +80,7 @@
             android:id="@+id/section3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="3. Registro de Usuario"
+            android:text="@string/section3"
             android:textStyle="bold"
             android:textSize="16sp"
             android:paddingBottom="8dp"/>
@@ -89,7 +89,7 @@
             android:id="@+id/section3_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Para utilizar algunas funcionalidades de la aplicación, es necesario crear una cuenta. El Usuario se compromete a proporcionar información veraz y actualizada. Es responsabilidad del Usuario mantener la confidencialidad de sus credenciales de acceso."
+            android:text="@string/section3_content"
             android:textSize="14sp"
             android:paddingBottom="16dp"/>
 
@@ -98,7 +98,7 @@
             android:id="@+id/section4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="4. Uso de la Aplicación"
+            android:text="@string/section4"
             android:textStyle="bold"
             android:textSize="16sp"
             android:paddingBottom="8dp"/>
@@ -107,7 +107,7 @@
             android:id="@+id/section4_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="• Intellihome permite a los Usuarios buscar y alquilar propiedades.\n\n• El Usuario se compromete a utilizar la aplicación solo para fines lícitos y de acuerdo con las leyes aplicables."
+            android:text="@string/section4_content"
             android:textSize="14sp"
             android:paddingBottom="16dp"/>
 
@@ -116,7 +116,7 @@
             android:id="@+id/section5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="5. Propiedades"
+            android:text="@string/section5"
             android:textStyle="bold"
             android:textSize="16sp"
             android:paddingBottom="8dp"/>
@@ -125,7 +125,7 @@
             android:id="@+id/section5_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="• Las propiedades listadas en Intellihome son ofrecidas por propietarios y agentes inmobiliarios.\n\n• Intellihome no es responsable de la veracidad, disponibilidad o estado de las propiedades."
+            android:text="@string/section5_content"
             android:textSize="14sp"
             android:paddingBottom="16dp"/>
 
@@ -134,7 +134,7 @@
             android:id="@+id/section6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="6. Comisiones y Pagos"
+            android:text="@string/section6"
             android:textStyle="bold"
             android:textSize="16sp"
             android:paddingBottom="8dp"/>
@@ -143,7 +143,7 @@
             android:id="@+id/section6_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="• Intellihome puede cobrar comisiones por los servicios ofrecidos. Las tarifas serán comunicadas claramente antes de confirmar cualquier transacción.\n\n• El Usuario acepta realizar los pagos a través de los métodos habilitados en la aplicación."
+            android:text="@string/section6_content"
             android:textSize="14sp"
             android:paddingBottom="16dp"/>
 
@@ -152,7 +152,7 @@
             android:id="@+id/section7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="7. Política de Cancelación"
+            android:text="@string/section7"
             android:textStyle="bold"
             android:textSize="16sp"
             android:paddingBottom="8dp"/>
@@ -161,7 +161,7 @@
             android:id="@+id/section7_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Las políticas de cancelación varían según cada propiedad y serán indicadas en el anuncio correspondiente. Es responsabilidad del Usuario revisar estas políticas antes de realizar una reserva."
+            android:text="@string/section7_content"
             android:textSize="14sp"
             android:paddingBottom="16dp"/>
 
@@ -170,7 +170,7 @@
             android:id="@+id/section8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="8. Limitación de Responsabilidad"
+            android:text="@string/section8"
             android:textStyle="bold"
             android:textSize="16sp"
             android:paddingBottom="8dp"/>
@@ -179,7 +179,7 @@
             android:id="@+id/section8_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Intellihome no será responsable de daños directos, indirectos, incidentales o consecuentes que surjan del uso de la aplicación o de la imposibilidad de uso."
+            android:text="@string/section8_content"
             android:textSize="14sp"
             android:paddingBottom="16dp"/>
 
@@ -188,7 +188,7 @@
             android:id="@+id/section9"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="9. Propiedad Intelectual"
+            android:text="@string/section9"
             android:textStyle="bold"
             android:textSize="16sp"
             android:paddingBottom="8dp"/>
@@ -197,7 +197,7 @@
             android:id="@+id/section9_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Todo el contenido de Intellihome, incluyendo textos, gráficos y logotipos, está protegido por derechos de propiedad intelectual. Queda prohibida la reproducción o distribución sin autorización."
+            android:text="@string/section9_content"
             android:textSize="14sp"
             android:paddingBottom="16dp"/>
 
@@ -206,7 +206,7 @@
             android:id="@+id/section10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="10. Modificaciones a los Términos"
+            android:text="@string/section10"
             android:textStyle="bold"
             android:textSize="16sp"
             android:paddingBottom="8dp"/>
@@ -215,7 +215,7 @@
             android:id="@+id/section10_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nos reservamos el derecho de modificar estos términos en cualquier momento. Las modificaciones entrarán en vigor al ser publicadas en la aplicación. El uso continuado de Intellihome tras la publicación de cambios implica la aceptación de los mismos."
+            android:text="@string/section10_content"
             android:textSize="14sp"
             android:paddingBottom="16dp"/>
 
@@ -224,7 +224,7 @@
             android:id="@+id/section11"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="11. Legislación Aplicable"
+            android:text="@string/section11"
             android:textStyle="bold"
             android:textSize="16sp"
             android:paddingBottom="8dp"/>
@@ -233,7 +233,7 @@
             android:id="@+id/section11_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Estos términos se rigen por las leyes de Costa Rica. Cualquier disputa relacionada con el uso de Intellihome será resuelta en los tribunales de San José."
+            android:text="@string/section11_content"
             android:textSize="14sp"
             android:paddingBottom="16dp"/>
 
@@ -242,7 +242,7 @@
             android:id="@+id/section12"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="12. Contacto"
+            android:text="@string/section12"
             android:textStyle="bold"
             android:textSize="16sp"
             android:paddingBottom="8dp"/>
@@ -251,7 +251,7 @@
             android:id="@+id/section12_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Para cualquier pregunta o inquietud sobre estos términos, por favor contáctenos en intellihome@gmail.com."
+            android:text="@string/section12_content"
             android:textSize="14sp"
             android:paddingBottom="16dp"/>
 
@@ -260,8 +260,10 @@
             android:id="@+id/btnContinue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Continuar"
+            android:text="@string/btn_continue"
             android:textColor="@android:color/white"
             android:layout_marginTop="16dp" />
+
     </LinearLayout>
+
 </ScrollView>
