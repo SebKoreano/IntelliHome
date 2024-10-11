@@ -26,11 +26,11 @@
     <string name="casaplaRegisterActivity">Casa na praia</string>
     <string name="cabañaRegisterActivity">Cabana</string>
     <string name="pisocciuRegisterActivity">Apartamento na cidade</string>
-    <string name="x4RegisterActivity">4x4</string>
+    <string name="x4RegisterActivity">Hatchback</string>
     <string name="sedanRegisterActivity">Sedã</string>
     <string name="pickupRegisterActivity">PickUp</string>
     <string name="suvRegisterActivity">SUV</string>
-    <string name="camionetaRegisterActivity">Caminhonete</string>
+    <string name="camionetaRegisterActivity">conversível</string>
     <string name="sanjoseRegisterActivity">São José</string>
     <string name="alajuelaRegisterActivity">Alajuela</string>
     <string name="herediaRegisterActivity">Herédia</string>
