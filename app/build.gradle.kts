@@ -2,8 +2,6 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
-
-
 android {
     namespace = "com.example.intellihome"
     compileSdk = 34

@@ -1,44 +1,23 @@
 package com.example.intellihome;
 
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.InputType;
 import android.view.View;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import android.text.TextUtils;
-import java.util.Calendar;
 import java.io.PrintWriter;
 import java.util.*;
-import java.time.LocalDate;
-import java.time.Period;
 import java.net.Socket;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.util.Log;
-import androidx.appcompat.app.AlertDialog;
 import android.content.pm.PackageManager;
 import android.widget.ImageView;
 import android.os.Build;
@@ -47,7 +26,6 @@ import androidx.core.content.ContextCompat; // Para verificar permisos
 import android.Manifest; // Para usar los permisos de Android, incluyendo READ_MEDIA_IMAGES
 import androidx.annotation.Nullable; // Para la anotación Nullable
 import android.widget.ArrayAdapter;
-
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -208,6 +186,24 @@ public class RegisterActivity extends AppCompatActivity {
         btnTogglePassword2.setOnClickListener(v -> togglePasswordVisibility(inputRepeatPassword, btnTogglePassword2));
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PhotoManager.REQUEST_IMAGE_CAPTURE) {
+                photoManager.handleCameraImage(data);
+            } else if (requestCode == PhotoManager.PICK_IMAGE) {
+                photoManager.handleGalleryImage(data);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        photoManager.handleRequestPermissionsResult(requestCode, grantResults);
+    }
+
     // Método para alternar la visibilidad de la contraseña
     private void togglePasswordVisibility(EditText passwordField, ImageView toggleButton) {
         if (isPasswordVisible) {
@@ -242,6 +238,7 @@ public class RegisterActivity extends AppCompatActivity {
         return validator.validarTarjeta(inputCardNumber.getText().toString(), inputCVV.getText().toString(), expDatePicker);
     }
 
+    //Muestra un dialogo para elegir si tomar una foto o elegir una de la galeria
     private void showPhotoSelectionDialog() {
         // Usar el diálogo de selección de foto
         photoManager.showPhotoSelectionDialog((dialog, which) -> {
@@ -263,24 +260,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == PhotoManager.REQUEST_IMAGE_CAPTURE) {
-                photoManager.handleCameraImage(data);
-            } else if (requestCode == PhotoManager.PICK_IMAGE) {
-                photoManager.handleGalleryImage(data);
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        photoManager.handleRequestPermissionsResult(requestCode, grantResults);
-    }
-
+    //Metodo de IP Dinamica en el servidor
     private void connectToServer(String ip, int port) {
         new Thread(() -> {
             try {
@@ -302,6 +282,7 @@ public class RegisterActivity extends AppCompatActivity {
         }).start();
     }
 
+    //Envia un mensaje al servidor
     private void sendMessage(String message) {
         new Thread(() -> {
             try {
@@ -314,6 +295,7 @@ public class RegisterActivity extends AppCompatActivity {
         }).start();
     }
 
+    //Recibe un string para mostrar un toast en pantalla
     private void mostrarMensaje(String mensaje) {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
     }
@@ -344,6 +326,11 @@ public class RegisterActivity extends AppCompatActivity {
             String cardHolder = inputCardHolder.getText().toString();
         }
     }
+
+    //Concatena los datos ingresados por el usuario para llevarlos al server
+    // Este es el metodo para poder verificar que la contraseña sea la correcta:
+    // boolean isValid = PasswordUtil.checkPassword("mi_contraseña", hashedPassword);
+    //Este metodo ya no concatena la contraseña repetida, ya que esta solo se deberia de usar para la verificacion
     private String concatenarDatos() {
         String firstName = inputFirstName.getText().toString();
         String lastName = inputLastName.getText().toString();
@@ -351,7 +338,9 @@ public class RegisterActivity extends AppCompatActivity {
         String phone = inputPhone.getText().toString();
         String email = inputEmail.getText().toString();
         String password = inputPassword.getText().toString();
-        String repeatPassword = inputRepeatPassword.getText().toString();
+
+        // Cifrar la contraseña usando SHA-256
+        String encryptedPassword = PasswordUtil.hashPassword(password);
 
         StringBuilder sb = new StringBuilder();
         sb.append("CrearCuenta").append("_");
@@ -360,8 +349,7 @@ public class RegisterActivity extends AppCompatActivity {
         sb.append(username).append("_");
         sb.append(phone).append("_");
         sb.append(email).append("_");
-        sb.append(password).append("_");
-        sb.append(repeatPassword);
+        sb.append(encryptedPassword).append("_"); // Usar contraseña cifrada
 
         // Agregar información de las secciones de propietario y alquilar si están visibles
         if (checkboxPropietario.isChecked()) {
