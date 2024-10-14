@@ -26,11 +26,11 @@
     <string name="casaplaRegisterActivity">Tengerparti ház</string>
     <string name="cabañaRegisterActivity">Kabina</string>
     <string name="pisocciuRegisterActivity">Városi lakás</string>
-    <string name="x4RegisterActivity">4x4</string>
+    <string name="x4RegisterActivity">Ferdehátú</string>
     <string name="sedanRegisterActivity">Sedán</string>
     <string name="pickupRegisterActivity">Pickup</string>
     <string name="suvRegisterActivity">SUV</string>
-    <string name="camionetaRegisterActivity">Kisteherautó</string>
+    <string name="camionetaRegisterActivity">átváltható</string>
     <string name="sanjoseRegisterActivity">San José</string>
     <string name="alajuelaRegisterActivity">Alajuela</string>
     <string name="herediaRegisterActivity">Herédia</string>
