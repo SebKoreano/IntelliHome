@@ -36,7 +36,7 @@ class Usuario:
             server.quit()
 
 class ChatServer:
-    def __init__(self, host="172.18.251.41", port=3535):
+    def __init__(self, host="192.168.18.5", port=3535):
         
         self.matriz_usuarios = [] 
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
