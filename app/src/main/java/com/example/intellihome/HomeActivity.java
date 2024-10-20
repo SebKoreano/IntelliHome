@@ -19,8 +19,7 @@ public class HomeActivity extends AppCompatActivity {
     private NumberPicker numHabitacionesPicker;
     private Button btnAddReglas, btnAddAmenidades;
     private Button btnPhoto;
-    private LinearLayout reglasLayout;
-    private int numeroReglas = 1;
+    private int numeroReglas = 1, numeroAmenidad= 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +33,6 @@ public class HomeActivity extends AppCompatActivity {
         btnAddReglas = findViewById(R.id.btnAddReglas);
         btnAddAmenidades = findViewById(R.id.btnAddAmenidades);
         btnPhoto = findViewById(R.id.btnProfilePhoto);
-        reglasLayout = findViewById(R.id.reglasLayout);
 
         // Configurar el NumberPicker
         numHabitacionesPicker.setMinValue(1);  // Valor mínimo
@@ -48,10 +46,12 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        // Acción del botón para añadir amenidades
-        btnAddAmenidades.setOnClickListener(v -> {
-            Toast.makeText(this, "Añadir amenidades clicado", Toast.LENGTH_SHORT).show();
-            // Lógica para añadir amenidades
+        // Acción del botón para añadir reglas
+        btnAddAmenidades.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                agregarNuevaAmenidad();
+            }
         });
 
         // Acción del botón para añadir foto de perfil
@@ -100,5 +100,26 @@ public class HomeActivity extends AppCompatActivity {
 
         // Incrementar el contador de reglas
         numeroReglas++;
+    }
+
+    // Método para agregar un nuevo EditText de amenidades
+    private void agregarNuevaAmenidad() {
+        // Crear un nuevo campo de texto para la regla
+        EditText nuevaAmenidad = new EditText(this);
+        nuevaAmenidad.setHint("Amenidad #" + numeroAmenidad);
+        nuevaAmenidad.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        ));
+
+        // Establecer el límite de 100 caracteres
+        nuevaAmenidad.setFilters(new InputFilter[] { new InputFilter.LengthFilter(100) });
+
+        // Añadir el campo de texto al layout
+        LinearLayout amenidadesLayout = findViewById(R.id.amenidadesLayout);
+        amenidadesLayout.addView(nuevaAmenidad);
+
+        // Incrementar el contador de reglas
+        numeroAmenidad++;
     }
 }

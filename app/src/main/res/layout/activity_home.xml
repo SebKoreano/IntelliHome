@@ -102,6 +102,12 @@
             android:layout_height="wrap_content"
             android:text="@string/amenidadesTitle" />
 
+        <LinearLayout
+            android:id="@+id/amenidadesLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
         <Button
             android:id="@+id/btnAddAmenidades"
             android:layout_width="wrap_content"
