@@ -5,7 +5,7 @@ import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class LightControl extends AppCompatActivity {
+public class LightControlActivity extends AppCompatActivity {
 
     // Declaración de botones
     private Button btnCuartoPrincipal, btnBanoCuartoPrincipal, btnCuarto1, btnCuarto2;
@@ -14,7 +14,7 @@ public class LightControl extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.light_control); // Asegúrate de que este archivo XML exista
+        setContentView(R.layout.activity_light_control); // Asegúrate de que este archivo XML exista
 
         // Inicialización de los botones
         btnCuartoPrincipal = findViewById(R.id.btnCuartoPrincipal);
