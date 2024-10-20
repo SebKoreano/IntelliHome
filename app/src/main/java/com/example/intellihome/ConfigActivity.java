@@ -42,7 +42,7 @@ public class ConfigActivity extends AppCompatActivity {
         btnTheme.setBackgroundColor(currentColor);
 
         // Conexión al servidor
-        connectToServer("172.18.251.41", 3535);
+        connectToServer("192.168.18.26", 3535);
 
         // Configura los botones
         btnHelp.setOnClickListener(view -> showHelp());

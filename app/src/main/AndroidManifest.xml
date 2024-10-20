@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.intellihome">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -26,7 +27,6 @@
         <activity android:name=".RecuperationActivity" />
         <activity android:name=".ConfigActivity" />
         <activity android:name=".ColorWheel" />
-        <activity android:name=".PhotoManager" />
 
 
         <activity

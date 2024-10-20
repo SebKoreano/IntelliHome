@@ -40,7 +40,7 @@ public class RecuperationActivity extends AppCompatActivity {
         new Thread(() -> {
             runOnUiThread(() -> {
                 // Una vez que se obtiene la IP, conectarse al servidor
-                connectToServer("172.18.251.41", 3535);
+                connectToServer("192.168.18.26", 3535);
             });
         }).start();
         confirmation_but.setOnClickListener(view -> {
