@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
@@ -42,21 +41,21 @@ public class HomeActivity extends AppCompatActivity {
         btnAddReglas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                agregarNuevaRegla();
+                agregarNuevoCampo("regla");
             }
         });
 
-        // Acción del botón para añadir reglas
+        // Acción del botón para añadir amenidades
         btnAddAmenidades.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                agregarNuevaAmenidad();
+                agregarNuevoCampo("amenidad");
             }
         });
 
         // Acción del botón para añadir foto de perfil
         btnPhoto.setOnClickListener(v -> {
-            Toast.makeText(this, "Añadir foto clicado", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.btnPhoto), Toast.LENGTH_SHORT).show();
             // Lógica para seleccionar la foto
         });
 
@@ -75,51 +74,71 @@ public class HomeActivity extends AppCompatActivity {
 
         // Configuración del Spinner de "Vehículo"
         Spinner selectVehiculo = findViewById(R.id.spinnerVehiculo);
-        String[] vehiculos = {getString(R.string.x4RegisterActivity), getString(R.string.pickupRegisterActivity), getString(R.string.sedanRegisterActivity), getString(R.string.suvRegisterActivity), getString(R.string.camionetaRegisterActivity)};
+        String[] vehiculos = {
+                getString(R.string.x4RegisterActivity),
+                getString(R.string.pickupRegisterActivity),
+                getString(R.string.sedanRegisterActivity),
+                getString(R.string.suvRegisterActivity),
+                getString(R.string.camionetaRegisterActivity)
+        };
         ArrayAdapter<String> vehiculoAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, vehiculos);
         vehiculoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selectVehiculo.setAdapter(vehiculoAdapter);
     }
 
-    // Método para agregar un nuevo EditText de reglas
-    private void agregarNuevaRegla() {
-        // Crear un nuevo campo de texto para la regla
-        EditText nuevaRegla = new EditText(this);
-        nuevaRegla.setHint("Reglas #" + numeroReglas);
-        nuevaRegla.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
+    // Método general para agregar un nuevo campo (regla o amenidad)
+    private void agregarNuevoCampo(String tipoCampo) {
+        // Crear el campo de texto
+        EditText nuevoCampo = crearNuevoCampo(tipoCampo);
 
-        // Establecer el límite de 100 caracteres
-        nuevaRegla.setFilters(new InputFilter[] { new InputFilter.LengthFilter(100) });
+        // Agregar el campo al layout correspondiente
+        agregarCampoAlLayout(nuevoCampo, tipoCampo);
 
-        // Añadir el campo de texto al layout
-        LinearLayout reglasLayout = findViewById(R.id.reglasLayout);
-        reglasLayout.addView(nuevaRegla);
-
-        // Incrementar el contador de reglas
-        numeroReglas++;
+        // Incrementar el contador correspondiente
+        incrementarContador(tipoCampo);
     }
 
-    // Método para agregar un nuevo EditText de amenidades
-    private void agregarNuevaAmenidad() {
-        // Crear un nuevo campo de texto para la regla
-        EditText nuevaAmenidad = new EditText(this);
-        nuevaAmenidad.setHint("Amenidad #" + numeroAmenidad);
-        nuevaAmenidad.setLayoutParams(new LinearLayout.LayoutParams(
+    // Método para crear un nuevo EditText con el hint adecuado y el límite de caracteres
+    private EditText crearNuevoCampo(String tipoCampo) {
+        EditText nuevoCampo = new EditText(this);
+        String hint = obtenerHint(tipoCampo);
+        nuevoCampo.setHint(hint);
+        nuevoCampo.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         ));
-
         // Establecer el límite de 100 caracteres
-        nuevaAmenidad.setFilters(new InputFilter[] { new InputFilter.LengthFilter(100) });
+        nuevoCampo.setFilters(new InputFilter[] { new InputFilter.LengthFilter(100) });
+        return nuevoCampo;
+    }
 
-        // Añadir el campo de texto al layout
-        LinearLayout amenidadesLayout = findViewById(R.id.amenidadesLayout);
-        amenidadesLayout.addView(nuevaAmenidad);
+    // Método para obtener el hint según el tipo de campo
+    private String obtenerHint(String tipoCampo) {
+        if (tipoCampo.equals("regla")) {
+            return getString(R.string.reglasHint) + numeroReglas;
+        } else if (tipoCampo.equals("amenidad")) {
+            return getString(R.string.amenidadHint) + numeroAmenidad;
+        }
+        return ""; // Por si hay más tipos en el futuro
+    }
 
-        // Incrementar el contador de reglas
-        numeroAmenidad++;
+    // Método para agregar el EditText al layout correspondiente
+    private void agregarCampoAlLayout(EditText nuevoCampo, String tipoCampo) {
+        if (tipoCampo.equals("regla")) {
+            LinearLayout reglasLayout = findViewById(R.id.reglasLayout);
+            reglasLayout.addView(nuevoCampo);
+        } else if (tipoCampo.equals("amenidad")) {
+            LinearLayout amenidadesLayout = findViewById(R.id.amenidadesLayout);
+            amenidadesLayout.addView(nuevoCampo);
+        }
+    }
+
+    // Método para incrementar el contador de reglas o amenidades
+    private void incrementarContador(String tipoCampo) {
+        if (tipoCampo.equals("regla")) {
+            numeroReglas++;
+        } else if (tipoCampo.equals("amenidad")) {
+            numeroAmenidad++;
+        }
     }
 }

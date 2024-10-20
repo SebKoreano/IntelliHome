@@ -122,4 +122,12 @@
     <string name="vehiculoHint">Vehicle</string>
     <string name="checkboxHours">Check In 3:00pm / Check Out 11:00am</string>
     <string name="btnPublish">Publish</string>
+    <string name="reglasHint">Rules #</string>
+    <string name="amenidadHint">Amenity #</string>
+    <string name="descripcionHint2">Description</string>
+    <string name="precioPorNocheHint2">Price per night</string>
+    <string name="numHabitaciones">Number of rooms</string>
+    <string name="btnAddReglas">Add Rule</string>
+    <string name="btnAddAmenidades">Add Amenity</string>
+    <string name="btnPhoto">Add Photo</string>
 </resources>

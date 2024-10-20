@@ -122,4 +122,12 @@
     <string name="vehiculoHint">Veículo</string>
     <string name="checkboxHours">Bejelentkezés 15:00 / Kijelentkezés 11:00</string>
     <string name="btnPublish">Közzétesz</string>
+    <string name="reglasHint">Regras #</string>
+    <string name="amenidadHint">Amenidade #</string>
+    <string name="descripcionHint2">Descrição</string>
+    <string name="precioPorNocheHint2">Preço por noite</string>
+    <string name="numHabitaciones">Número de quartos</string>
+    <string name="btnAddReglas">Adicionar Regra</string>
+    <string name="btnAddAmenidades">Adicionar Amenidade</string>
+    <string name="btnPhoto">Adicionar Foto</string>
 </resources>
