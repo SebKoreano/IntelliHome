@@ -1,10 +1,13 @@
 package com.example.intellihome;
 
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -16,6 +19,8 @@ public class HomeActivity extends AppCompatActivity {
     private NumberPicker numHabitacionesPicker;
     private Button btnAddReglas, btnAddAmenidades;
     private Button btnPhoto;
+    private LinearLayout reglasLayout;
+    private int numeroReglas = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,15 +34,18 @@ public class HomeActivity extends AppCompatActivity {
         btnAddReglas = findViewById(R.id.btnAddReglas);
         btnAddAmenidades = findViewById(R.id.btnAddAmenidades);
         btnPhoto = findViewById(R.id.btnProfilePhoto);
+        reglasLayout = findViewById(R.id.reglasLayout);
 
         // Configurar el NumberPicker
         numHabitacionesPicker.setMinValue(1);  // Valor mínimo
         numHabitacionesPicker.setMaxValue(99); // Valor máximo
 
         // Acción del botón para añadir reglas
-        btnAddReglas.setOnClickListener(v -> {
-            Toast.makeText(this, "Añadir reglas clicado", Toast.LENGTH_SHORT).show();
-            // Lógica para añadir reglas
+        btnAddReglas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                agregarNuevaRegla();
+            }
         });
 
         // Acción del botón para añadir amenidades
@@ -71,5 +79,26 @@ public class HomeActivity extends AppCompatActivity {
         ArrayAdapter<String> vehiculoAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, vehiculos);
         vehiculoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selectVehiculo.setAdapter(vehiculoAdapter);
+    }
+
+    // Método para agregar un nuevo EditText de reglas
+    private void agregarNuevaRegla() {
+        // Crear un nuevo campo de texto para la regla
+        EditText nuevaRegla = new EditText(this);
+        nuevaRegla.setHint("Reglas #" + numeroReglas);
+        nuevaRegla.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        ));
+
+        // Establecer el límite de 100 caracteres
+        nuevaRegla.setFilters(new InputFilter[] { new InputFilter.LengthFilter(100) });
+
+        // Añadir el campo de texto al layout
+        LinearLayout reglasLayout = findViewById(R.id.reglasLayout);
+        reglasLayout.addView(nuevaRegla);
+
+        // Incrementar el contador de reglas
+        numeroReglas++;
     }
 }
