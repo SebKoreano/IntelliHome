@@ -120,4 +120,6 @@
     <string name="btnAdd">+</string>
     <string name="tipoCasaHint">House type</string>
     <string name="vehiculoHint">Vehicle</string>
+    <string name="checkboxHours">Check In 3:00pm / Check Out 11:00am</string>
+    <string name="btnPublish">Publish</string>
 </resources>

@@ -120,4 +120,6 @@
     <string name="btnAdd">+</string>
     <string name="tipoCasaHint">Ház típusa</string>
     <string name="vehiculoHint">Jármű</string>
+    <string name="checkboxHours">Check In 15:00 / Check Out 11:00</string>
+    <string name="btnPublish">Publicar</string>
 </resources>
