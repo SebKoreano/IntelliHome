@@ -1,0 +1,131 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Descripción -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/descripcionTitle" />
+
+        <EditText
+            android:id="@+id/inputDescripcion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/descripcionHint"
+            android:inputType="textMultiLine"
+            android:gravity="top"
+            android:lines="4"
+            android:maxLines="6"
+            android:scrollbars="vertical" />
+
+        <!-- Número de habitaciones -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/numHabitacionesTitle" />
+
+        <NumberPicker
+            android:id="@+id/numHabitacionesPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <!-- Precio por noche -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/precioPorNocheTitle" />
+
+        <EditText
+            android:id="@+id/inputPrecioPorNoche"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/precioPorNocheHint"
+            android:inputType="numberDecimal"
+            android:drawableStart="@drawable/colones_symbol" />
+
+        <!-- Imágenes de la casa -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/imagenesDeLaCasaTitle" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnProfilePhoto"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/baseline_photo_camera_24" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- Reglas de uso -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reglasDeUsoTitle" />
+
+        <Button
+            android:id="@+id/btnAddReglas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#8CC4DF"
+            android:text="@string/btnAdd"
+            android:drawableStart="@drawable/ic_add_white" />
+
+        <!-- Amenidades -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/amenidadesTitle" />
+
+        <Button
+            android:id="@+id/btnAddAmenidades"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#8CC4DF"
+            android:text="@string/btnAdd"
+            android:drawableStart="@drawable/ic_add_white" />
+
+        <!-- Spinners para Tipo de casa y Vehículo -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/spinnerTipoCasa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:prompt="@string/tipoCasaHint" />
+
+            <Spinner
+                android:id="@+id/spinnerVehiculo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:prompt="@string/vehiculoHint" />
+        </LinearLayout>
+
+        
+
+    </LinearLayout>
+</ScrollView>

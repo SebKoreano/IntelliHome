@@ -109,4 +109,15 @@
     <string name="section12">12. Contato</string>
     <string name="section12_content">Para qualquer pergunta ou dúvida sobre estes termos, entre em contato conosco pelo e-mail intellihome@gmail.com.</string>
     <string name="btn_continue">Continuar</string>
+    <string name="descripcionTitle">Descrição</string>
+    <string name="descripcionHint">Insira uma descrição...</string>
+    <string name="numHabitacionesTitle">Núm. Quartos</string>
+    <string name="precioPorNocheTitle">Preço por noite</string>
+    <string name="precioPorNocheHint">₡ Insira o preço por noite</string>
+    <string name="imagenesDeLaCasaTitle">Imagens da casa</string>
+    <string name="reglasDeUsoTitle">Regras de uso</string>
+    <string name="amenidadesTitle">Comodidades</string>
+    <string name="btnAdd">+</string>
+    <string name="tipoCasaHint">Tipo de casa</string>
+    <string name="vehiculoHint">Veículo</string>
 </resources>
