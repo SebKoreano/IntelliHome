@@ -113,7 +113,7 @@
     <string name="descripcionHint">Adjon meg egy leírást...</string>
     <string name="numHabitacionesTitle">Szobák száma</string>
     <string name="precioPorNocheTitle">Ár éjszakánként</string>
-    <string name="precioPorNocheHint">₡ Adja meg az éjszakánkénti árat</string>
+    <string name="precioPorNocheHint">Adja meg az éjszakánkénti árat</string>
     <string name="imagenesDeLaCasaTitle">A ház képei</string>
     <string name="reglasDeUsoTitle">Használati szabályok</string>
     <string name="amenidadesTitle">Felszereltség</string>

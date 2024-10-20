@@ -113,7 +113,7 @@
     <string name="descripcionHint">Enter a description...</string>
     <string name="numHabitacionesTitle">Num. Rooms</string>
     <string name="precioPorNocheTitle">Price per night</string>
-    <string name="precioPorNocheHint">₡ Enter the price per night</string>
+    <string name="precioPorNocheHint">Enter the price per night</string>
     <string name="imagenesDeLaCasaTitle">House images</string>
     <string name="reglasDeUsoTitle">Usage rules</string>
     <string name="amenidadesTitle">Amenities</string>

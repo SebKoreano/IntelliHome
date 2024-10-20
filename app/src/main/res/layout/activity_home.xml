@@ -125,7 +125,23 @@
                 android:prompt="@string/vehiculoHint" />
         </LinearLayout>
 
-        
+        <CheckBox
+            android:id="@+id/checkboxHours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/termsycondRegister"
+            android:layout_marginTop="16dp" />
+
+        <!-- Botón Crear Cuenta -->
+        <Button
+            android:id="@+id/btnPublish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/crearcuentaRegister"
+            android:backgroundTint="@color/mainColor"
+            android:layout_marginTop="16dp" />
+
+
 
     </LinearLayout>
 </ScrollView>
