@@ -1,6 +1,7 @@
 package com.example.intellihome;
 
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -15,7 +16,6 @@ public class HomeActivity extends AppCompatActivity {
     private NumberPicker numHabitacionesPicker;
     private Button btnAddReglas, btnAddAmenidades;
     private Button btnPhoto;
-    private Spinner spinnerTipoCasa, spinnerVehiculo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +29,6 @@ public class HomeActivity extends AppCompatActivity {
         btnAddReglas = findViewById(R.id.btnAddReglas);
         btnAddAmenidades = findViewById(R.id.btnAddAmenidades);
         btnPhoto = findViewById(R.id.btnProfilePhoto);
-        spinnerTipoCasa = findViewById(R.id.spinnerTipoCasa);
-        spinnerVehiculo = findViewById(R.id.spinnerVehiculo);
 
         // Configurar el NumberPicker
         numHabitacionesPicker.setMinValue(1);  // Valor mínimo
@@ -54,10 +52,24 @@ public class HomeActivity extends AppCompatActivity {
             // Lógica para seleccionar la foto
         });
 
-        // Acción del spinner para tipo de casa
-        spinnerTipoCasa.setOnItemSelectedListener(new CustomItemSelectedListener(this, "Tipo de casa"));
+        // Configuración del Spinner de "Tipo de Casa"
+        Spinner selectCasa = findViewById(R.id.spinnerTipoCasa);
+        String[] casas = {
+                getString(R.string.apartaRegisterActivity),
+                getString(R.string.casacampRegisterActivity),
+                getString(R.string.casaplaRegisterActivity),
+                getString(R.string.cabañaRegisterActivity),
+                getString(R.string.pisocciuRegisterActivity)
+        };
+        ArrayAdapter<String> casaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, casas);
+        casaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectCasa.setAdapter(casaAdapter);
 
-        // Acción del spinner para vehículo
-        spinnerVehiculo.setOnItemSelectedListener(new CustomItemSelectedListener(this, "Vehículo"));
+        // Configuración del Spinner de "Vehículo"
+        Spinner selectVehiculo = findViewById(R.id.spinnerVehiculo);
+        String[] vehiculos = {getString(R.string.x4RegisterActivity), getString(R.string.pickupRegisterActivity), getString(R.string.sedanRegisterActivity), getString(R.string.suvRegisterActivity), getString(R.string.camionetaRegisterActivity)};
+        ArrayAdapter<String> vehiculoAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, vehiculos);
+        vehiculoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectVehiculo.setAdapter(vehiculoAdapter);
     }
 }
