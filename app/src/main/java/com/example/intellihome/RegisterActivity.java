@@ -3,8 +3,13 @@ package com.example.intellihome;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -18,17 +23,32 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
 
+import android.net.Uri;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -51,6 +71,10 @@ public class RegisterActivity extends AppCompatActivity {
     private DialogManager.PhotoManager photoManager;
     private Validator validator;
     private List<EditText> campos;
+
+    private LinearProgressIndicator progress;
+    private Uri imageUri;
+    private static final int PICK_IMAGE_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,6 +200,8 @@ public class RegisterActivity extends AppCompatActivity {
                     obtenerDatos();
                     sendMessage(concatenarDatos());
                     validator.mostrarMensaje(getString(R.string.cuentcreexRegisterActivity));
+                    imageUri = getImageUriFromButton(btnProfilePhoto);
+                    uploadImageToFirebase(imageUri);
                     regresarAConfig();
                 }
             } else {
@@ -355,6 +381,63 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         return sb.toString();
+    }
+
+    private void uploadImageToFirebase(Uri imageUri) {
+        if (imageUri != null) {
+            // Crear una referencia a Firebase Storage
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference("Usuarios/Arrendatario");
+
+            // Crear un nombre único para el archivo
+            String fileName = System.currentTimeMillis() + ".png"; // o el tipo de imagen que sea
+            StorageReference fileReference = storageReference.child(fileName);
+
+            // Subir la imagen
+            fileReference.putFile(imageUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Imagen subida con éxito
+                        Toast.makeText(RegisterActivity.this, "Imagen subida exitosamente", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        // Manejo de errores
+                        Toast.makeText(RegisterActivity.this, "Error al subir la imagen: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            Toast.makeText(this, "Por favor selecciona una imagen", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private Uri getImageUriFromButton(Button button) {
+        // Obtener el drawable del botón
+        Drawable drawable = button.getBackground();
+        if (drawable != null) {
+            // Convertir el drawable a bitmap
+            Bitmap bitmap = drawableToBitmap(drawable);
+
+            // Guardar el bitmap en un archivo temporal
+            try {
+                File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "profile_photo.png");
+                FileOutputStream fos = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                fos.close();
+
+                // Crear y retornar el Uri del archivo
+                return Uri.fromFile(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return null;
+    }
+
+    // Función para convertir un Drawable a Bitmap
+    private Bitmap drawableToBitmap(Drawable drawable) {
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
     }
 }
 

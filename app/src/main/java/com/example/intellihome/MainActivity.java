@@ -15,6 +15,7 @@ import java.net.Socket;
 import java.io.PrintWriter;
 import androidx.appcompat.app.AlertDialog;
 import java.util.Scanner;
+import com.google.firebase.FirebaseApp;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // Cargar el diseño XML
         setContentView(R.layout.activity_login);
+        FirebaseApp.initializeApp(this);
 
         // Obtener referencias a los elementos del layout
         EditText inputEmail = findViewById(R.id.inputEmail);
