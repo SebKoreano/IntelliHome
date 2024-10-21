@@ -1,5 +1,6 @@
 package com.example.intellihome;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.View;
@@ -84,6 +85,16 @@ public class HomeActivity extends AppCompatActivity {
         ArrayAdapter<String> vehiculoAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, vehiculos);
         vehiculoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selectVehiculo.setAdapter(vehiculoAdapter);
+
+        //Configura boton para escoger la ubicacion
+        Button btnElegirUbicacion = findViewById(R.id.btnElegirUbicacion);
+        btnElegirUbicacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, MapActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     // Método general para agregar un nuevo campo (regla o amenidad)

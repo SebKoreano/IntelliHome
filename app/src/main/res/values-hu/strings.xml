@@ -130,4 +130,8 @@
     <string name="btnAddReglas">Szabály hozzáadása</string>
     <string name="btnAddAmenidades">Kényelmi hozzáadása</string>
     <string name="btnPhoto">Kép hozzáadása</string>
+    <string name="ubicacion">Elhelyezkedés</string>
+    <string name="elegir_ubicaci_n">Válasszon helyet</string>
+    <string name="hint_latitud">Szélesség:</string>
+    <string name="hint_longitud">Hossz:</string>
 </resources>

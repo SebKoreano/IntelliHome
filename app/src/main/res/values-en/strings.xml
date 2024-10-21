@@ -130,4 +130,8 @@
     <string name="btnAddReglas">Add Rule</string>
     <string name="btnAddAmenidades">Add Amenity</string>
     <string name="btnPhoto">Add Photo</string>
+    <string name="ubicacion">Location</string>
+    <string name="elegir_ubicaci_n">Select location</string>
+    <string name="hint_latitud">Width:</string>
+    <string name="hint_longitud">Length:</string>
 </resources>

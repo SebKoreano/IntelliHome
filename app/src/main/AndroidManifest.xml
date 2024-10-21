@@ -22,13 +22,18 @@
         android:theme="@style/Theme.IntelliHome"
         tools:targetApi="31">
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC5Xy3Y-UblR89jL0Ig3ffdmirmgkXejvQ"
+            />
+
         <activity android:name=".RegisterActivity" />
         <activity android:name=".RecuperationActivity" />
         <activity android:name=".ConfigActivity" />
         <activity android:name=".ColorWheel" />
         <activity android:name=".PhotoManager" />
         <activity android:name=".HomeActivity" />
-
+        <activity android:name=".MapActivity" />
 
         <activity
             android:name=".MainActivity"
