@@ -15,6 +15,7 @@ import android.text.InputType;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -53,7 +54,7 @@ import android.widget.ArrayAdapter;
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText inputFirstName, inputLastName, inputUsername, inputPhone, inputEmail, inputPassword, inputRepeatPassword, inputHobbies;
-    private Spinner selectCasa, selectVehiculo, selectDomicilio;
+    private AutoCompleteTextView selectCasa, selectVehiculo, selectDomicilio;
     private DatePicker datePicker, expDatePicker;
     private CheckBox checkboxPropietario, checkboxAlquilar, checkboxTerms;
     private LinearLayout propietarioSection, alquilarSection;
