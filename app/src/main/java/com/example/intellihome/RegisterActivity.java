@@ -1,53 +1,33 @@
 package com.example.intellihome;
 
+import android.Manifest;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import android.text.TextUtils;
-import java.util.Calendar;
-import java.io.PrintWriter;
-import java.util.*;
-import java.time.LocalDate;
-import java.time.Period;
-import java.net.Socket;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.util.Log;
-import androidx.appcompat.app.AlertDialog;
-import android.content.pm.PackageManager;
-import android.widget.ImageView;
-import android.os.Build;
-import androidx.core.app.ActivityCompat; // Para manejar permisos
-import androidx.core.content.ContextCompat; // Para verificar permisos
-import android.Manifest; // Para usar los permisos de Android, incluyendo READ_MEDIA_IMAGES
-import androidx.annotation.Nullable; // Para la anotación Nullable
-import android.widget.ArrayAdapter;
-
+import java.util.Scanner;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -68,7 +48,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button btnCreateAccount, btnProfilePhoto;
     private boolean isPasswordVisible = false, isPasswordVisible2 = false;
     private DialogManager dialogManager;
-    private PhotoManager photoManager;
+    private DialogManager.PhotoManager photoManager;
     private Validator validator;
     private List<EditText> campos;
 
@@ -106,14 +86,14 @@ public class RegisterActivity extends AppCompatActivity {
         btnTogglePassword = findViewById(R.id.btnTogglePassword);
         btnTogglePassword2 = findViewById(R.id.btnTogglePassword2);
         dialogManager = new DialogManager(this);
-        photoManager = new PhotoManager(this, btnProfilePhoto);
+        photoManager = new DialogManager.PhotoManager(this, btnProfilePhoto);
 
         GlobalColor globalVariables = (GlobalColor) getApplicationContext();
         int currentColor = globalVariables.getCurrentColor();
         btnCreateAccount.setBackgroundColor(currentColor);
 
         // Conectar al servidor
-        connectToServer("192.168.18.26", 3535);
+        connectToServer("192.168.18.206", 3535);
 
         // Ocultar inicialmente las secciones de Propietario y Alquilar
         propietarioSection.setVisibility(View.GONE);
@@ -252,7 +232,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
                             != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(this,
-                                new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PhotoManager.PICK_IMAGE);
+                                new String[]{Manifest.permission.READ_MEDIA_IMAGES}, DialogManager.PhotoManager.PICK_IMAGE);
                     } else {
                         photoManager.openGallery();
                     }
@@ -267,9 +247,9 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == PhotoManager.REQUEST_IMAGE_CAPTURE) {
+            if (requestCode == DialogManager.PhotoManager.REQUEST_IMAGE_CAPTURE) {
                 photoManager.handleCameraImage(data);
-            } else if (requestCode == PhotoManager.PICK_IMAGE) {
+            } else if (requestCode == DialogManager.PhotoManager.PICK_IMAGE) {
                 photoManager.handleGalleryImage(data);
             }
         }

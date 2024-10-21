@@ -36,7 +36,7 @@ class Usuario:
             server.quit()
 
 class ChatServer:
-    def __init__(self, host="192.168.18.26", port=3535):
+    def __init__(self, host="192.168.18.206", port=3535):
         
         self.matriz_usuarios = [] 
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -79,9 +79,6 @@ class ChatServer:
                         #self.recuperar_contraseña(self,"sebasboza.cr@gmail.com",None) 
                     else:
                         print("No llegó mensaje relevante")
-                        
-                else:
-                    print("Error!")
             except Exception as e:
                 print("error")
                 break

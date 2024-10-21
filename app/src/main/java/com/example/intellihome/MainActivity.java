@@ -15,12 +15,6 @@ import java.net.Socket;
 import java.io.PrintWriter;
 import androidx.appcompat.app.AlertDialog;
 import java.util.Scanner;
-import android.content.Context;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
-import android.text.format.Formatter;
-
-import com.google.android.material.textfield.TextInputLayout;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
         ImageView btnTogglePassword = findViewById(R.id.btnTogglePassword);
 
         GlobalColor globalVariables = (GlobalColor) getApplicationContext();
-        int currentColor = globalVariables.getCurrentColor();
-        btnLogin.setBackgroundColor(currentColor);
+         int currentColor = globalVariables.getCurrentColor();
+         btnLogin.setBackgroundColor(currentColor);
 
         //Accion del boton para ver o no la contraseña
         btnTogglePassword.setOnClickListener(v -> {
@@ -68,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         // Iniciar el hilo para conectarse al servidor y recibir mensajes
         new Thread(() -> {
             try {
-                socket = new Socket("192.168.18.26", 3535); //192.168.18.206
+                socket = new Socket("192.168.18.206", 3535); //192.168.18.206
                 out = new PrintWriter(socket.getOutputStream(), true);
                 in = new Scanner(socket.getInputStream());
 
@@ -113,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             if (isChecked) {
                 // Mover a ConfigActivity cuando el CheckBox está marcado
                 Intent intent = new Intent(MainActivity.this, ConfigActivity.class);
-                //startActivity(intent);
+                startActivity(intent);
             }
         });
 
