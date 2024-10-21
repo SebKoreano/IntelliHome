@@ -97,7 +97,7 @@
             android:padding="12dp"
             android:backgroundTint="@color/mainColor"
             android:text="@string/inicsesActivityLogin"
-            android:textColor="?attr/android:background" />
+            android:background="@color/mainColor" />
 
         <TextView
             android:id="@+id/btnRecoverPassword"
