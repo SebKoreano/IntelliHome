@@ -1,24 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Theme.IntelliHome" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Primary brand color. -->
+
         <item name="colorPrimary">@color/mainColor</item>
         <item name="colorPrimaryVariant">@color/mainColor</item>
-        <item name="colorOnPrimary">@color/dayColor</item>
+        <item name="colorOnPrimary">@color/white</item>
 
-        <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/mainColor</item>
         <item name="colorSecondaryVariant">@color/mainColor</item>
         <item name="colorOnSecondary">@color/mainColor</item>
 
-        <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/black</item>
 
-        <!-- Customize theme. -->
-        <item name="android:background">@color/dayColor</item>
-        <item name="backgroundTint">@color/dayColor</item>
-        <item name="android:textColor">@color/nightColor</item>
-        <item name="android:textColorHint">@color/nightColor</item>
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/black</item>
         <item name="android:checkMark">@color/mainColor</item>
 
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>

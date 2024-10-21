@@ -378,4 +378,3 @@ public class RegisterActivity extends AppCompatActivity {
         return sb.toString();
     }
 }
-

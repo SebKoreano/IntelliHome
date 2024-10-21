@@ -342,7 +342,6 @@
                     android:text="@string/crearcuentaRegister"
                     android:backgroundTint="@color/mainColor"
                     android:layout_marginTop="16dp" />
-
             </LinearLayout>
         </ScrollView>
     </androidx.cardview.widget.CardView>

@@ -17,7 +17,7 @@
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:src="@drawable/info" />
+        android:src="@drawable/about" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -107,8 +107,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/rememberMeCheckbox"
                     android:text="@string/mantenersesActivityLogin"
-                    android:layout_centerVertical="true"
-                    android:alpha="0.7"/>
+                    android:layout_centerVertical="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -141,8 +140,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/btnAlreadyHaveAccount"
                 android:text="@string/nousuarioActivityLogin"
-                android:layout_gravity="center"
-                android:alpha="0.7"/>
+                android:layout_gravity="center"/>
 
             <View
                 android:layout_width="wrap_content"
@@ -153,8 +151,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/hola"
                 android:text="@string/inicsesconActivityLogin"
-                android:layout_gravity="center"
-                android:alpha="0.7"/>
+                android:layout_gravity="center"/>
 
             <View
                 android:layout_width="wrap_content"
