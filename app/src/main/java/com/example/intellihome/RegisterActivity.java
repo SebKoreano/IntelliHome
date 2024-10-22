@@ -326,6 +326,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     //Obtengo los datos de la cuenta
     private void obtenerDatos() {
+        // Obtener datos básicos
         String firstName = inputFirstName.getText().toString();
         String lastName = inputLastName.getText().toString();
         String username = inputUsername.getText().toString();
@@ -333,17 +334,30 @@ public class RegisterActivity extends AppCompatActivity {
         String email = inputEmail.getText().toString();
         String password = inputPassword.getText().toString();
 
+        // Obtener fecha seleccionada del DatePicker (siempre se obtiene)
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth() + 1; // Los meses empiezan en 0, por eso sumamos 1
+        int year = datePicker.getYear();
+        String birthDate = day + "/" + month + "/" + year; // Formato de fecha
 
+        // Obtener datos adicionales si el checkbox de propietario está marcado
         if (checkboxPropietario.isChecked()) {
             String iban = inputIban.getText().toString();
         }
 
+        // Obtener datos de la tarjeta si el checkbox de alquilar está marcado
         if (checkboxAlquilar.isChecked()) {
             String cardNumber = inputCardNumber.getText().toString();
             String cvv = inputCVV.getText().toString();
             String cardHolder = inputCardHolder.getText().toString();
+
+            // Obtener fecha de expiración de la tarjeta del expDatePicker
+            int expMonth = expDatePicker.getMonth() + 1; // Los meses empiezan en 0, por eso sumamos 1
+            int expYear = expDatePicker.getYear();
+            String expirationDate = expMonth + "/" + expYear; // Formato de fecha de expiración
         }
     }
+
     private String concatenarDatos() {
         String firstName = inputFirstName.getText().toString();
         String lastName = inputLastName.getText().toString();
