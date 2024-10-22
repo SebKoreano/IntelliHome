@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Lógica para el botón de Recuperación de Contraseña
         btnRecoverPassword.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+            Intent intent = new Intent(MainActivity.this, PublicarCasaActivity.class);
             startActivity(intent);
         });
 
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                     out.println(message);
                     // Cambiar a la nueva actividad HomeActivity tras enviar la solicitud
                     runOnUiThread(() -> {
-                        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                        Intent intent = new Intent(MainActivity.this, PublicarCasaActivity.class);
                         startActivity(intent);
                     });
                 }

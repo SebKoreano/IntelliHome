@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -23,7 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
-public class HomeActivity extends AppCompatActivity {
+public class PublicarCasaActivity extends AppCompatActivity {
 
     private EditText descripcionInput, precioInput;
     private NumberPicker numHabitacionesPicker;
@@ -42,7 +41,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_publicarcasa);
 
         // Inicializar vistas
         descripcionInput = findViewById(R.id.inputDescripcion);
@@ -114,7 +113,7 @@ public class HomeActivity extends AppCompatActivity {
         Button btnElegirUbicacion = findViewById(R.id.btnElegirUbicacion);
         btnElegirUbicacion.setOnClickListener(v -> {
             // Lanzar la actividad de MapActivity
-            Intent intent = new Intent(HomeActivity.this, MapActivity.class);
+            Intent intent = new Intent(PublicarCasaActivity.this, MapActivity.class);
             locationLauncher.launch(intent);
         });
 
@@ -152,7 +151,7 @@ public class HomeActivity extends AppCompatActivity {
 
     // Método para mostrar el diálogo de selección múltiple
     private void showMultiSelectDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(PublicarCasaActivity.this);
         builder.setTitle("Selecciona Amenidades");
 
         builder.setMultiChoiceItems(amenidadesArray, selectedItems, new DialogInterface.OnMultiChoiceClickListener() {
@@ -162,7 +161,7 @@ public class HomeActivity extends AppCompatActivity {
                     // Añadir la opción seleccionada a la lista y mostrar un Toast
                     if (!selectedAmenidades.contains(amenidadesArray[which])) {
                         selectedAmenidades.add(amenidadesArray[which]);
-                        Toast.makeText(HomeActivity.this, "Seleccionado: " + amenidadesArray[which], Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PublicarCasaActivity.this, "Seleccionado: " + amenidadesArray[which], Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     // Eliminar la opción si se deselecciona
@@ -175,7 +174,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Aquí puedes manejar lo que sucede cuando el usuario presiona "OK"
-                Toast.makeText(HomeActivity.this, "Amenidades seleccionadas: " + selectedAmenidades, Toast.LENGTH_LONG).show();
+                Toast.makeText(PublicarCasaActivity.this, "Amenidades seleccionadas: " + selectedAmenidades, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -202,10 +201,10 @@ public class HomeActivity extends AppCompatActivity {
                         longitudHome = data.getDoubleExtra("longitud", 0.0);
 
                         // Mostrar los valores en un Toast
-                        Toast.makeText(HomeActivity.this, "Latitud: " + latitudHome + ", Longitud: " + longitudHome, Toast.LENGTH_LONG).show();
+                        Toast.makeText(PublicarCasaActivity.this, "Latitud: " + latitudHome + ", Longitud: " + longitudHome, Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(HomeActivity.this, "No se obtuvo la ubicación", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PublicarCasaActivity.this, "No se obtuvo la ubicación", Toast.LENGTH_SHORT).show();
                 }
             }
     );
