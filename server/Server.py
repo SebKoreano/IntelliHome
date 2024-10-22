@@ -273,19 +273,19 @@ class ChatServer:
         for i in range(len(mat)):
             if mat[i][2] == string:  # Verificar correo
                 print("CORREO EXISTE EN MATRIZ PROPIETARIO")
-                return self.recuperar_contraseña(string, client_socket)
+                return self.recuperar_contraseña(string, "Propietario")
             
         mat = self.matriz_Alquilador
         for i in range(len(mat)):
             if mat[i][2] == string:  # Verificar correo
                 print("CORREO EXISTE EN MATRIZ ALQUILADOR")
-                return self.recuperar_contraseña(string, client_socket)
+                return self.recuperar_contraseña(string, "Alquilador")
             
         mat = self.matriz_AmbasFunciones
         for i in range(len(mat)):
             if mat[i][2] == string:  # Verificar correo
                 print("CORREO EXISTE EN MATRIZ AMBAS FUNCIONES")
-                return self.recuperar_contraseña(string, client_socket)
+                return self.recuperar_contraseña(string, "AmbasFunciones")
         
         print("NO SE ENCONTRÓ CORREO")
         return self.send_message_to_respond_request(client_socket, "Error, no se encontró el correo")
@@ -299,7 +299,7 @@ class ChatServer:
                 if mat[i][2] == correo:  # Verificar correo
                     mat[i][3] = password  # Cambiar la contraseña
                     break
-            self.CambiosATxt()
+            self.CambiosATxt("Propietario")
         
         elif Tipo == "Alquilador":
             mat = self.matriz_Alquilador
@@ -307,7 +307,7 @@ class ChatServer:
                 if mat[i][2] == correo:  # Verificar correo
                     mat[i][3] = password  # Cambiar la contraseña
                     break
-            self.CambiosATxt()
+            self.CambiosATxt("Alquilador")
         
         elif Tipo == "AmbasFunciones":
             mat = self.matriz_AmbasFunciones
@@ -315,7 +315,7 @@ class ChatServer:
                 if mat[i][2] == correo:  # Verificar correo
                     mat[i][3] = password  # Cambiar la contraseña
                     break
-            self.CambiosATxt()
+            self.CambiosATxt("AmbasFunciones")
 
     
     def CambiosATxt(self, Tipo):
