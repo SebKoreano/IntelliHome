@@ -11,19 +11,22 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import java.net.Socket;
-import java.io.PrintWriter;
 import androidx.appcompat.app.AlertDialog;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.Scanner;
 import com.google.firebase.FirebaseApp;
 
+
 public class MainActivity extends AppCompatActivity {
 
+    // Declaraciones globales
     private Socket socket;
     private PrintWriter out;
     private Scanner in;
     private boolean isPasswordVisible = false;
 
+    // Método onCreate
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,27 +44,59 @@ public class MainActivity extends AppCompatActivity {
         ImageView btnAbout = findViewById(R.id.btnAbout);
         ImageView btnTogglePassword = findViewById(R.id.btnTogglePassword);
 
+        // Configuración de color global (si aplica)
         GlobalColor globalVariables = (GlobalColor) getApplicationContext();
          int currentColor = globalVariables.getCurrentColor();
          btnLogin.setBackgroundColor(currentColor);
 
-        //Accion del boton para ver o no la contraseña
-        btnTogglePassword.setOnClickListener(v -> {
-            if (isPasswordVisible) {
-                // Si la contraseña es visible, ocultarla
-                inputPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                btnTogglePassword.setImageResource(R.drawable.ic_eye_closed);  // Cambiar el ícono al ojo cerrado
-            } else {
-                // Si la contraseña está oculta, mostrarla
-                inputPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                btnTogglePassword.setImageResource(R.drawable.ic_eye_open);  // Cambiar el ícono al ojo abierto
-            }
-            isPasswordVisible = !isPasswordVisible; // Alternar el estado
-            inputPassword.setSelection(inputPassword.length()); // Mantener el cursor al final del texto
+        // Configurar funcionalidad de mostrar/ocultar contraseña
+        btnTogglePassword.setOnClickListener(v -> togglePasswordVisibility(inputPassword, btnTogglePassword));
+
+        // Conectar al servidor
+        connectToServer();
+
+        // Configurar botón About
+        btnAbout.setOnClickListener(v -> showAboutDialog());
+
+        // Lógica para el botón de Login
+        btnLogin.setOnClickListener(v -> handleLogin(inputEmail.getText().toString(), inputPassword.getText().toString()));
+
+        // Lógica para el botón de Registro
+        btnAlreadyHaveAccount.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+            startActivity(intent);
         });
 
+        // Lógica para el botón de Recuperación de Contraseña
+        btnRecoverPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, PublicarCasaActivity.class);
+            startActivity(intent);
+        });
 
-        // Iniciar el hilo para conectarse al servidor y recibir mensajes
+        // Lógica para Remember Me
+        rememberMeCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                Intent intent = new Intent(MainActivity.this, ConfigActivity.class);
+                //startActivity(intent); // Descomentar si es necesario
+            }
+        });
+    }
+
+    // Método para alternar la visibilidad de la contraseña
+    private void togglePasswordVisibility(EditText inputPassword, ImageView btnTogglePassword) {
+        if (isPasswordVisible) {
+            inputPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            btnTogglePassword.setImageResource(R.drawable.ic_eye_closed);
+        } else {
+            inputPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            btnTogglePassword.setImageResource(R.drawable.ic_eye_open);
+        }
+        isPasswordVisible = !isPasswordVisible;
+        inputPassword.setSelection(inputPassword.length());
+    }
+
+    // Método para conectarse al servidor
+    private void connectToServer() {
         new Thread(() -> {
             try {
                 socket = new Socket("172.18.83.115", 3535); //192.168.18.206
@@ -72,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 while (true) {
                     if (in.hasNextLine()) {
                         String message = in.nextLine();
-                        handleServerResponse(message); // Llama a handleServerResponse con el mensaje recibido
+                        handleServerResponse(message);
                     }
                 }
             } catch (Exception e) {
@@ -127,17 +162,26 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // Método para mostrar el diálogo "About"
-    private void showAboutDialog() {
-        // Inflar el layout del diálogo personalizado
-        LayoutInflater inflater = getLayoutInflater();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(inflater.inflate(R.layout.dialog_about, null))
-                // Reemplaza el texto del botón "Cerrar" con el string de recursos
-                .setPositiveButton(getString(R.string.msjabtActivity), (dialog, id) -> dialog.dismiss());
+    // Método para manejar el login y pasar a HomeActivity
+    private void handleLogin(String email, String password) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Login").append("_").append(email).append("_").append(password);
+        String message = sb.toString();
 
-        // Mostrar el cuadro de diálogo
-        builder.create().show();
+        new Thread(() -> {
+            try {
+                if (out != null) {
+                    out.println(message);
+                    // Cambiar a la nueva actividad HomeActivity tras enviar la solicitud
+                    runOnUiThread(() -> {
+                        Intent intent = new Intent(MainActivity.this, PublicarCasaActivity.class);
+                        startActivity(intent);
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     private void moveToMainPage() {
@@ -147,10 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Método para manejar la respuesta del servidor
     private void handleServerResponse(String response) {
-        // Registrar el mensaje recibido
         Log.d("MainActivity", "Mensaje recibido: " + response);
-
-        // Mostrar la respuesta en un AlertDialog
         runOnUiThread(() -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setTitle("Respuesta del Servidor");
@@ -158,5 +199,14 @@ public class MainActivity extends AppCompatActivity {
             builder.setPositiveButton("OK", null);
             builder.show();
         });
+    }
+
+    // Método para mostrar el diálogo "About"
+    private void showAboutDialog() {
+        LayoutInflater inflater = getLayoutInflater();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(inflater.inflate(R.layout.dialog_about, null))
+                .setPositiveButton(getString(R.string.msjabtActivity), (dialog, id) -> dialog.dismiss());
+        builder.create().show();
     }
 }

@@ -1,0 +1,184 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Descripción -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/descripcionTitle" />
+
+        <EditText
+            android:id="@+id/inputDescripcion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/descripcionHint"
+            android:inputType="textMultiLine"
+            android:gravity="top"
+            android:lines="4"
+            android:maxLines="6"
+            android:scrollbars="vertical" />
+
+        <!-- Número de habitaciones -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/numHabitacionesTitle" />
+
+        <NumberPicker
+            android:id="@+id/numHabitacionesPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <!-- Precio por noche -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/precioPorNocheTitle" />
+
+        <EditText
+            android:id="@+id/inputPrecioPorNoche"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/precioPorNocheHint"
+            android:inputType="numberDecimal"
+            android:drawableStart="@drawable/colones_symbol" />
+
+        <!-- Ubicación -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ubicacion" />
+
+        <Button
+            android:id="@+id/btnElegirUbicacion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#8CC4DF"
+            android:text="@string/elegir_ubicaci_n"
+            android:drawableStart="@drawable/ic_location_pin_white" />
+
+        <!-- Imágenes de la casa -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/imagenesDeLaCasaTitle" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal">
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnHousePhoto"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/baseline_photo_camera_24" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- Reglas de uso -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reglasDeUsoTitle" />
+
+        <LinearLayout
+            android:id="@+id/reglasLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <Button
+            android:id="@+id/btnAddReglas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#8CC4DF"
+            android:text="@string/btnAdd"
+            android:drawableStart="@drawable/ic_add_white" />
+
+        <!-- Amenidades -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/amenidadesTitle" />
+
+        <Button
+            android:id="@+id/btnAddAmenidades"
+            android:layout_marginBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#8CC4DF"
+            android:text="Seleccionar Amenidades" />
+
+        <!-- Spinners para Tipo de casa y Vehículo -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tipo de casa:" />
+
+            <Spinner
+                android:id="@+id/spinnerTipoCasa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:prompt="@string/tipoCasaHint" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vehiculo preferido:" />
+
+            <Spinner
+                android:id="@+id/spinnerVehiculo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:prompt="@string/vehiculoHint" />
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/checkInCheckOutCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/checkboxHours"
+            android:layout_marginTop="16dp" />
+
+        <!-- Botón Publicar Casa -->
+        <Button
+            android:id="@+id/btnPublish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btnPublish"
+            android:backgroundTint="@color/mainColor"
+            android:layout_marginTop="16dp" />
+
+
+
+    </LinearLayout>
+</ScrollView>

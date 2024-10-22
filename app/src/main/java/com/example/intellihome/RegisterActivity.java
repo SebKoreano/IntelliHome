@@ -293,10 +293,10 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == DialogManager.PhotoManager.REQUEST_IMAGE_CAPTURE) {
-                photoManager.handleCameraImage(data);
-            } else if (requestCode == DialogManager.PhotoManager.PICK_IMAGE) {
-                photoManager.handleGalleryImage(data);
+            if (requestCode == PhotoManager.REQUEST_IMAGE_CAPTURE) {
+                photoManager.handleCameraImage(data, true);
+            } else if (requestCode == PhotoManager.PICK_IMAGE) {
+                photoManager.handleGalleryImage(data, true);
             }
         }
     }
@@ -352,6 +352,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     //Obtengo los datos de la cuenta
     private void obtenerDatos() {
+        // Obtener datos básicos
         String firstName = inputFirstName.getText().toString();
         String lastName = inputLastName.getText().toString();
         String username = inputUsername.getText().toString();
@@ -359,15 +360,27 @@ public class RegisterActivity extends AppCompatActivity {
         String email = inputEmail.getText().toString();
         String password = inputPassword.getText().toString();
 
+        // Obtener fecha seleccionada del DatePicker (siempre se obtiene)
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth() + 1; // Los meses empiezan en 0, por eso sumamos 1
+        int year = datePicker.getYear();
+        String birthDate = day + "/" + month + "/" + year; // Formato de fecha
 
+        // Obtener datos adicionales si el checkbox de propietario está marcado
         if (checkboxPropietario.isChecked()) {
             String iban = inputIban.getText().toString();
         }
 
+        // Obtener datos de la tarjeta si el checkbox de alquilar está marcado
         if (checkboxAlquilar.isChecked()) {
             String cardNumber = inputCardNumber.getText().toString();
             String cvv = inputCVV.getText().toString();
             String cardHolder = inputCardHolder.getText().toString();
+
+            // Obtener fecha de expiración de la tarjeta del expDatePicker
+            int expMonth = expDatePicker.getMonth() + 1; // Los meses empiezan en 0, por eso sumamos 1
+            int expYear = expDatePicker.getYear();
+            String expirationDate = expMonth + "/" + expYear; // Formato de fecha de expiración
         }
     }
     private String concatenarDatos(String Tipo) {
