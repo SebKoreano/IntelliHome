@@ -27,6 +27,7 @@
         <activity android:name=".ConfigActivity" />
         <activity android:name=".ColorWheel" />
         <activity android:name=".PhotoManager" />
+        <activity android:name=".MainPageActivity"/>
 
         <activity
             android:name=".MainActivity"

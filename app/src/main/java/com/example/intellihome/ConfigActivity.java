@@ -100,7 +100,6 @@ public class ConfigActivity extends AppCompatActivity {
         builder.create().show();
     }
 
-
     private void changeTheme() {
         Intent intent = new Intent(ConfigActivity.this, ColorWheel.class);
         startActivity(intent);

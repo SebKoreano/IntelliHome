@@ -107,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }).start();
+
+            moveToMainPage();
         });
 
         rememberMeCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -139,6 +141,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Mostrar el cuadro de diálogo
         builder.create().show();
+    }
+
+    private void moveToMainPage() {
+        Intent intent = new Intent(MainActivity.this, MainPageActivity.class);
+        startActivity(intent);
     }
 
     // Método para manejar la respuesta del servidor

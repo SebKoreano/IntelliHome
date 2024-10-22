@@ -109,4 +109,13 @@
     <string name="section12">12. Kapcsolat</string>
     <string name="section12_content">Bármilyen kérdés vagy észrevétel esetén kérjük, vegye fel velünk a kapcsolatot az intellihome@gmail.com címen.</string>
     <string name="btn_continue">Folytatás</string>
+    <string name="signUp">Nyilvántartás</string>
+    <string name="configuraciones">Beállítások elemre</string>
+    <string name="publicar_casa">Post Home</string>
+    <string name="monitorear_viviendas">Monitor Homes</string>
+    <string name="perfil">Profil</string>
+    <string name="buscar">Keres</string>
+    <string name="pagina_principal">Főoldal</string>
+    <string name="open_nav_drawer">Nyissa meg a menüt</string>
+    <string name="close_nav_drawer">Menü bezárása</string>
 </resources>
