@@ -1,5 +1,19 @@
-from machine import Pin
+import network
+import usocket as socket
 import time
+from machine import Pin
+
+# Configuración de la red WiFi
+nombrewifi = "Nexxt_DE4168"
+contrasena = "Ams140568"
+
+# Conexión a la red WiFi
+wifi = network.WLAN(network.STA_IF)
+wifi.active(True)
+wifi.connect(nombrewifi, contrasena)
+while not wifi.isconnected():
+    time.sleep(0.1)
+print("Conexión establecida:", wifi.ifconfig())
 
 # Configuración de pines para los LEDs
 led_pins = {
@@ -30,11 +44,22 @@ def toggle_led(letter):
         led_pins[letter].value(led_states[letter])  # Encender/apagar el LED
         print(f"LED asociado a la letra {letter} {'encendido' if led_states[letter] else 'apagado'}")
 
-# Simulación de entrada por teclado
-while True:
-    letter = input("Ingresa una letra (Z, X, C, V, B, N, M): ").upper()
-    if letter in led_pins:
-        toggle_led(letter)
-    else:
-        print("Letra no válida, intenta nuevamente.")
-    time.sleep(0.1)
+# Configuración del socket
+s = socket.socket()
+s.bind(('0.0.0.0', 1234))
+s.listen(1)
+print("Esperando conexiones...")
+
+conn, addr = s.accept()  
+print("Conexión aceptada de:", addr)
+
+try:
+    while True:
+        data = conn.recv(1024)  # Recibe datos del cliente
+        if not data:
+            break  # Sale si no hay más datos
+        letra = data.decode('utf-8').upper()  # Decodifica la letra recibida y la convierte a mayúsculas
+        print("Letra recibida:", letra)
+        toggle_led(letra)  # Llama a la función para encender/apagar el LED correspondiente
+finally:
+    conn.close()  # Cierra la conexión
