@@ -158,16 +158,19 @@ class ChatServer:
         if Tipo == "Propietario":
             mat = self.matriz_Propietario
             if mat[i][3] == contra:  # Verificar la contraseña
-                return self.send_message_to_respond_request(client_socket, "Se ingresó con éxito como propietario.")
+                DatosPorEnviar = mat[i][0] + "_Propietario"
+                return self.send_message_to_respond_request(client_socket, DatosPorEnviar)
         elif Tipo == "Alquilador":
             mat = self.matriz_Alquilador
             if mat[i][3] == contra:  # Verificar la contraseña
-                return self.send_message_to_respond_request(client_socket, "Se ingresó con éxito como alquilador.")
+                DatosPorEnviar = mat[i][0] + "_Alquilador"
+                return self.send_message_to_respond_request(client_socket, DatosPorEnviar)
 
         elif Tipo == "AmbasFunciones":
             mat = self.matriz_AmbasFunciones
             if mat[i][3] == contra:  # Verificar la contraseña
-                return self.send_message_to_respond_request(client_socket, "Se ingresó con éxito como propietario y alquilador a la vez.")
+                DatosPorEnviar = mat[i][0] + "_AmbasFunciones"
+                return self.send_message_to_respond_request(client_socket, DatosPorEnviar)
         
 
         return self.send_message_to_respond_request(client_socket, "Fallo en contraseña")
