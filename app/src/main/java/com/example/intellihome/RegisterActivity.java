@@ -198,7 +198,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         validator.mostrarMensaje(getString(R.string.cuentcreexRegisterActivity));
                         imageUri = getImageUriFromButton(btnProfilePhoto);
-                        uploadImageToFirebase(imageUri, "Propietario");
+                        uploadInfoToFirebase(imageUri, "Propietario");
                         regresarAConfig();
                     }
                     if (isAlquilar && !isPropietario) {
@@ -207,7 +207,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         validator.mostrarMensaje(getString(R.string.cuentcreexRegisterActivity));
                         imageUri = getImageUriFromButton(btnProfilePhoto);
-                        uploadImageToFirebase(imageUri, "Alquilador");
+                        uploadInfoToFirebase(imageUri, "Alquilador");
                         regresarAConfig();
                     }
                     if (isAlquilar && isPropietario) {
@@ -216,7 +216,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         validator.mostrarMensaje(getString(R.string.cuentcreexRegisterActivity));
                         imageUri = getImageUriFromButton(btnProfilePhoto);
-                        uploadImageToFirebase(imageUri, "AmbasFunciones");
+                        uploadInfoToFirebase(imageUri, "AmbasFunciones");
                         regresarAConfig();
                     }
 
@@ -400,19 +400,22 @@ public class RegisterActivity extends AppCompatActivity {
         return sb.toString();
     }
 
-    private void uploadImageToFirebase(Uri imageUri, String Tipo) {
+    private void uploadInfoToFirebase(Uri imageUri, String tipo) {
         if (imageUri != null) {
             // Crear una referencia a Firebase Storage
-            String DireccionCreacionCarpeta = "Usuarios/" + Tipo + "/" ;
-            String Nombre = inputUsername.getText().toString(); //Nombre de la carpeta por crear basada en user name
+            String direccionCreacionCarpeta = "Usuarios/" + tipo + "/";
+            String nombre = inputUsername.getText().toString(); // Nombre de la carpeta por crear basada en el username
 
-            String Direccion = DireccionCreacionCarpeta + Nombre;
-            crearCarpeta(DireccionCreacionCarpeta); //Crea carpeta con .txt para guardar la informacion.
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference(Direccion);
+            // Crear la referencia para la carpeta del usuario
+            StorageReference carpetaRef = FirebaseStorage.getInstance().getReference(direccionCreacionCarpeta + nombre + "/");
 
-            // Crear un nombre único para el archivo
-            String fileName = System.currentTimeMillis() + ".png"; // o el tipo de imagen que sea
-            StorageReference fileReference = storageReference.child(fileName);
+            // Crear la carpeta (archivo dummy) y subir el archivo de texto
+            crearCarpeta(carpetaRef.getPath()); // Cambia a carpetaRef.getPath() si es necesario
+            crearYSubirTxt(carpetaRef.child("info.txt")); // Aquí subimos el .txt dentro de la carpeta
+
+            // Crear un nombre único para el archivo de imagen
+            String fileName = "ProfilePicture.png"; // o el tipo de imagen que sea
+            StorageReference fileReference = carpetaRef.child(fileName); // Asegúrate de que esté dentro de la misma carpeta
 
             // Subir la imagen
             fileReference.putFile(imageUri)
@@ -428,6 +431,7 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "Por favor selecciona una imagen", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private Uri getImageUriFromButton(Button button) {
         // Obtener el drawable del botón
@@ -480,5 +484,52 @@ public class RegisterActivity extends AppCompatActivity {
             System.err.println("Error al crear la carpeta: " + e.getMessage());
         }
     }
+    private void crearYSubirTxt(StorageReference storageRef) {
+        try {
+            String firstName = inputFirstName.getText().toString();
+            String lastName = inputLastName.getText().toString();
+            String username = inputUsername.getText().toString();
+            String phone = inputPhone.getText().toString();
+            String email = inputEmail.getText().toString();
+            String hobbies = inputHobbies.getText().toString();
+            String vehiculo = selectVehiculo.getSelectedItem().toString();
+            String casa = selectCasa.getSelectedItem().toString();
+            String domicilio = selectDomicilio.getSelectedItem().toString();
+
+            // Crear un StringBuilder para formar el contenido del archivo
+            StringBuilder contenidoArchivo = new StringBuilder();
+
+            // Añadir líneas de ejemplo (puedes reemplazar con tus propios datos)
+            contenidoArchivo.append("Nombre:").append(firstName).append("\n");
+            contenidoArchivo.append("Apellido:").append(lastName).append("\n");
+            contenidoArchivo.append("Username:").append(username).append("\n");
+            contenidoArchivo.append("Telefono:").append(phone).append("\n");
+            contenidoArchivo.append("Correo:").append(email).append("\n");
+            contenidoArchivo.append("Hobbies:").append(hobbies).append("\n");
+            contenidoArchivo.append("Vehiculo:").append(vehiculo).append("\n");
+            contenidoArchivo.append("CasaPreferencia:").append(casa).append("\n");
+            contenidoArchivo.append("Domicilio:").append(domicilio).append("\n");
+            contenidoArchivo.append("FechaNacimiento:").append("ayer :D").append("\n");
+
+
+            // Convertir el contenido a bytes
+            byte[] data = contenidoArchivo.toString().getBytes("UTF-8");
+
+            // Subir el archivo al Storage en la referencia dada
+            storageRef.putBytes(data)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Manejar el éxito de la subida
+                        System.out.println("Archivo subido exitosamente a: " + storageRef.getPath());
+                    })
+                    .addOnFailureListener(e -> {
+                        // Manejar errores en la subida
+                        System.err.println("Error al subir el archivo: " + e.getMessage());
+                    });
+
+        } catch (Exception e) {
+            System.err.println("Error al crear o subir el archivo: " + e.getMessage());
+        }
+    }
+
 }
 
