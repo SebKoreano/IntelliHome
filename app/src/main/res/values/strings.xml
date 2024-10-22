@@ -134,4 +134,5 @@
     <string name="elegir_ubicaci_n">Elegir ubicación</string>
     <string name="hint_latitud">Latitud:</string>
     <string name="hint_longitud">Longitud:</string>
+    <string name="aceptar">Aceptar</string>
 </resources>

@@ -10,16 +10,22 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class HomeActivity extends AppCompatActivity {
 
     private EditText descripcionInput, precioInput;
     private NumberPicker numHabitacionesPicker;
-    private Button btnAddReglas, btnAddAmenidades;
-    private Button btnPhoto;
+    private Button btnAddReglas, btnAddAmenidades, btnPhoto;
     private int numeroReglas = 1, numeroAmenidad= 1;
+    public static final int MAP_REQUEST_CODE = 1;
+    private double latitudHome, longitudHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,15 +92,29 @@ public class HomeActivity extends AppCompatActivity {
         vehiculoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selectVehiculo.setAdapter(vehiculoAdapter);
 
-        //Configura boton para escoger la ubicacion
+        // Configura botón para escoger la ubicación
         Button btnElegirUbicacion = findViewById(R.id.btnElegirUbicacion);
         btnElegirUbicacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, MapActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1);  // El 1 es el requestCode
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            // Obtener latitud y longitud desde el Intent de MapActivity
+            latitudHome = data.getDoubleExtra("latitud", 0.0);
+            longitudHome = data.getDoubleExtra("longitud", 0.0);
+
+            // Mostrar los valores en un Toast
+            Toast.makeText(this, "Latitud: " + latitudHome + ", Longitud: " + longitudHome, Toast.LENGTH_LONG).show();
+        }
     }
 
     // Método general para agregar un nuevo campo (regla o amenidad)

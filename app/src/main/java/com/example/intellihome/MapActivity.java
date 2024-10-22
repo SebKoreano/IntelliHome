@@ -3,7 +3,9 @@ package com.example.intellihome;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -16,6 +18,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener {
 
     EditText txtLatitud, txtLongitud;
+    private Button btnAceptar;
     GoogleMap mMap;
 
     @Override
@@ -25,6 +28,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         txtLatitud = findViewById(R.id.txtLatitud);
         txtLongitud = findViewById(R.id.txtLongitud);
+        btnAceptar = findViewById(R.id.btnAceptar);
+
+        // Lógica para el botón del mapa
+        btnAceptar.setOnClickListener(v -> {
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("latitud", Double.parseDouble(txtLatitud.getText().toString()));
+            resultIntent.putExtra("longitud", Double.parseDouble(txtLongitud.getText().toString()));
+            setResult(RESULT_OK, resultIntent);  // Envía el resultado a HomeActivity
+            finish();  // Cierra MapActivity
+        });
+
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -47,9 +61,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         txtLongitud.setText(String.valueOf(latLng.longitude));
 
         mMap.clear();
-        LatLng mexico = new LatLng(latLng.latitude,latLng.longitude);
-        mMap.addMarker(new MarkerOptions().position(mexico).title(""));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(mexico));
+        LatLng costaRica = new LatLng(latLng.latitude,latLng.longitude);
+        mMap.addMarker(new MarkerOptions().position(costaRica).title(""));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(costaRica));
     }
 
     @Override
@@ -58,8 +72,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         txtLongitud.setText(String.valueOf(latLng.longitude));
 
         mMap.clear();
-        LatLng mexico = new LatLng(latLng.latitude,latLng.longitude);
-        mMap.addMarker(new MarkerOptions().position(mexico).title(""));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(mexico));
+        LatLng costaRica = new LatLng(latLng.latitude,latLng.longitude);
+        mMap.addMarker(new MarkerOptions().position(costaRica).title(""));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(costaRica));
     }
 }
