@@ -1,55 +1,58 @@
 package com.example.intellihome;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AutoCompleteTextView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import android.text.TextUtils;
-import java.util.Calendar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
-import java.time.LocalDate;
-import java.time.Period;
 import java.net.Socket;
-import android.graphics.Bitmap;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Scanner;
+
 import android.net.Uri;
-import android.util.Log;
-import androidx.appcompat.app.AlertDialog;
-import android.content.pm.PackageManager;
-import android.widget.ImageView;
-import android.os.Build;
-import androidx.core.app.ActivityCompat; // Para manejar permisos
-import androidx.core.content.ContextCompat; // Para verificar permisos
-import android.Manifest; // Para usar los permisos de Android, incluyendo READ_MEDIA_IMAGES
-import androidx.annotation.Nullable; // Para la anotación Nullable
-import android.widget.ArrayAdapter;
-
-
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -69,9 +72,13 @@ public class RegisterActivity extends AppCompatActivity {
     private Button btnCreateAccount, btnProfilePhoto;
     private boolean isPasswordVisible = false, isPasswordVisible2 = false;
     private DialogManager dialogManager;
-    private PhotoManager photoManager;
+    private DialogManager.PhotoManager photoManager;
     private Validator validator;
     private List<EditText> campos;
+
+    private LinearProgressIndicator progress;
+    private Uri imageUri;
+    private static final int PICK_IMAGE_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,14 +114,14 @@ public class RegisterActivity extends AppCompatActivity {
         btnTogglePassword = findViewById(R.id.btnTogglePassword);
         btnTogglePassword2 = findViewById(R.id.btnTogglePassword2);
         dialogManager = new DialogManager(this);
-        photoManager = new PhotoManager(this, btnProfilePhoto);
+        photoManager = new DialogManager.PhotoManager(this, btnProfilePhoto);
 
         GlobalColor globalVariables = (GlobalColor) getApplicationContext();
         int currentColor = globalVariables.getCurrentColor();
         btnCreateAccount.setBackgroundColor(currentColor);
 
         // Conectar al servidor
-        connectToServer("172.18.251.41", 3535);
+        connectToServer("172.18.83.115", 3535); //192.168.18.206
 
         // Ocultar inicialmente las secciones de Propietario y Alquilar
         propietarioSection.setVisibility(View.GONE);
@@ -188,16 +195,34 @@ public class RegisterActivity extends AppCompatActivity {
                 boolean isAlquilar = checkboxAlquilar.isChecked();
                 // Validar los campos generales
                 if (validarCamposGenerales(isPropietario, isAlquilar)) {
-                    if (isPropietario && !validarIban()) {
-                        return;
+                    if (isPropietario && !isAlquilar) {
+                        obtenerDatos();
+                        sendMessage(concatenarDatos("Propietario"));
+
+                        validator.mostrarMensaje(getString(R.string.cuentcreexRegisterActivity));
+                        imageUri = getImageUriFromButton(btnProfilePhoto);
+                        uploadInfoToFirebase(imageUri, "Propietario");
+                        regresarAConfig();
                     }
-                    if (isAlquilar && !validarTarjeta()) {
-                        return;
+                    if (isAlquilar && !isPropietario) {
+                        obtenerDatos();
+                        sendMessage(concatenarDatos("Alquilador"));
+
+                        validator.mostrarMensaje(getString(R.string.cuentcreexRegisterActivity));
+                        imageUri = getImageUriFromButton(btnProfilePhoto);
+                        uploadInfoToFirebase(imageUri, "Alquilador");
+                        regresarAConfig();
                     }
-                    obtenerDatos();
-                    sendMessage(concatenarDatos());
-                    validator.mostrarMensaje(getString(R.string.cuentcreexRegisterActivity));
-                    regresarAConfig();
+                    if (isAlquilar && isPropietario) {
+                        obtenerDatos();
+                        sendMessage(concatenarDatos("AmbasFunciones"));
+
+                        validator.mostrarMensaje(getString(R.string.cuentcreexRegisterActivity));
+                        imageUri = getImageUriFromButton(btnProfilePhoto);
+                        uploadInfoToFirebase(imageUri, "AmbasFunciones");
+                        regresarAConfig();
+                    }
+
                 }
             } else {
                 validator.mostrarMensaje(getString(R.string.debeacepterRegisterActivity));
@@ -253,7 +278,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
                             != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(this,
-                                new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PhotoManager.PICK_IMAGE);
+                                new String[]{Manifest.permission.READ_MEDIA_IMAGES}, DialogManager.PhotoManager.PICK_IMAGE);
                     } else {
                         photoManager.openGallery();
                     }
@@ -268,9 +293,9 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == PhotoManager.REQUEST_IMAGE_CAPTURE) {
+            if (requestCode == DialogManager.PhotoManager.REQUEST_IMAGE_CAPTURE) {
                 photoManager.handleCameraImage(data);
-            } else if (requestCode == PhotoManager.PICK_IMAGE) {
+            } else if (requestCode == DialogManager.PhotoManager.PICK_IMAGE) {
                 photoManager.handleGalleryImage(data);
             }
         }
@@ -345,36 +370,181 @@ public class RegisterActivity extends AppCompatActivity {
             String cardHolder = inputCardHolder.getText().toString();
         }
     }
-    private String concatenarDatos() {
-        String firstName = inputFirstName.getText().toString();
-        String lastName = inputLastName.getText().toString();
+    private String concatenarDatos(String Tipo) {
         String username = inputUsername.getText().toString();
         String phone = inputPhone.getText().toString();
         String email = inputEmail.getText().toString();
         String password = inputPassword.getText().toString();
-        String repeatPassword = inputRepeatPassword.getText().toString();
 
         StringBuilder sb = new StringBuilder();
         sb.append("CrearCuenta").append("_");
-        sb.append(firstName).append("_");
-        sb.append(lastName).append("_");
+        sb.append(Tipo).append("_");
         sb.append(username).append("_");
         sb.append(phone).append("_");
         sb.append(email).append("_");
         sb.append(password).append("_");
-        sb.append(repeatPassword);
 
         // Agregar información de las secciones de propietario y alquilar si están visibles
         if (checkboxPropietario.isChecked()) {
             String iban = inputIban.getText().toString();
-            sb.append("_").append(iban);
+            sb.append(iban).append("_");
         }
 
         if (checkboxAlquilar.isChecked()) {
             String cardNumber = inputCardNumber.getText().toString();
-            sb.append("_").append(cardNumber);
+            String CardCVV = inputCVV.getText().toString();
+            String CardHolder = inputCardHolder.getText().toString();
+
+            // Obtener fecha de expiración de la tarjeta del expDatePicker
+            int expMonth = expDatePicker.getMonth() + 1; // Los meses empiezan en 0, por eso sumamos 1
+            int expYear = expDatePicker.getYear();
+            String expirationDate = expMonth + "/" + expYear; // Formato de fecha de expiración
+
+            sb.append(cardNumber).append("_");
+            sb.append(CardCVV).append("_");
+            sb.append(expirationDate).append("_");
+            sb.append(CardHolder).append("_");
+
         }
 
         return sb.toString();
     }
+    private void uploadInfoToFirebase(Uri imageUri, String tipo) {
+        if (imageUri != null) {
+            // Crear una referencia a Firebase Storage
+            String direccionCreacionCarpeta = "Usuarios/" + tipo + "/";
+            String nombre = inputUsername.getText().toString(); // Nombre de la carpeta por crear basada en el username
+
+            // Crear la referencia para la carpeta del usuario
+            StorageReference carpetaRef = FirebaseStorage.getInstance().getReference(direccionCreacionCarpeta + nombre + "/");
+
+            // Crear la carpeta (archivo dummy) y subir el archivo de texto
+            crearCarpeta(carpetaRef.getPath()); // Cambia a carpetaRef.getPath() si es necesario
+            crearYSubirTxt(carpetaRef.child("info.txt")); // Aquí subimos el .txt dentro de la carpeta
+
+            // Crear un nombre único para el archivo de imagen
+            String fileName = "ProfilePicture.png"; // o el tipo de imagen que sea
+            StorageReference fileReference = carpetaRef.child(fileName); // Asegúrate de que esté dentro de la misma carpeta
+
+            // Subir la imagen
+            fileReference.putFile(imageUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Imagen subida con éxito
+                        Toast.makeText(RegisterActivity.this, "Imagen subida exitosamente", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        // Manejo de errores
+                        Toast.makeText(RegisterActivity.this, "Error al subir la imagen: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            Toast.makeText(this, "Por favor selecciona una imagen", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private Uri getImageUriFromButton(Button button) {
+        // Obtener el drawable del botón
+        Drawable drawable = button.getBackground();
+        if (drawable != null) {
+            // Convertir el drawable a bitmap
+            Bitmap bitmap = drawableToBitmap(drawable);
+
+            // Guardar el bitmap en un archivo temporal
+            try {
+                File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "profile_photo.png");
+                FileOutputStream fos = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                fos.close();
+
+                // Crear y retornar el Uri del archivo
+                return Uri.fromFile(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return null;
+    }
+
+    // Función para convertir un Drawable a Bitmap
+    private Bitmap drawableToBitmap(Drawable drawable) {
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+    private void crearCarpeta(String rutaCarpeta) {
+        try {
+
+            // Obtener el nombre del archivo del input (nombre del usuario)
+            String name = inputUsername.getText().toString().trim(); // Eliminar espacios innecesarios
+            String archivoDummy = name + ".txt"; // Archivo vacío
+            String rutaCompleta = rutaCarpeta + archivoDummy; // Ruta completa combinada
+
+            // Obtener la referencia al Storage de Firebase
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReference();
+
+            // Crear una referencia a la ruta completa
+            StorageReference carpetaRef = storageRef.child(rutaCompleta);
+
+        } catch (Exception e) {
+            System.err.println("Error al crear la carpeta: " + e.getMessage());
+        }
+    }
+    private void crearYSubirTxt(StorageReference storageRef) {
+        try {
+            String firstName = inputFirstName.getText().toString();
+            String lastName = inputLastName.getText().toString();
+            String username = inputUsername.getText().toString();
+            String phone = inputPhone.getText().toString();
+            String email = inputEmail.getText().toString();
+            String hobbies = inputHobbies.getText().toString();
+            String vehiculo = selectVehiculo.getSelectedItem().toString();
+            String casa = selectCasa.getSelectedItem().toString();
+            String domicilio = selectDomicilio.getSelectedItem().toString();
+
+
+            // Obtener fecha seleccionada del DatePicker (siempre se obtiene)
+            int day = datePicker.getDayOfMonth();
+            int month = datePicker.getMonth() + 1; // Los meses empiezan en 0, por eso sumamos 1
+            int year = datePicker.getYear();
+            String birthDate = day + "/" + month + "/" + year; // Formato de fecha
+
+            // Crear un StringBuilder para formar el contenido del archivo
+            StringBuilder contenidoArchivo = new StringBuilder();
+
+            // Añadir líneas de ejemplo (puedes reemplazar con tus propios datos)
+            contenidoArchivo.append("Nombre:").append(firstName).append("\n");
+            contenidoArchivo.append("Apellido:").append(lastName).append("\n");
+            contenidoArchivo.append("Username:").append(username).append("\n");
+            contenidoArchivo.append("Telefono:").append(phone).append("\n");
+            contenidoArchivo.append("Correo:").append(email).append("\n");
+            contenidoArchivo.append("Hobbies:").append(hobbies).append("\n");
+            contenidoArchivo.append("Vehiculo:").append(vehiculo).append("\n");
+            contenidoArchivo.append("CasaPreferencia:").append(casa).append("\n");
+            contenidoArchivo.append("Domicilio:").append(domicilio).append("\n");
+            contenidoArchivo.append("FechaNacimiento:").append(birthDate).append("\n");
+
+
+            // Convertir el contenido a bytes
+            byte[] data = contenidoArchivo.toString().getBytes("UTF-8");
+
+            // Subir el archivo al Storage en la referencia dada
+            storageRef.putBytes(data)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Manejar el éxito de la subida
+                        System.out.println("Archivo subido exitosamente a: " + storageRef.getPath());
+                    })
+                    .addOnFailureListener(e -> {
+                        // Manejar errores en la subida
+                        System.err.println("Error al subir el archivo: " + e.getMessage());
+                    });
+
+        } catch (Exception e) {
+            System.err.println("Error al crear o subir el archivo: " + e.getMessage());
+        }
+    }
+
 }

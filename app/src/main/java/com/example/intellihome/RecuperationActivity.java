@@ -6,13 +6,11 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Enumeration;
 import java.util.Scanner;
 
 public class RecuperationActivity extends AppCompatActivity {
@@ -40,7 +38,7 @@ public class RecuperationActivity extends AppCompatActivity {
         new Thread(() -> {
             runOnUiThread(() -> {
                 // Una vez que se obtiene la IP, conectarse al servidor
-                connectToServer("172.18.251.41", 3535);
+                connectToServer("172.18.83.115", 3535); //192.168.18.206
             });
         }).start();
         confirmation_but.setOnClickListener(view -> {

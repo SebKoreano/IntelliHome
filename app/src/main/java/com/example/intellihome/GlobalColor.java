@@ -1,7 +1,6 @@
 package com.example.intellihome;
 
 import android.app.Application;
-import android.graphics.Color;
 
 public class GlobalColor extends Application {
     private int currentColor = 0x57cdf5;

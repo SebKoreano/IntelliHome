@@ -36,9 +36,10 @@ class Usuario:
             server.quit()
 
 class ChatServer:
-    def __init__(self, host="192.168.18.5", port=3535):
-        
-        self.matriz_usuarios = [] 
+    def __init__(self, host="172.18.83.115", port=3535): #192.168.18.206
+        self.matriz_Alquilador = [] 
+        self.matriz_Propietario = []
+        self.matriz_AmbasFunciones = [] 
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_socket.bind((host, port))
         self.server_socket.listen(5)
@@ -66,7 +67,7 @@ class ChatServer:
 
                     # Verificar el prefijo del mensaje
                     if message.startswith("CrearCuenta_"):  # Nuevo usuario
-                        print(message)
+                        print(message + "SE CREARÁ ESTA CUENTAAAAAAA")
                         self.write_message_to_file(message[len("CrearCuenta_"):])
 
                     elif message.startswith("Login_"):
@@ -79,9 +80,6 @@ class ChatServer:
                         #self.recuperar_contraseña(self,"sebasboza.cr@gmail.com",None) 
                     else:
                         print("No llegó mensaje relevante")
-                        
-                else:
-                    print("Error!")
             except Exception as e:
                 print("error")
                 break
@@ -103,74 +101,169 @@ class ChatServer:
 
     #Escriba cuenta creada en .txt
     def write_message_to_file(self, message):
-        """Escribir un mensaje en el archivo usuarios.txt."""
-        with open("server/usuarios.txt", "a") as file:  # Abrir en modo append
-            file.write(message + "\n") 
+        """Escribir un mensaje en el archivo .txt indicado"""
+        if message.startswith("Propietario_"):
+            print(message)
+            with open("server/Propietario.txt", "a") as file:  # Abrir en modo append
+                file.write((message[len("Propietario_"):]) + "\n") 
+                
 
-    def procesar_usuario(self, mensaje):
+        elif message.startswith("Alquilador_"):
+            print(message)
+            with open("server/Alquilador.txt", "a") as file:  # Abrir en modo append
+                file.write((message[len("Alquilador_"):]) + "\n") 
+
+
+        elif message.startswith("AmbasFunciones_"):
+            print(message)
+            with open("server/AmbasFunciones.txt", "a") as file:  # Abrir en modo append
+                file.write((message[len("AmbasFunciones_"):]) + "\n") 
+
+
+    def procesar_usuario(self, mensaje, Tipo):
         # Dividimos el mensaje en partes usando el delimitador '_'
         datos_usuario = mensaje.split('_')
-        
-        # Asignamos cada parte a una variable sin omitir letras
-        nombre = datos_usuario[0]
-        apellido = datos_usuario[1]
-        usuario = datos_usuario[2]  
-        telefono = datos_usuario[3] 
-        email = datos_usuario[4]    
-        contrasena = datos_usuario[5] 
-        confirmar_contrasena = datos_usuario[6]  # Confirmación de contraseña
-        codigo_recuperacion = datos_usuario[7] 
 
-        # Creamos una fila con la información del usuario
-        usuario_fila = [nombre, apellido, usuario, telefono, email, contrasena, confirmar_contrasena, codigo_recuperacion]
+        usuario = datos_usuario[0]  
+        telefono = datos_usuario[1] 
+        email = datos_usuario[2]    
+        contrasena = datos_usuario[3]
 
-        # Insertar usuario_fila en el Text widget
+        if Tipo == "Propietario":
+            Iban = datos_usuario[4]
+            usuario_fila = [usuario, telefono, email, contrasena, Iban]
+
+
+        elif Tipo == "Alquilador":
+            CardNum = datos_usuario[4]
+            CardCVV = datos_usuario[5]
+            CardHolder = datos_usuario[6]
+            usuario_fila = [usuario, telefono, email, contrasena, CardNum, CardCVV, CardHolder]
+
+        elif Tipo == "AmbasFunciones":
+            Iban = datos_usuario[4]
+            CardNum = datos_usuario[5]
+            CardCVV = datos_usuario[6]
+            CardHolder = datos_usuario[7]
+            usuario_fila = [usuario, telefono, email, contrasena, Iban, CardNum, CardCVV, CardHolder]
+
+
         print(usuario_fila)
 
         return usuario_fila
     
-    def revisar_contraseña(self, i, contra, client_socket): 
+    def revisar_contraseña(self, i, contra, client_socket, Tipo): 
         """Verifica si la contraseña proporcionada coincide con la almacenada."""
-        mat = self.matriz_usuarios
-        if mat[i][5] == contra:  # Verificar la contraseña
-            return self.send_message_to_respond_request(client_socket, "Se ingresó con éxito")
+        if Tipo == "Propietario":
+            mat = self.matriz_Propietario
+            if mat[i][3] == contra:  # Verificar la contraseña
+                DatosPorEnviar = mat[i][0] + "_Propietario"
+                return self.send_message_to_respond_request(client_socket, DatosPorEnviar)
+        elif Tipo == "Alquilador":
+            mat = self.matriz_Alquilador
+            if mat[i][3] == contra:  # Verificar la contraseña
+                DatosPorEnviar = mat[i][0] + "_Alquilador"
+                return self.send_message_to_respond_request(client_socket, DatosPorEnviar)
+
+        elif Tipo == "AmbasFunciones":
+            mat = self.matriz_AmbasFunciones
+            if mat[i][3] == contra:  # Verificar la contraseña
+                DatosPorEnviar = mat[i][0] + "_AmbasFunciones"
+                return self.send_message_to_respond_request(client_socket, DatosPorEnviar)
+        
+
         return self.send_message_to_respond_request(client_socket, "Fallo en contraseña")
+
 
     def agregar_usuario_a_matriz(self):
         """Leer usuarios del archivo y agregarlos a la matriz."""
         try:
-            with open("server/usuarios.txt", "r") as file:  # Abrir el archivo en modo lectura
+            with open("server/Alquilador.txt", "r") as file:  # Abrir el archivo en modo lectura
                 for line in file:
                     mensaje = line.strip()  # Limpiar espacios en blanco
-                    usuario_fila = self.procesar_usuario(mensaje)  # Procesar la línea
-                    self.matriz_usuarios.append(usuario_fila)  # Añadir el usuario a la matriz
+                    usuario_fila = self.procesar_usuario(mensaje, "Alquilador")  # Procesar la línea
+                    self.matriz_Alquilador.append(usuario_fila)  # Añadir el usuario a la matriz
+            
+            with open("server/Propietario.txt", "r") as file:  # Abrir el archivo en modo lectura
+                for line in file:
+                    mensaje = line.strip()  # Limpiar espacios en blanco
+                    usuario_fila = self.procesar_usuario(mensaje, "Propietario")  # Procesar la línea
+                    self.matriz_Propietario.append(usuario_fila)  # Añadir el usuario a la matriz
+
+            with open("server/AmbasFunciones.txt", "r") as file:  # Abrir el archivo en modo lectura
+                for line in file:
+                    mensaje = line.strip()  # Limpiar espacios en blanco
+                    usuario_fila = self.procesar_usuario(mensaje, "AmbasFunciones")  # Procesar la línea
+                    self.matriz_AmbasFunciones.append(usuario_fila)  # Añadir el usuario a la matriz         
+
+
         except FileNotFoundError:
-            print("El archivo usuarios.txt no se encontró.")
+            print("El archivo no se encontró.")
         except Exception as e:
             print(f"Ocurrió un error al leer el archivo: {e}")
 
     def buscar_login(self, mensaje, client_socket): 
         """Buscar el usuario en la matriz y verificar la contraseña."""
-        mat = self.matriz_usuarios
+        #Revisa matriz de Propietario
+        mat = self.matriz_Propietario
         datos_login = mensaje.split("_")
 
         indicador = datos_login[0]  # Usuario, correo o teléfono
         contra = datos_login[1]      # Contraseña
 
         for i in range(len(mat)):  # Usar range(len(mat)) para revisar todas las filas
-            if mat[i][2] == indicador:  # Verificar nombre de usuario
-                return self.revisar_contraseña(i, contra, client_socket)  # Revisar contraseña
+            if mat[i][0] == indicador:  # Verificar nombre de usuario
+                return self.revisar_contraseña(i, contra, client_socket, "Propietario")  # Revisar contraseña
         
         for i in range(len(mat)):
-            if mat[i][3] == indicador:  # Verificar teléfono
-                return self.revisar_contraseña(i, contra, client_socket)  # Revisar contraseña
+            if mat[i][1] == indicador:  # Verificar teléfono
+                return self.revisar_contraseña(i, contra, client_socket, "Propietario")  # Revisar contraseña
             
         for i in range(len(mat)):
-            if mat[i][4] == indicador:  # Verificar correo
-                return self.revisar_contraseña(i, contra, client_socket)  # Revisar contraseña
+            if mat[i][2] == indicador:  # Verificar correo
+                return self.revisar_contraseña(i, contra, client_socket, "Propietario")  # Revisar contraseña
+
+        #Revisa matriz de Alquilador
+        mat = self.matriz_Alquilador
+        datos_login = mensaje.split("_")
+
+        indicador = datos_login[0]  # Usuario, correo o teléfono
+        contra = datos_login[1]      # Contraseña
+
+        for i in range(len(mat)):  # Usar range(len(mat)) para revisar todas las filas
+            if mat[i][0] == indicador:  # Verificar nombre de usuario
+                return self.revisar_contraseña(i, contra, client_socket, "Alquilador")  # Revisar contraseña
+        
+        for i in range(len(mat)):
+            if mat[i][1] == indicador:  # Verificar teléfono
+                return self.revisar_contraseña(i, contra, client_socket, "Alquilador")  # Revisar contraseña
+            
+        for i in range(len(mat)):
+            if mat[i][2] == indicador:  # Verificar correo
+                return self.revisar_contraseña(i, contra, client_socket, "Alquilador")  # Revisar contraseña
+
+        #Revisa matriz de AmbasFunciones
+        mat = self.matriz_AmbasFunciones
+        datos_login = mensaje.split("_")
+
+        indicador = datos_login[0]  # Usuario, correo o teléfono
+        contra = datos_login[1]      # Contraseña
+
+        for i in range(len(mat)):  # Usar range(len(mat)) para revisar todas las filas
+            if mat[i][0] == indicador:  # Verificar nombre de usuario
+                return self.revisar_contraseña(i, contra, client_socket, "AmbasFunciones")  # Revisar contraseña
+        
+        for i in range(len(mat)):
+            if mat[i][1] == indicador:  # Verificar teléfono
+                return self.revisar_contraseña(i, contra, client_socket, "AmbasFunciones")  # Revisar contraseña
+            
+        for i in range(len(mat)):
+            if mat[i][2] == indicador:  # Verificar correo
+                return self.revisar_contraseña(i, contra, client_socket, "AmbasFunciones")  # Revisar contraseña
         
         return self.send_message_to_respond_request(client_socket, "Fallo en usuario")
-   
+
+
     def close_server(self):
         for client in self.clients:
             client.close()
@@ -178,38 +271,83 @@ class ChatServer:
         self.root.destroy()
 
     def existe_correo(self, string, client_socket):
-        mat = self.matriz_usuarios
+        mat = self.matriz_Propietario
         for i in range(len(mat)):
-            if mat[i][4] == string:  # Verificar correo
-                print("CORREO EXISTE EN MATRIZ")
-                return self.recuperar_contraseña(string, client_socket)
+            if mat[i][2] == string:  # Verificar correo
+                print("CORREO EXISTE EN MATRIZ PROPIETARIO")
+                return self.recuperar_contraseña(string, "Propietario")
+            
+        mat = self.matriz_Alquilador
+        for i in range(len(mat)):
+            if mat[i][2] == string:  # Verificar correo
+                print("CORREO EXISTE EN MATRIZ ALQUILADOR")
+                return self.recuperar_contraseña(string, "Alquilador")
+            
+        mat = self.matriz_AmbasFunciones
+        for i in range(len(mat)):
+            if mat[i][2] == string:  # Verificar correo
+                print("CORREO EXISTE EN MATRIZ AMBAS FUNCIONES")
+                return self.recuperar_contraseña(string, "AmbasFunciones")
+        
         print("NO SE ENCONTRÓ CORREO")
         return self.send_message_to_respond_request(client_socket, "Error, no se encontró el correo")
 
-    def cambiar_Contraseña(self, correo, string): 
+    def cambiar_Contraseña(self, correo, password, Tipo): 
         """Cambia la contraseña de un usuario en la matriz y actualiza el archivo."""
-        mat = self.matriz_usuarios
-        for i in range(len(mat)):
-            if mat[i][4] == correo:  # Verificar correo
-                mat[i][5] = string  # Cambiar la contraseña
-                mat[i][6] = string  # Cambiar la contraseña de confirmación
-                break
-        self.CambiosATxt()
-    
-    def CambiosATxt(self):
-        mat = self.matriz_usuarios
-        with open("server/usuarios2.txt", "w") as file:  # Abrir en modo append
-            for fila in mat:
-                message = "_".join(fila)  # Unir elementos de la fila con "_"
-                file.write(message + "\n")
 
-    def recuperar_contraseña(self, correo, client_socket):
+        if Tipo == "Propietario":
+            mat = self.matriz_Propietario
+            for i in range(len(mat)):
+                if mat[i][2] == correo:  # Verificar correo
+                    mat[i][3] = password  # Cambiar la contraseña
+                    break
+            self.CambiosATxt("Propietario")
+        
+        elif Tipo == "Alquilador":
+            mat = self.matriz_Alquilador
+            for i in range(len(mat)):
+                if mat[i][2] == correo:  # Verificar correo
+                    mat[i][3] = password  # Cambiar la contraseña
+                    break
+            self.CambiosATxt("Alquilador")
+        
+        elif Tipo == "AmbasFunciones":
+            mat = self.matriz_AmbasFunciones
+            for i in range(len(mat)):
+                if mat[i][2] == correo:  # Verificar correo
+                    mat[i][3] = password  # Cambiar la contraseña
+                    break
+            self.CambiosATxt("AmbasFunciones")
+
+    
+    def CambiosATxt(self, Tipo):
+        if Tipo == "Propietario":
+            mat = self.matriz_Propietario
+            with open("server/Propietario.txt", "w") as file:  # Abrir en modo append
+                for fila in mat:
+                    message = "_".join(fila)  # Unir elementos de la fila con "_"
+                    file.write(message + "\n")
+        elif Tipo == "Alquilador":
+            mat = self.matriz_Alquilador
+            with open("server/Alquilador.txt", "w") as file:  # Abrir en modo append
+                for fila in mat:
+                    message = "_".join(fila)  # Unir elementos de la fila con "_"
+                    file.write(message + "\n")
+
+        elif Tipo == "AmbasFunciones":
+            mat = self.matriz_AmbasFunciones
+            with open("server/AmbasFunciones.txt", "w") as file:  # Abrir en modo append
+                for fila in mat:
+                    message = "_".join(fila)  # Unir elementos de la fila con "_"
+                    file.write(message + "\n")
+
+    def recuperar_contraseña(self, correo, Tipo):
         # Crear una instancia de Usuario y probar el envío
         usuario = Usuario()
         new_pass = generar_nueva_contraseña()  # Asegúrate de que esta función esté definida correctamente
         print(f"Nueva contraseña: {new_pass}")  # Imprimir la nueva contraseña
         usuario.send_password_reset_email(correo, new_pass)  # Enviar el correo
-        self.cambiar_Contraseña(correo, new_pass)  # Cambiar la contraseña en la matriz
+        self.cambiar_Contraseña(correo, new_pass, Tipo)  # Cambiar la contraseña en la matriz
 
 def generar_nueva_contraseña():
     print("entro")
