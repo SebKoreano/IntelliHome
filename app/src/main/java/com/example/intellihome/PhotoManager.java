@@ -29,13 +29,15 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PhotoManager {
 
     private final Activity activity;
     private Button btnProfilePhoto;
     private LinearLayout linearLayout;
-
+    private List<Bitmap> photoUris; // Lista para almacenar las URIs de las fotos
     public static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int PICK_IMAGE = 2;
     public static final int REQUEST_CAMERA_PERMISSION = 100;
@@ -44,12 +46,14 @@ public class PhotoManager {
     public PhotoManager(Activity activity, Button btnProfilePhoto) {
         this.activity = activity;
         this.btnProfilePhoto = btnProfilePhoto;
+        this.photoUris = new ArrayList<>();
     }
 
     // Constructor con LinearLayout
     public PhotoManager(Activity activity, LinearLayout linearLayout) {
         this.activity = activity;
         this.linearLayout = linearLayout;
+        this.photoUris = new ArrayList<>();
     }
 
     // Mostrar el diálogo de selección de fotos
@@ -134,6 +138,7 @@ public class PhotoManager {
         );
         imageView.setLayoutParams(params);
         linearLayout.addView(imageView);
+        photoUris.add(bitmap);
     }
 
     // Establecer el fondo del botón con un Bitmap circular
@@ -186,4 +191,11 @@ public class PhotoManager {
             }
         }
     }
+
+    // Método para obtener el número de fotos añadidas
+    public int getPhotoCount() {
+        // Devuelve el número de fotos almacenadas en photoUris
+        return photoUris.size();
+    }
+
 }

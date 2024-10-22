@@ -9,6 +9,7 @@ import android.text.InputFilter;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
@@ -26,7 +27,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
 
     private EditText descripcionInput, precioInput;
     private NumberPicker numHabitacionesPicker;
-    private Button btnAddReglas, btnAddAmenidades, btnPhoto;
+    private Button btnAddReglas, btnAddAmenidades, btnPhoto, btnPublicar;
     private int numeroReglas = 1, numeroAmenidad= 1;
     public static final int MAP_REQUEST_CODE = 1;
     private double latitudHome, longitudHome;
@@ -51,6 +52,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
         btnAddAmenidades = findViewById(R.id.btnAddAmenidades);
         btnPhoto = findViewById(R.id.btnHousePhoto);
         linearLayout = findViewById(R.id.linearLayout);
+        btnPublicar = findViewById((R.id.btnPublish));
 
         // Configurar el NumberPicker
         numHabitacionesPicker.setMinValue(1);  // Valor mínimo
@@ -75,12 +77,6 @@ public class PublicarCasaActivity extends AppCompatActivity {
             public void onClick(View v) {
                 showMultiSelectDialog();
             }
-        });
-
-        // Acción del botón para añadir foto de perfil
-        btnPhoto.setOnClickListener(v -> {
-            Toast.makeText(this, getString(R.string.btnPhoto), Toast.LENGTH_SHORT).show();
-            // Lógica para seleccionar la foto
         });
 
         // Configuración del Spinner de "Tipo de Casa"
@@ -132,6 +128,18 @@ public class PublicarCasaActivity extends AppCompatActivity {
                 }
             });
         });
+
+        // Acción del botón "Publicar"
+        btnPublicar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (validarCampos()) {
+                    // Lógica para publicar la casa (si todo está correcto)
+                    Toast.makeText(PublicarCasaActivity.this, "Publicando la casa...", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
     @Override
@@ -147,6 +155,61 @@ public class PublicarCasaActivity extends AppCompatActivity {
                 photoManager.handleGalleryImage(data,false);
             }
         }
+    }
+
+    // Método para validar todos los campos antes de publicar
+    private boolean validarCampos() {
+        // Verificar si la descripción está vacía
+        if (descripcionInput.getText().toString().trim().isEmpty()) {
+            Toast.makeText(this, "La descripción no puede estar vacía", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Verificar si el precio está vacío
+        if (precioInput.getText().toString().trim().isEmpty()) {
+            Toast.makeText(this, "El precio no puede estar vacío", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Verificar si la ubicación (latitud y longitud) ha sido seleccionada
+        if (latitudHome == 0.0 || longitudHome == 0.0) {
+            Toast.makeText(this, "Debes elegir una ubicación", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Verificar si hay al menos una foto
+        if (photoManager.getPhotoCount() == 0) {
+            Toast.makeText(this, "Debes añadir al menos una foto", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Verificar si hay al menos una regla de uso
+        if (numeroReglas <= 1) {
+            Toast.makeText(this, "Debes añadir al menos una regla de uso", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Verificar si hay al menos una amenidad seleccionada
+        if (selectedAmenidades.isEmpty()) {
+            Toast.makeText(this, "Debes seleccionar al menos una amenidad", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Verificar si el checkbox de check-in/check-out está seleccionado
+        CheckBox checkInCheckOut = findViewById(R.id.checkInCheckOutCheckbox);
+        if (!checkInCheckOut.isChecked()) {
+            Toast.makeText(this, "Debes aceptar los términos de check-in y check-out", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Si todas las validaciones pasan
+        return true;
+    }
+
+    // Método para obtener el número de reglas de uso
+    private int getReglasCount() {
+        // Este método debe devolver cuántas reglas se han añadido al layout dinámico.
+        return linearLayout.getChildCount();
     }
 
     // Método principal para mostrar el diálogo de selección múltiple
@@ -263,7 +326,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
         } else if (tipoCampo.equals("amenidad")) {
             return getString(R.string.amenidadHint) + numeroAmenidad;
         }
-        return ""; // Por si hay más tipos en el futuro
+        return "";
     }
 
     // Método para agregar el EditText al layout correspondiente
