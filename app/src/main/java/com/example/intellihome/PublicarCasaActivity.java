@@ -28,7 +28,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
     private EditText descripcionInput, precioInput;
     private NumberPicker numHabitacionesPicker;
     private Button btnAddReglas, btnAddAmenidades, btnPhoto, btnPublicar;
-    private int numeroReglas = 1, numeroAmenidad= 1;
+    private int numeroReglas = 1, numeroAmenidad= 1, totalFotos = 0;;
     public static final int MAP_REQUEST_CODE = 1;
     private double latitudHome, longitudHome;
     private PhotoManager photoManager;
@@ -119,12 +119,19 @@ public class PublicarCasaActivity extends AppCompatActivity {
         // Configurar el botón para mostrar el diálogo
         btnPhoto.setOnClickListener(v -> {
             photoManager.showPhotoSelectionDialog((dialog, which) -> {
-                if (which == 0) {
-                    // Opción para tomar una foto
-                    photoManager.dispatchTakePictureIntent();
-                } else if (which == 1) {
-                    // Opción para seleccionar de la galería
-                    photoManager.openGallery();
+                if (totalFotos < 10) {
+                    if (which == 0) {
+                        // Opción para tomar una foto
+                        photoManager.dispatchTakePictureIntent();
+                    } else if (which == 1) {
+                        // Opción para seleccionar de la galería
+                        photoManager.openGallery();
+                    }
+                    totalFotos++;
+                }
+                else
+                {
+                    Toast.makeText(PublicarCasaActivity.this, "Hay un maximo de 10 fotos por casa", Toast.LENGTH_SHORT).show();
                 }
             });
         });
