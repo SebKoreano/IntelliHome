@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
     private void handleServerResponse(String response) {
         // Registrar el mensaje recibido
         Log.d("MainActivity", "Mensaje recibido: " + response);
-        if (response == "Fallo en contraseña" || response == "Fallo en usuario"){
+        if (response.trim().equals("Fallo en contraseña") || response.trim().equals("Fallo en usuario")){
             // Mostrar la respuesta en un AlertDialog
             runOnUiThread(() -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -163,8 +163,5 @@ public class MainActivity extends AppCompatActivity {
             String ColorElegido = " ";
             moveToMainPage();
         }
-
-
-
     }
 }
