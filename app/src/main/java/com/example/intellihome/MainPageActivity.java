@@ -61,7 +61,8 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
             Intent intent = new Intent(MainPageActivity.this, ConfigActivity.class);
             startActivity(intent);
         } else if (id == R.id.menu_add_house) {
-            // Lógica para publicar casa
+            Intent intent = new Intent(MainPageActivity.this, PublicarCasaActivity.class);
+            startActivity(intent);
         } else if (id == R.id.menu_control_house) {
             // Lógica para monitorear viviendas
         }

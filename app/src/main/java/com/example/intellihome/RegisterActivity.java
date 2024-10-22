@@ -72,7 +72,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button btnCreateAccount, btnProfilePhoto;
     private boolean isPasswordVisible = false, isPasswordVisible2 = false;
     private DialogManager dialogManager;
-    private DialogManager.PhotoManager photoManager;
+    private PhotoManager photoManager;
     private Validator validator;
     private List<EditText> campos;
 
@@ -114,7 +114,7 @@ public class RegisterActivity extends AppCompatActivity {
         btnTogglePassword = findViewById(R.id.btnTogglePassword);
         btnTogglePassword2 = findViewById(R.id.btnTogglePassword2);
         dialogManager = new DialogManager(this);
-        photoManager = new DialogManager.PhotoManager(this, btnProfilePhoto);
+        photoManager = new PhotoManager(this, btnProfilePhoto);
 
         GlobalColor globalVariables = (GlobalColor) getApplicationContext();
         int currentColor = globalVariables.getCurrentColor();
@@ -294,7 +294,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == PhotoManager.REQUEST_IMAGE_CAPTURE) {
-                photoManager.handleCameraImage(data, true);
+                photoManager.handleCameraImage(data,true);
             } else if (requestCode == PhotoManager.PICK_IMAGE) {
                 photoManager.handleGalleryImage(data, true);
             }
