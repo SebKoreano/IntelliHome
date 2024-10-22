@@ -141,9 +141,23 @@
     <string name="btnPhoto">Kép hozzáadása</string>
     <string name="ubicacion">Elhelyezkedés</string>
     <string name="elegir_ubicaci_n">Válasszon helyet</string>
-    <string name="hint_latitud">Szélesség:</string>
-    <string name="hint_longitud">Hossz:</string>
+    <string name="hint_latitud">Szélesség: </string>
+    <string name="hint_longitud">Hossz: </string>
     <string name="aceptar">Elfogadás</string>
+    <string name="maxFotoCasa">Házonként maximum 10 fotó lehet</string>
+    <string name="publicarCasa">A ház kiadása...</string>
+    <string name="validarDescripcion">A leírás nem lehet üres</string>
+    <string name="validarPrecio">Az ár nem lehet üres</string>
+    <string name="validarUbicacion">Ki kell választani egy helyet</string>
+    <string name="validarFoto">Legalább egy fényképet hozzá kell adnia</string>
+    <string name="validarReglas">Legalább egy használati szabályt hozzá kell adnia</string>
+    <string name="validarAmenidades">Legalább egy kényelmi szolgáltatást ki kell választania</string>
+    <string name="validarcheckInCheckOut">El kell fogadnia a be- és kijelentkezés feltételeit</string>
+    <string name="ok">Rendben</string>
+    <string name="seleccionAmenidades">Válassza a Felszerelések lehetőséget</string>
+    <string name="amenidadSeleccionadas">Válogatott szolgáltatások: </string>
+    <string name="amenidadesSeleccionadas">Kiválasztott: </string>
+    <string name="errorUbicacion">A helyszín nem sikerült</string>
     <string-array name="amenidades_array">
         <item>WiFi</item>
         <item>Medence</item>
