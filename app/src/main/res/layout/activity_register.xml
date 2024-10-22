@@ -43,39 +43,60 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sign-Up"
+                    android:text="@string/nousuarioActivityLogin"
                     android:textColor="@color/mainColor"
                     android:textSize="32sp"
                     android:textStyle="bold"/>
 
-                <Button
-                    android:id="@+id/btnProfilePhoto"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/baseline_photo_camera_24"/>
-
-                <com.google.android.material.textfield.TextInputLayout
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"/>
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/nombreRegister">
+                    android:orientation="horizontal">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/inputName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:weightSum="1">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/apellidosRegister">
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/nombreRegister">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/inputLastName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/inputName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/apellidosRegister">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/inputLastName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent"/>
+
+                    <Button
+                        android:id="@+id/btnProfilePhoto"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/baseline_photo_camera_24"/>
+                </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
@@ -112,6 +133,9 @@
                         android:inputType="textEmailAddress"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"/>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -174,6 +198,9 @@
                         android:src="@drawable/ic_eye_closed"/>
                 </RelativeLayout>
 
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"/>
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -189,23 +216,28 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:orientation="horizontal">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
 
-                        <AutoCompleteTextView
+                    <AutoCompleteTextView
                             android:id="@+id/selectCasa"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:hint="@string/prompt_casa_preferida" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <View
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent">
+                    </View>
+
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent">
 
@@ -215,41 +247,36 @@
                             android:layout_height="match_parent"
                             android:hint="@string/prompt_vehiculo" />
                     </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
-
-                        <AutoCompleteTextView
-                            android:id="@+id/selectDomicilio"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:hint="@string/prompt_domicilio" />
-                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/selectDomicilio"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/prompt_domicilio" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <DatePicker
                     android:id="@+id/datePicker"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:backgroundTint="#808080"
-                    android:calendarTextColor="?attr/android:textColor" />
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/quehacerRegister"
-                    android:textSize="16sp"
-                    android:layout_marginTop="16dp" />
+                    android:text="@string/quehacerRegister" />
 
-                <!-- Checkboxes Propietario y Alquilar -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:gravity="center"> <!-- Centrar contenido -->
+                    android:gravity="center">
 
                     <CheckBox
                         android:id="@+id/checkboxPropietario"
@@ -261,24 +288,26 @@
                         android:id="@+id/checkboxAlquilar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/alquilarRegister"
-                        android:layout_marginStart="16dp" />
+                        android:text="@string/alquilarRegister" />
                 </LinearLayout>
 
-                <!-- Inputs dinámicos: Cuenta IBAN / Información de tarjeta -->
                 <LinearLayout
                     android:id="@+id/propietarioSection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone"
-                    android:layout_marginTop="8dp">
+                    android:visibility="gone">
 
-                    <EditText
-                        android:id="@+id/inputIban"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/ibanRegister" />
+                        android:hint="@string/ibanRegister">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputIban"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -286,62 +315,68 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone"
-                    android:layout_marginTop="8dp">
+                    android:visibility="gone">
 
-                    <EditText
-                        android:id="@+id/inputCardNumber"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/numtarjetaRegister" />
+                        android:hint="@string/numtarjetaRegister">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputCardNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="8dp">
+                        android:orientation="vertical">
 
                         <DatePicker
                             android:id="@+id/expDatePicker"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="#808080"
-                            android:calendarTextColor="?attr/android:textColor"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
 
-                        <EditText
-                            android:id="@+id/inputCVV"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/cvvRegister"
-                            android:layout_marginStart="8dp" />
+                            android:hint="@string/cvvRegister">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/inputCVV"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+                        </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
-                    <EditText
-                        android:id="@+id/inputCardHolder"
+
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/titulartarjetaRegister"
-                        android:layout_marginTop="8dp" />
+                        android:hint="@string/titulartarjetaRegister">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputCardHolder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-                <!-- Check Terms & Conditions -->
                 <CheckBox
                     android:id="@+id/checkboxTerms"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/termsycondRegister"
-                    android:layout_marginTop="16dp" />
+                    android:text="@string/termsycondRegister"/>
 
-                <!-- Botón Crear Cuenta -->
-                <Button
-                    android:id="@+id/btnCreateAccount"
+                <com.google.android.material.button.MaterialButton
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/crearcuentaRegister"
+                    android:layout_height="60dp"
+                    android:id="@+id/btnCreateAccount"
                     android:backgroundTint="@color/mainColor"
-                    android:layout_marginTop="16dp" />
+                    android:text="@string/crearcuentaRegister"
+                    android:textStyle="bold"
+                    app:cornerRadius="32dp"/>
             </LinearLayout>
         </ScrollView>
     </androidx.cardview.widget.CardView>
