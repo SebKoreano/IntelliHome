@@ -121,7 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
         btnCreateAccount.setBackgroundColor(currentColor);
 
         // Conectar al servidor
-        connectToServer("172.18.83.115", 3535); //192.168.18.206
+        connectToServer("192.168.18.206", 3535); //192.168.18.206
 
         // Ocultar inicialmente las secciones de Propietario y Alquilar
         propietarioSection.setVisibility(View.GONE);
