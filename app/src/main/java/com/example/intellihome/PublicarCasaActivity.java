@@ -149,46 +149,66 @@ public class PublicarCasaActivity extends AppCompatActivity {
         }
     }
 
-    // Método para mostrar el diálogo de selección múltiple
+    // Método principal para mostrar el diálogo de selección múltiple
     private void showMultiSelectDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(PublicarCasaActivity.this);
         builder.setTitle("Selecciona Amenidades");
 
-        builder.setMultiChoiceItems(amenidadesArray, selectedItems, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                if (isChecked) {
-                    // Añadir la opción seleccionada a la lista y mostrar un Toast
-                    if (!selectedAmenidades.contains(amenidadesArray[which])) {
-                        selectedAmenidades.add(amenidadesArray[which]);
-                        Toast.makeText(PublicarCasaActivity.this, "Seleccionado: " + amenidadesArray[which], Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    // Eliminar la opción si se deselecciona
-                    selectedAmenidades.remove(amenidadesArray[which]);
-                }
-            }
-        });
+        // Configurar las opciones del diálogo con selección múltiple
+        builder.setMultiChoiceItems(amenidadesArray, selectedItems, getMultiChoiceClickListener());
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Aquí puedes manejar lo que sucede cuando el usuario presiona "OK"
-                Toast.makeText(PublicarCasaActivity.this, "Amenidades seleccionadas: " + selectedAmenidades, Toast.LENGTH_LONG).show();
-            }
-        });
-
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Manejo de la acción de cancelar
-                dialog.dismiss();
-            }
-        });
+        // Configurar botones de acción (OK y Cancelar)
+        builder.setPositiveButton("OK", getPositiveButtonClickListener());
+        builder.setNegativeButton("Cancelar", getNegativeButtonClickListener());
 
         // Mostrar el diálogo
         builder.create().show();
     }
+
+    // Método para manejar la selección y deselección de opciones en el diálogo
+    private DialogInterface.OnMultiChoiceClickListener getMultiChoiceClickListener() {
+        return new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                handleAmenidadSelection(which, isChecked);
+            }
+        };
+    }
+
+    // Método para manejar el botón OK del diálogo
+    private DialogInterface.OnClickListener getPositiveButtonClickListener() {
+        return new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(PublicarCasaActivity.this, "Amenidades seleccionadas: " + selectedAmenidades, Toast.LENGTH_LONG).show();
+            }
+        };
+    }
+
+    // Método para manejar el botón Cancelar del diálogo
+    private DialogInterface.OnClickListener getNegativeButtonClickListener() {
+        return new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        };
+    }
+
+    // Método para manejar la lógica de selección/deselección de una amenidad
+    private void handleAmenidadSelection(int which, boolean isChecked) {
+        if (isChecked) {
+            // Añadir la opción seleccionada a la lista y mostrar un Toast
+            if (!selectedAmenidades.contains(amenidadesArray[which])) {
+                selectedAmenidades.add(amenidadesArray[which]);
+                Toast.makeText(PublicarCasaActivity.this, "Seleccionado: " + amenidadesArray[which], Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            // Eliminar la opción si se deselecciona
+            selectedAmenidades.remove(amenidadesArray[which]);
+        }
+    }
+
 
     // Definir el ActivityResultLauncher
     private ActivityResultLauncher<Intent> locationLauncher = registerForActivityResult(
