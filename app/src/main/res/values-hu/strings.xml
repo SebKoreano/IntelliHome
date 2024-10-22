@@ -134,5 +134,5 @@
     <string name="elegir_ubicaci_n">Válasszon helyet</string>
     <string name="hint_latitud">Szélesség:</string>
     <string name="hint_longitud">Hossz:</string>
-    <string name="aceptar">Aceptar</string>
+    <string name="aceptar">Elfogadás</string>
 </resources>
