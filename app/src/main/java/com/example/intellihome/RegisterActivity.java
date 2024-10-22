@@ -501,9 +501,9 @@ public class RegisterActivity extends AppCompatActivity {
             String phone = inputPhone.getText().toString();
             String email = inputEmail.getText().toString();
             String hobbies = inputHobbies.getText().toString();
-            String vehiculo = selectVehiculo.getSelectedItem().toString();
-            String casa = selectCasa.getSelectedItem().toString();
-            String domicilio = selectDomicilio.getSelectedItem().toString();
+            String vehiculo = selectVehiculo.getText().toString();
+            String casa = selectCasa.getText().toString();
+            String domicilio = selectDomicilio.getText().toString();
 
 
             // Obtener fecha seleccionada del DatePicker (siempre se obtiene)
