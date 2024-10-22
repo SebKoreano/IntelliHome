@@ -109,4 +109,38 @@
     <string name="section12">12. Contacto</string>
     <string name="section12_content">Para cualquier pregunta o inquietud sobre estos términos, por favor contáctenos en intellihome@gmail.com.</string>
     <string name="btn_continue">Continuar</string>
+    <string name="descripcionTitle">Descripción</string>
+    <string name="descripcionHint">Ingrese una descripción...</string>
+    <string name="numHabitacionesTitle">Num. Habitaciones</string>
+    <string name="precioPorNocheTitle">Precio por noche</string>
+    <string name="precioPorNocheHint">Ingrese el precio por noche</string>
+    <string name="imagenesDeLaCasaTitle">Imágenes de la casa</string>
+    <string name="reglasDeUsoTitle">Reglas de uso</string>
+    <string name="amenidadesTitle">Amenidades</string>
+    <string name="btnAdd">+</string>
+    <string name="tipoCasaHint">Tipo de casa</string>
+    <string name="vehiculoHint">Vehículo</string>
+    <string name="checkboxHours">Check In 3:00pm / Check Out 11:00am</string>
+    <string name="btnPublish">Publicar</string>
+    <string name="reglasHint">Reglas #</string>
+    <string name="amenidadHint">Amenidad #</string>
+    <string name="descripcionHint2">Descripción</string>
+    <string name="precioPorNocheHint2">Precio por noche</string>
+    <string name="numHabitaciones">Número de habitaciones</string>
+    <string name="btnAddReglas">Añadir Regla</string>
+    <string name="btnAddAmenidades">Añadir Amenidad</string>
+    <string name="btnPhoto">Añadir Foto</string>
+    <string name="ubicacion">Ubicación</string>
+    <string name="elegir_ubicaci_n">Elegir ubicación</string>
+    <string name="hint_latitud">Latitud:</string>
+    <string name="hint_longitud">Longitud:</string>
+    <string name="aceptar">Aceptar</string>
+    <string-array name="amenidades_array">
+        <item>WiFi</item>
+        <item>Piscina</item>
+        <item>Gimnasio</item>
+        <item>Estacionamiento</item>
+        <item>Restaurante</item>
+        <item>Spa</item>
+    </string-array>
 </resources>

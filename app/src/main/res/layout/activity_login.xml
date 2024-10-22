@@ -96,8 +96,7 @@
             android:layout_marginTop="16dp"
             android:padding="12dp"
             android:backgroundTint="@color/mainColor"
-            android:text="@string/inicsesActivityLogin"
-            android:textColor="?attr/android:background" />
+            android:text="@string/inicsesActivityLogin"/>
 
         <TextView
             android:id="@+id/btnRecoverPassword"
