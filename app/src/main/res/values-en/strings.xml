@@ -146,10 +146,10 @@
     <string name="aceptar">Accept</string>
     <string-array name="amenidades_array">
         <item>WiFi</item>
-        <item>Medence</item>
-        <item>Tornaterem</item>
-        <item>Parkolóhely</item>
-        <item>Étterem</item>
-        <item>Gyógyfürdő</item>
+        <item>Pool</item>
+        <item>Gym</item>
+        <item>Parking</item>
+        <item>Restaurant</item>
+        <item>Spa</item>
     </string-array>
 </resources>

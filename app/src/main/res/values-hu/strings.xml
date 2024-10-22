@@ -146,10 +146,10 @@
     <string name="aceptar">Elfogadás</string>
     <string-array name="amenidades_array">
         <item>WiFi</item>
-        <item>Piscina</item>
-        <item>Gimnasio</item>
-        <item>Estacionamiento</item>
-        <item>Restaurante</item>
-        <item>Spa</item>
+        <item>Medence</item>
+        <item>Tornaterem</item>
+        <item>Parkolóhely</item>
+        <item>Étterem</item>
+        <item>Gyógyfürdő</item>
     </string-array>
 </resources>
