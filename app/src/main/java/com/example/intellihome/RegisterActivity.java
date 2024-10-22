@@ -191,18 +191,34 @@ public class RegisterActivity extends AppCompatActivity {
                 boolean isAlquilar = checkboxAlquilar.isChecked();
                 // Validar los campos generales
                 if (validarCamposGenerales(isPropietario, isAlquilar)) {
-                    if (isPropietario && !validarIban()) {
-                        return;
+                    if (isPropietario && !isAlquilar) {
+                        obtenerDatos();
+                        sendMessage(concatenarDatos("Propietario"));
+
+                        validator.mostrarMensaje(getString(R.string.cuentcreexRegisterActivity));
+                        imageUri = getImageUriFromButton(btnProfilePhoto);
+                        uploadImageToFirebase(imageUri, "Propietario");
+                        regresarAConfig();
                     }
-                    if (isAlquilar && !validarTarjeta()) {
-                        return;
+                    if (isAlquilar && !isPropietario) {
+                        obtenerDatos();
+                        sendMessage(concatenarDatos("Alquilador"));
+
+                        validator.mostrarMensaje(getString(R.string.cuentcreexRegisterActivity));
+                        imageUri = getImageUriFromButton(btnProfilePhoto);
+                        uploadImageToFirebase(imageUri, "Alquilador");
+                        regresarAConfig();
                     }
-                    obtenerDatos();
-                    sendMessage(concatenarDatos());
-                    validator.mostrarMensaje(getString(R.string.cuentcreexRegisterActivity));
-                    imageUri = getImageUriFromButton(btnProfilePhoto);
-                    uploadImageToFirebase(imageUri);
-                    regresarAConfig();
+                    if (isAlquilar && isPropietario) {
+                        obtenerDatos();
+                        sendMessage(concatenarDatos("AmbasFunciones"));
+
+                        validator.mostrarMensaje(getString(R.string.cuentcreexRegisterActivity));
+                        imageUri = getImageUriFromButton(btnProfilePhoto);
+                        uploadImageToFirebase(imageUri, "AmbasFunciones");
+                        regresarAConfig();
+                    }
+
                 }
             } else {
                 validator.mostrarMensaje(getString(R.string.debeacepterRegisterActivity));
@@ -350,43 +366,44 @@ public class RegisterActivity extends AppCompatActivity {
             String cardHolder = inputCardHolder.getText().toString();
         }
     }
-    private String concatenarDatos() {
-        String firstName = inputFirstName.getText().toString();
-        String lastName = inputLastName.getText().toString();
+    private String concatenarDatos(String Tipo) {
         String username = inputUsername.getText().toString();
         String phone = inputPhone.getText().toString();
         String email = inputEmail.getText().toString();
         String password = inputPassword.getText().toString();
-        String repeatPassword = inputRepeatPassword.getText().toString();
 
         StringBuilder sb = new StringBuilder();
         sb.append("CrearCuenta").append("_");
-        sb.append(firstName).append("_");
-        sb.append(lastName).append("_");
+        sb.append(Tipo).append("_");
         sb.append(username).append("_");
         sb.append(phone).append("_");
         sb.append(email).append("_");
         sb.append(password).append("_");
-        sb.append(repeatPassword);
 
         // Agregar información de las secciones de propietario y alquilar si están visibles
         if (checkboxPropietario.isChecked()) {
             String iban = inputIban.getText().toString();
-            sb.append("_").append(iban);
+            sb.append(iban).append("_");
         }
 
         if (checkboxAlquilar.isChecked()) {
             String cardNumber = inputCardNumber.getText().toString();
-            sb.append("_").append(cardNumber);
+            String CardCVV = inputCVV.getText().toString();
+            String CardHolder = inputCardHolder.getText().toString();
+            sb.append(cardNumber).append("_");
+            sb.append(CardCVV).append("_");
+            sb.append(CardHolder).append("_");
+
         }
 
         return sb.toString();
     }
 
-    private void uploadImageToFirebase(Uri imageUri) {
+    private void uploadImageToFirebase(Uri imageUri, String Tipo) {
         if (imageUri != null) {
             // Crear una referencia a Firebase Storage
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference("Usuarios/Arrendatario");
+            String Direccion = "Usuarios/" + Tipo + "/";
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference(Direccion);
 
             // Crear un nombre único para el archivo
             String fileName = System.currentTimeMillis() + ".png"; // o el tipo de imagen que sea
