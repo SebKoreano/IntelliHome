@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         // Iniciar el hilo para conectarse al servidor y recibir mensajes
         new Thread(() -> {
             try {
-                socket = new Socket("172.18.83.115", 3535); //192.168.18.206
+                socket = new Socket("192.168.18.206", 3535); //192.168.18.206
 
                 out = new PrintWriter(socket.getOutputStream(), true);
                 in = new Scanner(socket.getInputStream());
@@ -105,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }).start();
 
-            moveToMainPage();
         });
 
         rememberMeCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -149,14 +148,23 @@ public class MainActivity extends AppCompatActivity {
     private void handleServerResponse(String response) {
         // Registrar el mensaje recibido
         Log.d("MainActivity", "Mensaje recibido: " + response);
+        if (response == "Fallo en contraseña" || response == "Fallo en usuario"){
+            // Mostrar la respuesta en un AlertDialog
+            runOnUiThread(() -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Tipo de Fallo");
+                builder.setMessage(response);
+                builder.setPositiveButton("OK", null);
+                builder.show();
+            });
+        }
+        else {
+            //Se crean variables globales con nombre de usuario
+            String ColorElegido = " ";
+            moveToMainPage();
+        }
 
-        // Mostrar la respuesta en un AlertDialog
-        runOnUiThread(() -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setTitle("Respuesta del Servidor");
-            builder.setMessage(response);
-            builder.setPositiveButton("OK", null);
-            builder.show();
-        });
+
+
     }
 }

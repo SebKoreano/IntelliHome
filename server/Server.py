@@ -1,7 +1,5 @@
 import socket
 import threading
-import tkinter as tk
-from tkinter import scrolledtext
 import secrets
 import string
 
@@ -36,7 +34,7 @@ class Usuario:
             server.quit()
 
 class ChatServer:
-    def __init__(self, host="172.18.83.115", port=3535): #192.168.18.206
+    def __init__(self, host="192.168.18.206", port=3535): #192.168.18.206
         self.matriz_Alquilador = [] 
         self.matriz_Propietario = []
         self.matriz_AmbasFunciones = [] 
@@ -380,40 +378,40 @@ def generar_nueva_contraseña():
             return contraseña
                 
 ###################################### Conexión domótica ###################################
+def funcion():
+    # Dirección IP de la Raspberry Pi Pico
+    ip_pico = "192.168.0.108"  # Cambia esto si es necesario
+    puerto = 1234  # Puerto que estamos usando en la Pico
 
-# Dirección IP de la Raspberry Pi Pico
-ip_pico = "192.168.0.108"  # Cambia esto si es necesario
-puerto = 1234  # Puerto que estamos usando en la Pico
+    # Crear un socket
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# Crear un socket
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        # Conectar al servidor
+        client_socket.connect((ip_pico, puerto))
 
-try:
-    # Conectar al servidor
-    client_socket.connect((ip_pico, puerto))
+        # Letras disponibles para enviar
+        letras = ['z', 'x', 'c', 'v', 'b', 'n', 'm']
 
-    # Letras disponibles para enviar
-    letras = ['z', 'x', 'c', 'v', 'b', 'n', 'm']
+        print("Letras disponibles para enviar:", ", ".join(letras))
+        print("Escribe 'salir' para terminar.")
 
-    print("Letras disponibles para enviar:", ", ".join(letras))
-    print("Escribe 'salir' para terminar.")
+        while True:
+            # Solicitar al usuario que ingrese una letra
+            letra_a_enviar = input("Ingresa una letra (z, x, c, v, b, n, m): ").lower()
 
-    while True:
-        # Solicitar al usuario que ingrese una letra
-        letra_a_enviar = input("Ingresa una letra (z, x, c, v, b, n, m): ").lower()
+            if letra_a_enviar == 'salir':
+                print("Cerrando conexión...")
+                break  # Sale del bucle si el usuario escribe 'salir'
 
-        if letra_a_enviar == 'salir':
-            print("Cerrando conexión...")
-            break  # Sale del bucle si el usuario escribe 'salir'
+            if letra_a_enviar in letras:
+                client_socket.send(letra_a_enviar.encode('utf-8'))  # Envía la letra seleccionada
+                print(f"Enviado: {letra_a_enviar}")
+            else:
+                print("Selección inválida. Debes elegir una de las letras disponibles.")
 
-        if letra_a_enviar in letras:
-            client_socket.send(letra_a_enviar.encode('utf-8'))  # Envía la letra seleccionada
-            print(f"Enviado: {letra_a_enviar}")
-        else:
-            print("Selección inválida. Debes elegir una de las letras disponibles.")
-
-finally:
-    client_socket.close()  # Cierra la conexión
+    finally:
+        client_socket.close()  # Cierra la conexión
 
 
 # Definir parametros para la contraseña random

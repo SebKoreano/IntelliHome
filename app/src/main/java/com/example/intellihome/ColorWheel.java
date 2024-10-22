@@ -14,6 +14,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 public class ColorWheel extends AppCompatActivity {
     ImageView imgView;
     TextView mColorValues;
@@ -74,7 +77,38 @@ public class ColorWheel extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
+                String direccionCreacionCarpeta = "Usuarios/" + "Alquilador" + "/" + "Eudus123" + "/";
+                StorageReference carpetaRef = FirebaseStorage.getInstance().getReference(direccionCreacionCarpeta);
+                crearYSubirTxtConColores(carpetaRef.child("Colores.txt"));
             }
         });
+    }
+
+    private void crearYSubirTxtConColores(StorageReference storageRef) {
+        try {
+            // Crear un StringBuilder para formar el contenido del archivo
+            StringBuilder contenidoArchivo = new StringBuilder();
+
+            String RGBHexaColor = ((TextView) findViewById(R.id.displayValues)).getText().toString();
+            // Añadir líneas de ejemplo (puedes reemplazar con tus propios datos)
+            contenidoArchivo.append(RGBHexaColor).append("\n");
+
+            // Convertir el contenido a bytes
+            byte[] data = contenidoArchivo.toString().getBytes("UTF-8");
+
+            // Subir el archivo al Storage en la referencia dada
+            storageRef.putBytes(data)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Manejar el éxito de la subida
+                        System.out.println("Archivo subido exitosamente a: " + storageRef.getPath());
+                    })
+                    .addOnFailureListener(e -> {
+                        // Manejar errores en la subida
+                        System.err.println("Error al subir el archivo: " + e.getMessage());
+                    });
+
+        } catch (Exception e) {
+            System.err.println("Error al crear o subir el archivo: " + e.getMessage());
+        }
     }
 }
