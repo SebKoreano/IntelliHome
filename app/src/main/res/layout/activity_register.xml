@@ -1,357 +1,382 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.intellihome.CustomScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".RegisterActivity">
 
-    <LinearLayout
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/mainColor"/>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        app:srcCompat="@drawable/logo"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp"
-        android:gravity="center">
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/imageView2"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="-20dp"
+        app:cardCornerRadius="28dp">
 
-        <!-- Logo en la parte superior -->
-        <ImageView
-            android:id="@+id/logoImageView"
-            android:layout_width="210dp"
-            android:layout_height="115dp"
-            app:srcCompat="@drawable/logo"
-            android:layout_marginBottom="15dp" /> <!-- Margen inferior para separación -->
-
-        <!-- Nombre, Apellidos y Foto de Perfil -->
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"> <!-- Centrar contenido -->
+            android:fillViewport="true">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:padding="28dp"
                 android:orientation="vertical">
 
-                <!-- Entrada de Nombre -->
-                <EditText
-                    android:id="@+id/inputName"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="@string/nombreRegister" />
+                    android:text="@string/signUp"
+                    android:textColor="@color/mainColor"
+                    android:textSize="32sp"
+                    android:textStyle="bold"/>
 
                 <View
-                    android:layout_width="350dp"
-                    android:layout_height="1.5dp"
-                    android:background="#000000" />
-
-                <!-- Entrada de Apellidos -->
-                <EditText
-                    android:id="@+id/inputLastName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"/>
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:hint="@string/apellidosRegister" />
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:weightSum="1">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/nombreRegister">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/inputName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/apellidosRegister">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/inputLastName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent"/>
+
+                    <Button
+                        android:id="@+id/btnProfilePhoto"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/baseline_photo_camera_24"/>
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/usuarioRegister">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputUsername"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/telefonoRegister">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/emailRegister">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <View
-                    android:layout_width="350dp"
-                    android:layout_height="1.5dp"
-                    android:background="#000000" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            </LinearLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/contrasenaRegister">
 
-            <!-- Botón de Foto de Perfil -->
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"/>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
-                android:id="@+id/btnProfilePhoto"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginStart="20dp"
-                android:background="@drawable/baseline_photo_camera_24"/>
-        </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal">
 
-        <!-- Campos de entrada -->
-        <EditText
-            android:id="@+id/inputUsername"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/usuarioRegister"
-            android:layout_marginTop="16dp" />
+                        <ImageView
+                            android:id="@+id/iconHelpPassword"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_help_circle"/>
 
-        <View
-            android:layout_width="350dp"
-            android:layout_height="1.5dp"
-            android:background="#000000" />
+                        <ImageView
+                            android:id="@+id/btnTogglePassword"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_eye_closed"/>
+                    </LinearLayout>
+                </RelativeLayout>
 
-        <EditText
-            android:id="@+id/inputPhone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/telefonoRegister"
-            android:inputType="phone"
-            android:layout_marginTop="8dp" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-        <View
-            android:layout_width="350dp"
-            android:layout_height="1.5dp"
-            android:background="#000000" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/recontrasenaRegister">
 
-        <EditText
-            android:id="@+id/inputEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/emailRegister"
-            android:inputType="textEmailAddress"
-            android:layout_marginTop="8dp" />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputRepeatPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"/>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-        <View
-            android:layout_width="350dp"
-            android:layout_height="1.5dp"
-            android:background="#000000" />
+                    <ImageView
+                        android:id="@+id/btnTogglePassword2"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_eye_closed"/>
+                </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp">
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"/>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hobbiesRegister">
 
-            <!-- Campo de texto para la contraseña -->
-            <EditText
-                android:id="@+id/inputPassword"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:hint="@string/contrasenaRegister"
-                android:inputType="textPassword"
-                android:layout_marginEnd="8dp" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputHobbies"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <ImageView
-                android:id="@+id/btnTogglePassword"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="center_vertical"
-                android:padding="8dp"
-                android:src="@drawable/ic_eye_closed" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-            <!-- Ícono de ayuda -->
-            <ImageView
-                android:id="@+id/iconHelpPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_help_circle"
-                android:contentDescription="Ayuda para contraseña"
-                android:layout_gravity="center_vertical"
-                android:padding="8dp" />
-        </LinearLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
 
-        <View
-            android:layout_width="350dp"
-            android:layout_height="1.5dp"
-            android:background="#000000" />
+                    <AutoCompleteTextView
+                            android:id="@+id/selectCasa"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="@string/prompt_casa_preferida" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp">
+                    <View
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent">
+                    </View>
 
-            <EditText
-                android:id="@+id/inputRepeatPassword"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:hint="@string/recontrasenaRegister"
-                android:inputType="textPassword"
-                android:layout_marginTop="8dp" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/btnTogglePassword2"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="center_vertical"
-                android:padding="8dp"
-                android:src="@drawable/ic_eye_closed" /> <!-- Ojo cerrado por defecto -->
-        </LinearLayout>
+                        <AutoCompleteTextView
+                            android:id="@+id/selectVehiculo"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="@string/prompt_vehiculo" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
 
-        <View
-            android:layout_width="350dp"
-            android:layout_height="1.5dp"
-            android:background="#000000" />
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center">
 
-        <!-- Selects de Casa preferida y Vehículo -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="16dp"
-            android:gravity="center"> <!-- Centrar contenido -->
-
-            <!-- Spinner de Casa preferida -->
-            <EditText
-                android:id="@+id/inputHobbies"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/hobbiesRegister"
-                android:inputType="text" />
-
-            <!-- Spinner de Vehículo -->
-            <Spinner
-                android:id="@+id/selectVehiculo"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:prompt="@string/prompt_vehiculo"
-                android:backgroundTint="@color/mainColor" />
-
-        </LinearLayout>
-
-        <!-- Select de Domicilio y campo de texto para Hobbies -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp"
-            android:gravity="center"> <!-- Centrar contenido -->
-
-            <!-- Campo de texto para Hobbies -->
-
-            <!-- Spinner de Domicilio -->
-            <Spinner
-                android:id="@+id/selectCasa"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@color/mainColor"
-                android:prompt="@string/prompt_casa_preferida" />
-
-            <Spinner
-                android:id="@+id/selectDomicilio"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:prompt="@string/prompt_domicilio"
-                android:backgroundTint="@color/mainColor" />
-        </LinearLayout>
-
-
-
-        <!-- Date Picker -->
-
-        <!-- Pregunta: ¿Qué quieres hacer? -->
-        <DatePicker
-            android:id="@+id/datePicker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="#808080"
-            android:calendarTextColor="?attr/android:textColor" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/quehacerRegister"
-            android:textSize="16sp"
-            android:layout_marginTop="16dp" />
-
-        <!-- Checkboxes Propietario y Alquilar -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"> <!-- Centrar contenido -->
-
-            <CheckBox
-                android:id="@+id/checkboxPropietario"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/propietarioRegister" />
-
-            <CheckBox
-                android:id="@+id/checkboxAlquilar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/alquilarRegister"
-                android:layout_marginStart="16dp" />
-        </LinearLayout>
-
-        <!-- Inputs dinámicos: Cuenta IBAN / Información de tarjeta -->
-        <LinearLayout
-            android:id="@+id/propietarioSection"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:layout_marginTop="8dp">
-
-            <EditText
-                android:id="@+id/inputIban"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/ibanRegister" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/alquilarSection"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:layout_marginTop="8dp">
-
-            <EditText
-                android:id="@+id/inputCardNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/numtarjetaRegister" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp">
+                    <AutoCompleteTextView
+                        android:id="@+id/selectDomicilio"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/prompt_domicilio" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <DatePicker
-                    android:id="@+id/expDatePicker"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="#808080"
-                    android:calendarTextColor="?attr/android:textColor"
+                    android:id="@+id/datePicker"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-                <EditText
-                    android:id="@+id/inputCVV"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="@string/cvvRegister"
-                    android:layout_marginStart="8dp" />
+                    android:text="@string/quehacerRegister" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <CheckBox
+                        android:id="@+id/checkboxPropietario"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/propietarioRegister" />
+
+                    <CheckBox
+                        android:id="@+id/checkboxAlquilar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/alquilarRegister" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/propietarioSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/ibanRegister">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputIban"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/alquilarSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/numtarjetaRegister">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputCardNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <DatePicker
+                            android:id="@+id/expDatePicker"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/cvvRegister">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/inputCVV"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/titulartarjetaRegister">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputCardHolder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/checkboxTerms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/termsycondRegister"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:id="@+id/btnCreateAccount"
+                    android:backgroundTint="@color/mainColor"
+                    android:text="@string/crearcuentaRegister"
+                    android:textStyle="bold"
+                    app:cornerRadius="32dp"/>
             </LinearLayout>
-
-            <EditText
-                android:id="@+id/inputCardHolder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/titulartarjetaRegister"
-                android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <!-- Check Terms & Conditions -->
-        <CheckBox
-            android:id="@+id/checkboxTerms"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/termsycondRegister"
-            android:layout_marginTop="16dp" />
-
-        <!-- Botón Crear Cuenta -->
-        <Button
-            android:id="@+id/btnCreateAccount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/crearcuentaRegister"
-            android:backgroundTint="@color/mainColor"
-            android:layout_marginTop="16dp" />
-    </LinearLayout>
-</com.example.intellihome.CustomScrollView>
+        </ScrollView>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

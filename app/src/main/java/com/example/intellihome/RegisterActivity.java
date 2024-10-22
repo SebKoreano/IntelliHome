@@ -13,6 +13,9 @@ import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.AutoCompleteTextView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -54,7 +57,7 @@ import android.net.Uri;
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText inputFirstName, inputLastName, inputUsername, inputPhone, inputEmail, inputPassword, inputRepeatPassword, inputHobbies;
-    private Spinner selectCasa, selectVehiculo, selectDomicilio;
+    private AutoCompleteTextView selectCasa, selectVehiculo, selectDomicilio;
     private DatePicker datePicker, expDatePicker;
     private CheckBox checkboxPropietario, checkboxAlquilar, checkboxTerms;
     private LinearLayout propietarioSection, alquilarSection;
@@ -406,7 +409,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         return sb.toString();
     }
-
     private void uploadInfoToFirebase(Uri imageUri, String tipo) {
         if (imageUri != null) {
             // Crear una referencia a Firebase Storage
@@ -546,4 +548,3 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 }
-

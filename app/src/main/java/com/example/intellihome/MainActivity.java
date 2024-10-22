@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(() -> {
             try {
                 socket = new Socket("172.18.83.115", 3535); //192.168.18.206
+
                 out = new PrintWriter(socket.getOutputStream(), true);
                 in = new Scanner(socket.getInputStream());
 
@@ -103,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }).start();
+
+            moveToMainPage();
         });
 
         rememberMeCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -135,6 +138,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Mostrar el cuadro de diálogo
         builder.create().show();
+    }
+
+    private void moveToMainPage() {
+        Intent intent = new Intent(MainActivity.this, MainPageActivity.class);
+        startActivity(intent);
     }
 
     // Método para manejar la respuesta del servidor

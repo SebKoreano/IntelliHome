@@ -109,4 +109,13 @@
     <string name="section12">12. Contacto</string>
     <string name="section12_content">Para cualquier pregunta o inquietud sobre estos términos, por favor contáctenos en intellihome@gmail.com.</string>
     <string name="btn_continue">Continuar</string>
+    <string name="signUp">Registrarse</string>
+    <string name="configuraciones">Configuraciones</string>
+    <string name="publicar_casa">Publicar Casa</string>
+    <string name="monitorear_viviendas">Monitorear Viviendas</string>
+    <string name="perfil">Perfil</string>
+    <string name="buscar">Buscar</string>
+    <string name="pagina_principal">Página Principal</string>
+    <string name="open_nav_drawer">Abrir Menú</string>
+    <string name="close_nav_drawer">Cerar Menú</string>
 </resources>
