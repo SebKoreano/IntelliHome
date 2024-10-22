@@ -128,10 +128,10 @@ public class HomeActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == PhotoManager.REQUEST_IMAGE_CAPTURE) {
                 // Manejar imagen de la cámara
-                photoManager.handleCameraImage(data);
+                photoManager.handleCameraImage(data, false);
             } else if (requestCode == PhotoManager.PICK_IMAGE) {
                 // Manejar imagen de la galería
-                photoManager.handleGalleryImage(data);
+                photoManager.handleGalleryImage(data,false);
             }
         }
     }

@@ -52,7 +52,7 @@ public class PhotoManager {
         this.linearLayout = linearLayout;
     }
 
-    // Método para mostrar el diálogo y gestionar la selección de fotos
+    // Mostrar el diálogo de selección de fotos
     public void showPhotoSelectionDialog(DialogInterface.OnClickListener listener) {
         String[] options = {
                 activity.getString(R.string.tomarfotoRegisterActivity),
@@ -85,61 +85,56 @@ public class PhotoManager {
         activity.startActivityForResult(pickPhotoIntent, PICK_IMAGE);
     }
 
-    // Método para manejar la imagen tomada con la cámara
-    public void handleCameraImage(Intent data) {
+    // Método para manejar la imagen de la cámara
+    public void handleCameraImage(Intent data, boolean isForButton) {
         Bundle extras = data.getExtras();
         if (extras != null) {
             Bitmap imageBitmap = (Bitmap) extras.get("data");
 
-            // Redimensionar la imagen a 110dp de altura (ancho proporcional)
-            Bitmap resizedBitmap = resizeBitmapByHeight(imageBitmap, 105);
-            addImageToScrollView(resizedBitmap);
+            if (isForButton) {
+                setButtonBackgroundFromBitmap(imageBitmap);
+            } else {
+                Bitmap resizedBitmap = resizeBitmapByHeight(imageBitmap, 105);
+                addImageToScrollView(resizedBitmap);
+            }
         }
     }
 
-    // Método para manejar la imagen seleccionada de la galería
-    public void handleGalleryImage(Intent data) {
+    // Método para manejar la imagen de la galería
+    public void handleGalleryImage(Intent data, boolean isForButton) {
         Uri selectedImage = data.getData();
         try {
             Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), selectedImage);
 
-            // Redimensionar la imagen a 110dp de altura (ancho proporcional)
-            Bitmap resizedBitmap = resizeBitmapByHeight(imageBitmap, 105);
-            addImageToScrollView(resizedBitmap);
-        } catch (Exception e) {
+            if (isForButton) {
+                setButtonBackgroundFromBitmap(imageBitmap);
+            } else {
+                Bitmap resizedBitmap = resizeBitmapByHeight(imageBitmap, 105);
+                addImageToScrollView(resizedBitmap);
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    // Método para añadir la imagen al HorizontalScrollView
+    // Añadir imagen al LinearLayout
     private void addImageToScrollView(Bitmap bitmap) {
-        // Crear un ImageView nuevo
         ImageView imageView = new ImageView(activity);
 
-        // Establecer la imagen redimensionada como contenido del ImageView
         imageView.setImageBitmap(bitmap);
-
-        // Configurar las dimensiones del ImageView (wrap_content para el ancho, 110dp para la altura)
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, // Mantener el ancho original
-                (int) (110 * activity.getResources().getDisplayMetrics().density) // 110dp en altura
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                (int) (110 * activity.getResources().getDisplayMetrics().density)
         );
-
-        // Agregar margen de 7dp a la izquierda y a la derecha
         params.setMargins(
-                (int) (7 * activity.getResources().getDisplayMetrics().density), // margen izquierda
-                0, // sin margen arriba
-                (int) (7 * activity.getResources().getDisplayMetrics().density), // margen derecha
-                0  // sin margen abajo
+                (int) (7 * activity.getResources().getDisplayMetrics().density),
+                0,
+                (int) (7 * activity.getResources().getDisplayMetrics().density),
+                0
         );
-
-        // Asignar los parámetros de diseño al ImageView
         imageView.setLayoutParams(params);
-
-        // Añadir el ImageView al LinearLayout
         linearLayout.addView(imageView);
     }
-
 
     // Establecer el fondo del botón con un Bitmap circular
     private void setButtonBackgroundFromBitmap(Bitmap bitmap) {
@@ -172,15 +167,16 @@ public class PhotoManager {
         return output;
     }
 
-    // Método para insertar una imagen en el LinearLayout
-    private void insertImageIntoLinearLayout(Bitmap bitmap) {
-        ImageView imageView = new ImageView(activity);
-        imageView.setImageBitmap(bitmap);
-        imageView.setLayoutParams(new LinearLayout.LayoutParams(100, 100));
-        linearLayout.addView(imageView);
+    // Redimensionar Bitmap por altura
+    private Bitmap resizeBitmapByHeight(Bitmap bitmap, int heightDp) {
+        float density = activity.getResources().getDisplayMetrics().density;
+        int heightPx = Math.round(heightDp * density);
+
+        int widthPx = Math.round((float) bitmap.getWidth() * ((float) heightPx / (float) bitmap.getHeight()));
+        return Bitmap.createScaledBitmap(bitmap, widthPx, heightPx, true);
     }
 
-    // Manejar los permisos solicitados
+    // Manejar permisos solicitados
     public void handleRequestPermissionsResult(int requestCode, int[] grantResults) {
         if (requestCode == PICK_IMAGE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -190,28 +186,4 @@ public class PhotoManager {
             }
         }
     }
-
-    // Método para redimensionar el Bitmap a 100x100 dp
-    private Bitmap resizeBitmap(Bitmap bitmap, int widthDp, int heightDp) {
-        // Convertir dp a píxeles
-        float density = activity.getResources().getDisplayMetrics().density;
-        int widthPx = Math.round(widthDp * density);
-        int heightPx = Math.round(heightDp * density);
-
-        return Bitmap.createScaledBitmap(bitmap, widthPx, heightPx, true);
-    }
-
-    // Método para redimensionar el Bitmap a una altura específica (110dp de altura, ancho proporcional)
-    private Bitmap resizeBitmapByHeight(Bitmap bitmap, int heightDp) {
-        // Convertir dp a píxeles
-        float density = activity.getResources().getDisplayMetrics().density;
-        int heightPx = Math.round(heightDp * density);
-
-        // Calcular el ancho proporcionalmente
-        int widthPx = Math.round((float) bitmap.getWidth() * ((float) heightPx / (float) bitmap.getHeight()));
-
-        return Bitmap.createScaledBitmap(bitmap, widthPx, heightPx, true);
-    }
-
 }
-

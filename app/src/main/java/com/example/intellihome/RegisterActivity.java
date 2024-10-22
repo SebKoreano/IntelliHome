@@ -268,9 +268,9 @@ public class RegisterActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == PhotoManager.REQUEST_IMAGE_CAPTURE) {
-                photoManager.handleCameraImage(data);
+                photoManager.handleCameraImage(data, true);
             } else if (requestCode == PhotoManager.PICK_IMAGE) {
-                photoManager.handleGalleryImage(data);
+                photoManager.handleGalleryImage(data, true);
             }
         }
     }
