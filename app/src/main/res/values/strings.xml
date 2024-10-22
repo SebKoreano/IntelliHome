@@ -135,4 +135,12 @@
     <string name="hint_latitud">Latitud:</string>
     <string name="hint_longitud">Longitud:</string>
     <string name="aceptar">Aceptar</string>
+    <string-array name="amenidades_array">
+        <item>WiFi</item>
+        <item>Piscina</item>
+        <item>Gimnasio</item>
+        <item>Estacionamiento</item>
+        <item>Restaurante</item>
+        <item>Spa</item>
+    </string-array>
 </resources>

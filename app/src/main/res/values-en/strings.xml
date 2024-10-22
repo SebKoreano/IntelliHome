@@ -135,4 +135,12 @@
     <string name="hint_latitud">Width:</string>
     <string name="hint_longitud">Length:</string>
     <string name="aceptar">Accept</string>
+    <string-array name="amenidades_array">
+        <item>WiFi</item>
+        <item>Medence</item>
+        <item>Tornaterem</item>
+        <item>Parkolóhely</item>
+        <item>Étterem</item>
+        <item>Gyógyfürdő</item>
+    </string-array>
 </resources>

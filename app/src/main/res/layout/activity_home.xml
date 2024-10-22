@@ -117,19 +117,13 @@
             android:layout_height="wrap_content"
             android:text="@string/amenidadesTitle" />
 
-        <LinearLayout
-            android:id="@+id/amenidadesLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-
         <Button
             android:id="@+id/btnAddAmenidades"
+            android:layout_marginBottom="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#8CC4DF"
-            android:text="@string/btnAdd"
-            android:drawableStart="@drawable/ic_add_white" />
+            android:text="Seleccionar Amenidades" />
 
         <!-- Spinners para Tipo de casa y Vehículo -->
         <LinearLayout
@@ -137,12 +131,28 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tipo de casa:" />
+
             <Spinner
                 android:id="@+id/spinnerTipoCasa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:prompt="@string/tipoCasaHint" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vehiculo preferido:" />
 
             <Spinner
                 android:id="@+id/spinnerVehiculo"

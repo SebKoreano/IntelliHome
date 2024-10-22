@@ -1,6 +1,8 @@
 package com.example.intellihome;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -19,6 +21,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+
 public class HomeActivity extends AppCompatActivity {
 
     private EditText descripcionInput, precioInput;
@@ -29,6 +33,11 @@ public class HomeActivity extends AppCompatActivity {
     private double latitudHome, longitudHome;
     private PhotoManager photoManager;
     private LinearLayout linearLayout;
+    private String[] amenidadesArray;  // Lista de opciones
+    private boolean[] selectedItems;   // Lista que guarda qué opciones están seleccionadas
+    private ArrayList<String> selectedAmenidades;  // Lista para almacenar las opciones seleccionadas
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +65,16 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        // Acción del botón para añadir amenidades
+        // Lista de amenidades (opciones)
+        amenidadesArray = getResources().getStringArray(R.array.amenidades_array);  // Puedes definirlo en res/values/strings.xml
+        selectedItems = new boolean[amenidadesArray.length];
+        selectedAmenidades = new ArrayList<>();
+
+        // Configurar el botón para mostrar el diálogo de selección
         btnAddAmenidades.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                agregarNuevoCampo("amenidad");
+                showMultiSelectDialog();
             }
         });
 
@@ -136,6 +150,46 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    // Método para mostrar el diálogo de selección múltiple
+    private void showMultiSelectDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+        builder.setTitle("Selecciona Amenidades");
+
+        builder.setMultiChoiceItems(amenidadesArray, selectedItems, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                if (isChecked) {
+                    // Añadir la opción seleccionada a la lista y mostrar un Toast
+                    if (!selectedAmenidades.contains(amenidadesArray[which])) {
+                        selectedAmenidades.add(amenidadesArray[which]);
+                        Toast.makeText(HomeActivity.this, "Seleccionado: " + amenidadesArray[which], Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    // Eliminar la opción si se deselecciona
+                    selectedAmenidades.remove(amenidadesArray[which]);
+                }
+            }
+        });
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Aquí puedes manejar lo que sucede cuando el usuario presiona "OK"
+                Toast.makeText(HomeActivity.this, "Amenidades seleccionadas: " + selectedAmenidades, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Manejo de la acción de cancelar
+                dialog.dismiss();
+            }
+        });
+
+        // Mostrar el diálogo
+        builder.create().show();
+    }
 
     // Definir el ActivityResultLauncher
     private ActivityResultLauncher<Intent> locationLauncher = registerForActivityResult(
@@ -198,9 +252,6 @@ public class HomeActivity extends AppCompatActivity {
         if (tipoCampo.equals("regla")) {
             LinearLayout reglasLayout = findViewById(R.id.reglasLayout);
             reglasLayout.addView(nuevoCampo);
-        } else if (tipoCampo.equals("amenidad")) {
-            LinearLayout amenidadesLayout = findViewById(R.id.amenidadesLayout);
-            amenidadesLayout.addView(nuevoCampo);
         }
     }
 
