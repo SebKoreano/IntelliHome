@@ -36,7 +36,7 @@ class Usuario:
             server.quit()
 
 class ChatServer:
-    def __init__(self, host="192.168.18.206", port=3535):
+    def __init__(self, host="172.18.83.115", port=3535): #192.168.18.206
         self.matriz_Alquilador = [] 
         self.matriz_Propietario = []
         self.matriz_AmbasFunciones = [] 

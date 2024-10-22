@@ -118,7 +118,7 @@ public class RegisterActivity extends AppCompatActivity {
         btnCreateAccount.setBackgroundColor(currentColor);
 
         // Conectar al servidor
-        connectToServer("192.168.18.206", 3535);
+        connectToServer("172.18.83.115", 3535); //192.168.18.206
 
         // Ocultar inicialmente las secciones de Propietario y Alquilar
         propietarioSection.setVisibility(View.GONE);
@@ -391,8 +391,15 @@ public class RegisterActivity extends AppCompatActivity {
             String cardNumber = inputCardNumber.getText().toString();
             String CardCVV = inputCVV.getText().toString();
             String CardHolder = inputCardHolder.getText().toString();
+
+            // Obtener fecha de expiración de la tarjeta del expDatePicker
+            int expMonth = expDatePicker.getMonth() + 1; // Los meses empiezan en 0, por eso sumamos 1
+            int expYear = expDatePicker.getYear();
+            String expirationDate = expMonth + "/" + expYear; // Formato de fecha de expiración
+
             sb.append(cardNumber).append("_");
             sb.append(CardCVV).append("_");
+            sb.append(expirationDate).append("_");
             sb.append(CardHolder).append("_");
 
         }
@@ -496,6 +503,13 @@ public class RegisterActivity extends AppCompatActivity {
             String casa = selectCasa.getSelectedItem().toString();
             String domicilio = selectDomicilio.getSelectedItem().toString();
 
+
+            // Obtener fecha seleccionada del DatePicker (siempre se obtiene)
+            int day = datePicker.getDayOfMonth();
+            int month = datePicker.getMonth() + 1; // Los meses empiezan en 0, por eso sumamos 1
+            int year = datePicker.getYear();
+            String birthDate = day + "/" + month + "/" + year; // Formato de fecha
+
             // Crear un StringBuilder para formar el contenido del archivo
             StringBuilder contenidoArchivo = new StringBuilder();
 
@@ -509,7 +523,7 @@ public class RegisterActivity extends AppCompatActivity {
             contenidoArchivo.append("Vehiculo:").append(vehiculo).append("\n");
             contenidoArchivo.append("CasaPreferencia:").append(casa).append("\n");
             contenidoArchivo.append("Domicilio:").append(domicilio).append("\n");
-            contenidoArchivo.append("FechaNacimiento:").append("ayer :D").append("\n");
+            contenidoArchivo.append("FechaNacimiento:").append(birthDate).append("\n");
 
 
             // Convertir el contenido a bytes
