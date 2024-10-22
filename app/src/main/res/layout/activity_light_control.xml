@@ -1,0 +1,142 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <!-- Título -->
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Monitoreo y control de luces"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <!-- Sección: Zona de Cuartos -->
+    <TextView
+        android:id="@+id/tvZonaCuartos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zona de Cuartos"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitulo"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp" />
+
+    <!-- Cuarto principal -->
+
+    <!-- Baño del cuarto principal -->
+
+    <Button
+        android:id="@+id/btnCuartoPrincipal"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="16dp"
+        android:text="CP"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.203" />
+
+    <Button
+        android:id="@+id/btnBanoCuartoPrincipal"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="BCP"
+        app:layout_constraintTop_toTopOf="@+id/btnCuartoPrincipal"
+        app:layout_constraintStart_toEndOf="@+id/btnCuartoPrincipal"
+        android:layout_marginStart="16dp" />
+
+    <!-- Cuarto pequeño 1 -->
+    <Button
+        android:id="@+id/btnCuarto1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="C1"
+        app:layout_constraintTop_toBottomOf="@+id/btnCuartoPrincipal"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp" />
+
+    <!-- Cuarto pequeño 2 -->
+    <Button
+        android:id="@+id/btnCuarto2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="C2"
+        app:layout_constraintTop_toBottomOf="@+id/btnCuarto1"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp" />
+
+    <!-- Sección: Zona Social -->
+    <TextView
+        android:id="@+id/tvZonaSocial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zona Social"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@+id/tvZonaCuartos"
+        app:layout_constraintStart_toEndOf="@+id/tvZonaCuartos"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="32dp" />
+
+    <!-- Sala -->
+    <Button
+        android:id="@+id/btnSala"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="Sala"
+        app:layout_constraintTop_toBottomOf="@+id/tvZonaSocial"
+        app:layout_constraintStart_toStartOf="@+id/tvZonaSocial"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp" />
+
+    <!-- Sección: Zona de Servicio -->
+    <TextView
+        android:id="@+id/tvZonaServicio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zona de Servicio"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/btnSala"
+        app:layout_constraintStart_toStartOf="@+id/btnSala"
+        android:layout_marginTop="24dp" />
+
+    <!-- Baño -->
+    <Button
+        android:id="@+id/btnBano"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="Baño"
+        app:layout_constraintTop_toBottomOf="@+id/tvZonaServicio"
+        app:layout_constraintStart_toStartOf="@+id/tvZonaServicio"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp" />
+
+    <!-- Lavandería -->
+    <Button
+        android:id="@+id/btnLavanderia"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="Lavandería"
+        app:layout_constraintTop_toBottomOf="@+id/btnBano"
+        app:layout_constraintStart_toStartOf="@+id/btnBano"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
