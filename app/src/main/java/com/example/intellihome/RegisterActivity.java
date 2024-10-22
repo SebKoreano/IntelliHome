@@ -38,6 +38,7 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -402,7 +403,11 @@ public class RegisterActivity extends AppCompatActivity {
     private void uploadImageToFirebase(Uri imageUri, String Tipo) {
         if (imageUri != null) {
             // Crear una referencia a Firebase Storage
-            String Direccion = "Usuarios/" + Tipo + "/";
+            String DireccionCreacionCarpeta = "Usuarios/" + Tipo + "/" ;
+            String Nombre = inputUsername.getText().toString(); //Nombre de la carpeta por crear basada en user name
+
+            String Direccion = DireccionCreacionCarpeta + Nombre;
+            crearCarpeta(DireccionCreacionCarpeta); //Crea carpeta con .txt para guardar la informacion.
             StorageReference storageReference = FirebaseStorage.getInstance().getReference(Direccion);
 
             // Crear un nombre único para el archivo
@@ -455,6 +460,25 @@ public class RegisterActivity extends AppCompatActivity {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
+    }
+    private void crearCarpeta(String rutaCarpeta) {
+        try {
+
+            // Obtener el nombre del archivo del input (nombre del usuario)
+            String name = inputUsername.getText().toString().trim(); // Eliminar espacios innecesarios
+            String archivoDummy = name + ".txt"; // Archivo vacío
+            String rutaCompleta = rutaCarpeta + archivoDummy; // Ruta completa combinada
+
+            // Obtener la referencia al Storage de Firebase
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReference();
+
+            // Crear una referencia a la ruta completa
+            StorageReference carpetaRef = storageRef.child(rutaCompleta);
+
+        } catch (Exception e) {
+            System.err.println("Error al crear la carpeta: " + e.getMessage());
+        }
     }
 }
 
