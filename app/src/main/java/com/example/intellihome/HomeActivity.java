@@ -1,5 +1,6 @@
 package com.example.intellihome;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -26,6 +27,8 @@ public class HomeActivity extends AppCompatActivity {
     private int numeroReglas = 1, numeroAmenidad= 1;
     public static final int MAP_REQUEST_CODE = 1;
     private double latitudHome, longitudHome;
+    private PhotoManager photoManager;
+    private LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +41,8 @@ public class HomeActivity extends AppCompatActivity {
         numHabitacionesPicker = findViewById(R.id.numHabitacionesPicker);
         btnAddReglas = findViewById(R.id.btnAddReglas);
         btnAddAmenidades = findViewById(R.id.btnAddAmenidades);
-        btnPhoto = findViewById(R.id.btnProfilePhoto);
+        btnPhoto = findViewById(R.id.btnHousePhoto);
+        linearLayout = findViewById(R.id.linearLayout);
 
         // Configurar el NumberPicker
         numHabitacionesPicker.setMinValue(1);  // Valor mínimo
@@ -92,14 +96,28 @@ public class HomeActivity extends AppCompatActivity {
         vehiculoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selectVehiculo.setAdapter(vehiculoAdapter);
 
-        // Configura botón para escoger la ubicación
+        // Configura el botón para abrir el mapa
         Button btnElegirUbicacion = findViewById(R.id.btnElegirUbicacion);
-        btnElegirUbicacion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, MapActivity.class);
-                startActivityForResult(intent, 1);  // El 1 es el requestCode
-            }
+        btnElegirUbicacion.setOnClickListener(v -> {
+            // Lanzar la actividad de MapActivity
+            Intent intent = new Intent(HomeActivity.this, MapActivity.class);
+            locationLauncher.launch(intent);
+        });
+
+        // Crear instancia de PhotoManager con el layout donde se agregarán las fotos
+        photoManager = new PhotoManager(this, linearLayout);
+
+        // Configurar el botón para mostrar el diálogo
+        btnPhoto.setOnClickListener(v -> {
+            photoManager.showPhotoSelectionDialog((dialog, which) -> {
+                if (which == 0) {
+                    // Opción para tomar una foto
+                    photoManager.dispatchTakePictureIntent();
+                } else if (which == 1) {
+                    // Opción para seleccionar de la galería
+                    photoManager.openGallery();
+                }
+            });
         });
     }
 
@@ -107,15 +125,37 @@ public class HomeActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
-            // Obtener latitud y longitud desde el Intent de MapActivity
-            latitudHome = data.getDoubleExtra("latitud", 0.0);
-            longitudHome = data.getDoubleExtra("longitud", 0.0);
-
-            // Mostrar los valores en un Toast
-            Toast.makeText(this, "Latitud: " + latitudHome + ", Longitud: " + longitudHome, Toast.LENGTH_LONG).show();
+        if (resultCode == RESULT_OK && data != null) {
+            if (requestCode == PhotoManager.REQUEST_IMAGE_CAPTURE) {
+                // Manejar imagen de la cámara
+                photoManager.handleCameraImage(data);
+            } else if (requestCode == PhotoManager.PICK_IMAGE) {
+                // Manejar imagen de la galería
+                photoManager.handleGalleryImage(data);
+            }
         }
     }
+
+
+    // Definir el ActivityResultLauncher
+    private ActivityResultLauncher<Intent> locationLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    if (data != null) {
+                        latitudHome = data.getDoubleExtra("latitud", 0.0);
+                        longitudHome = data.getDoubleExtra("longitud", 0.0);
+
+                        // Mostrar los valores en un Toast
+                        Toast.makeText(HomeActivity.this, "Latitud: " + latitudHome + ", Longitud: " + longitudHome, Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(HomeActivity.this, "No se obtuvo la ubicación", Toast.LENGTH_SHORT).show();
+                }
+            }
+    );
+
 
     // Método general para agregar un nuevo campo (regla o amenidad)
     private void agregarNuevoCampo(String tipoCampo) {

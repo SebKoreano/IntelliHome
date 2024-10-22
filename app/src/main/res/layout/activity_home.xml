@@ -77,15 +77,16 @@
             android:scrollbars="horizontal">
 
             <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/btnProfilePhoto"
+                    android:id="@+id/btnHousePhoto"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="7dp"
                     android:background="@drawable/baseline_photo_camera_24" />
             </LinearLayout>
         </HorizontalScrollView>
