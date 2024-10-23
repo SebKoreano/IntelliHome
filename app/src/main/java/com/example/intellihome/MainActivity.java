@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         // Iniciar el hilo para conectarse al servidor y recibir mensajes
         new Thread(() -> {
             try {
-                socket = new Socket("192.168.18.206", 3535); //192.168.18.206
+                socket = new Socket("172.18.117.43", 3535); //192.168.18.206
 
                 out = new PrintWriter(socket.getOutputStream(), true);
                 in = new Scanner(socket.getInputStream());

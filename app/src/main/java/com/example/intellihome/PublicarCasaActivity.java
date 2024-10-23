@@ -494,9 +494,11 @@ public class PublicarCasaActivity extends AppCompatActivity {
             String descripcionCasa = descripcionInput.getText().toString();
             String precioPorNoche = precioInput.getText().toString();
             GlobalColor globalVariable = (GlobalColor) getApplication();
+            List<String> reglasVivienda =   obtenerTextosReglas();
 
 
-            // Añadir líneas de ejemplo (puedes reemplazar con tus propios datos)
+
+                // Añadir líneas de ejemplo (puedes reemplazar con tus propios datos)
             contenidoArchivo.append("DuenoDeVivienda:").append(globalVariable.getCurrentuserName()).append("\n");
             contenidoArchivo.append("NombreDeVivienda:").append(nombreCasa).append("\n");
             contenidoArchivo.append("DescripcionGeneral:").append(descripcionCasa).append("\n");
@@ -505,11 +507,12 @@ public class PublicarCasaActivity extends AppCompatActivity {
             contenidoArchivo.append("Longitud:").append(longitudHome).append("\n");
             contenidoArchivo.append("Latitud:").append(latitudHome).append("\n");
 
-            //int j = 0;
-            //for (String strg:
-              //   ) {
-
-            //}
+            int j = 0;
+            for (String strg:reglasVivienda
+                 ) {
+                contenidoArchivo.append("Regla").append(j).append(":").append(strg).append("\n");
+                j++;
+            }
 
             int i = 0;
             for (String strg: selectedAmenidades
