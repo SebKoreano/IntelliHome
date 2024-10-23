@@ -100,6 +100,7 @@ public class PhotoManager {
             } else {
                 Bitmap resizedBitmap = resizeBitmapByHeight(imageBitmap, 105);
                 addImageToScrollView(resizedBitmap);
+                ((PublicarCasaActivity) activity).agregarImagenALaLista(resizedBitmap); // Agrega la imagen a la lista
             }
         }
     }
@@ -115,11 +116,13 @@ public class PhotoManager {
             } else {
                 Bitmap resizedBitmap = resizeBitmapByHeight(imageBitmap, 105);
                 addImageToScrollView(resizedBitmap);
+                ((PublicarCasaActivity) activity).agregarImagenALaLista(resizedBitmap); // Agrega la imagen a la lista
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     // Añadir imagen al LinearLayout
     private void addImageToScrollView(Bitmap bitmap) {

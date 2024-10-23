@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         rememberMeCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 // Mover a ConfigActivity cuando el CheckBox está marcado
-                Intent intent = new Intent(MainActivity.this, ConfigActivity.class);
+                Intent intent = new Intent(MainActivity.this, PublicarCasaActivity.class);
                 startActivity(intent);
             }
         });

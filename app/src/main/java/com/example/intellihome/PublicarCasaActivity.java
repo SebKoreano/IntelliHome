@@ -21,7 +21,7 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.util.Log;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
@@ -34,10 +34,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PublicarCasaActivity extends AppCompatActivity {
 
-    private EditText descripcionInput, precioInput;
+    private EditText descripcionInput, precioInput, inputTitulo;
     private NumberPicker numHabitacionesPicker;
     private Button btnAddReglas, btnAddAmenidades, btnPhoto, btnPublicar;
     private int numeroReglas = 1, numeroAmenidad= 1, totalFotos = 0;;
@@ -48,7 +49,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
     private String[] amenidadesArray;  // Lista de opciones
     private boolean[] selectedItems;   // Lista que guarda qué opciones están seleccionadas
     private ArrayList<String> selectedAmenidades;  // Lista para almacenar las opciones seleccionadas
-
+    private List<Bitmap> listaDeFotos = new ArrayList<>();
 
 
     @Override
@@ -65,6 +66,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
         btnPhoto = findViewById(R.id.btnHousePhoto);
         linearLayout = findViewById(R.id.linearLayout);
         btnPublicar = findViewById((R.id.btnPublish));
+        inputTitulo = findViewById((R.id.inputTitulo));
 
         // Configurar el NumberPicker
         numHabitacionesPicker.setMinValue(1);  // Valor mínimo
@@ -143,7 +145,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    Toast.makeText(PublicarCasaActivity.this, "Hay un maximo de 10 fotos por casa", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PublicarCasaActivity.this, getString(R.string.maxFotoCasa), Toast.LENGTH_SHORT).show();
                 }
             });
         });
@@ -154,7 +156,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (validarCampos()) {
                     // Lógica para publicar la casa (si todo está correcto)
-                    Toast.makeText(PublicarCasaActivity.this, "Publicando la casa...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PublicarCasaActivity.this, getString(R.string.publicarCasa), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -178,46 +180,52 @@ public class PublicarCasaActivity extends AppCompatActivity {
 
     // Método para validar todos los campos antes de publicar
     private boolean validarCampos() {
+        // Verificar si la el titulo está vacío
+        if (inputTitulo.getText().toString().trim().isEmpty()) {
+            Toast.makeText(this, getString(R.string.errorTitulo), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         // Verificar si la descripción está vacía
         if (descripcionInput.getText().toString().trim().isEmpty()) {
-            Toast.makeText(this, "La descripción no puede estar vacía", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.validarDescripcion), Toast.LENGTH_SHORT).show();
             return false;
         }
 
         // Verificar si el precio está vacío
         if (precioInput.getText().toString().trim().isEmpty()) {
-            Toast.makeText(this, "El precio no puede estar vacío", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.validarPrecio), Toast.LENGTH_SHORT).show();
             return false;
         }
 
         // Verificar si la ubicación (latitud y longitud) ha sido seleccionada
         if (latitudHome == 0.0 || longitudHome == 0.0) {
-            Toast.makeText(this, "Debes elegir una ubicación", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.validarUbicacion), Toast.LENGTH_SHORT).show();
             return false;
         }
 
         // Verificar si hay al menos una foto
         if (photoManager.getPhotoCount() == 0) {
-            Toast.makeText(this, "Debes añadir al menos una foto", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.validarFoto), Toast.LENGTH_SHORT).show();
             return false;
         }
 
         // Verificar si hay al menos una regla de uso
         if (numeroReglas <= 1) {
-            Toast.makeText(this, "Debes añadir al menos una regla de uso", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.validarReglas), Toast.LENGTH_SHORT).show();
             return false;
         }
 
         // Verificar si hay al menos una amenidad seleccionada
         if (selectedAmenidades.isEmpty()) {
-            Toast.makeText(this, "Debes seleccionar al menos una amenidad", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.validarAmenidades), Toast.LENGTH_SHORT).show();
             return false;
         }
 
         // Verificar si el checkbox de check-in/check-out está seleccionado
         CheckBox checkInCheckOut = findViewById(R.id.checkInCheckOutCheckbox);
         if (!checkInCheckOut.isChecked()) {
-            Toast.makeText(this, "Debes aceptar los términos de check-in y check-out", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.validarcheckInCheckOut), Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -234,14 +242,14 @@ public class PublicarCasaActivity extends AppCompatActivity {
     // Método principal para mostrar el diálogo de selección múltiple
     private void showMultiSelectDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(PublicarCasaActivity.this);
-        builder.setTitle("Selecciona Amenidades");
+        builder.setTitle(getString(R.string.seleccionAmenidades));
 
         // Configurar las opciones del diálogo con selección múltiple
         builder.setMultiChoiceItems(amenidadesArray, selectedItems, getMultiChoiceClickListener());
 
         // Configurar botones de acción (OK y Cancelar)
-        builder.setPositiveButton("OK", getPositiveButtonClickListener());
-        builder.setNegativeButton("Cancelar", getNegativeButtonClickListener());
+        builder.setPositiveButton(getString(R.string.ok), getPositiveButtonClickListener());
+        builder.setNegativeButton(getString(R.string.msjabtActivity), getNegativeButtonClickListener());
 
         // Mostrar el diálogo
         builder.create().show();
@@ -262,7 +270,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
         return new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(PublicarCasaActivity.this, "Amenidades seleccionadas: " + selectedAmenidades, Toast.LENGTH_LONG).show();
+                Toast.makeText(PublicarCasaActivity.this, getString(R.string.amenidadSeleccionadas) + selectedAmenidades, Toast.LENGTH_LONG).show();
             }
         };
     }
@@ -283,7 +291,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
             // Añadir la opción seleccionada a la lista y mostrar un Toast
             if (!selectedAmenidades.contains(amenidadesArray[which])) {
                 selectedAmenidades.add(amenidadesArray[which]);
-                Toast.makeText(PublicarCasaActivity.this, "Seleccionado: " + amenidadesArray[which], Toast.LENGTH_SHORT).show();
+                Toast.makeText(PublicarCasaActivity.this, getString(R.string.amenidadesSeleccionadas) + amenidadesArray[which], Toast.LENGTH_SHORT).show();
             }
         } else {
             // Eliminar la opción si se deselecciona
@@ -303,10 +311,10 @@ public class PublicarCasaActivity extends AppCompatActivity {
                         longitudHome = data.getDoubleExtra("longitud", 0.0);
 
                         // Mostrar los valores en un Toast
-                        Toast.makeText(PublicarCasaActivity.this, "Latitud: " + latitudHome + ", Longitud: " + longitudHome, Toast.LENGTH_LONG).show();
+                        Toast.makeText(PublicarCasaActivity.this, getString(R.string.hint_latitud) + latitudHome + ", " + getString(R.string.hint_longitud) + longitudHome, Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(PublicarCasaActivity.this, "No se obtuvo la ubicación", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PublicarCasaActivity.this, getString(R.string.errorUbicacion), Toast.LENGTH_SHORT).show();
                 }
             }
     );
@@ -364,4 +372,12 @@ public class PublicarCasaActivity extends AppCompatActivity {
             numeroAmenidad++;
         }
     }
+
+    // Método para agregar las imágenes a la lista
+    public void agregarImagenALaLista(Bitmap bitmap) {
+        listaDeFotos.add(bitmap);
+        // Mostrar el tamaño de la lista en los logs
+        Log.d("PublicarCasaActivity", "Total fotos en la lista: " + listaDeFotos.size());
+    }
+
 }

@@ -141,9 +141,26 @@
     <string name="btnPhoto">Add Photo</string>
     <string name="ubicacion">Location</string>
     <string name="elegir_ubicaci_n">Select location</string>
-    <string name="hint_latitud">Width:</string>
-    <string name="hint_longitud">Length:</string>
+    <string name="hint_latitud">Width: </string>
+    <string name="hint_longitud">Length: </string>
     <string name="aceptar">Accept</string>
+    <string name="maxFotoCasa">There is a maximum of 10 photos per house</string>
+    <string name="publicarCasa">Publishing the house...</string>
+    <string name="validarDescripcion">Description cannot be empty</string>
+    <string name="validarPrecio">Price cannot be empty</string>
+    <string name="validarUbicacion">You must choose a location</string>
+    <string name="validarFoto">You must add at least one photo</string>
+    <string name="validarReglas">You must add at least one usage rule</string>
+    <string name="validarAmenidades">You must select at least one amenity</string>
+    <string name="validarcheckInCheckOut">You must accept the check-in and check-out terms</string>
+    <string name="ok">Ok</string>
+    <string name="seleccionAmenidades">Select Amenities</string>
+    <string name="amenidadSeleccionadas">Selected amenities: </string>
+    <string name="amenidadesSeleccionadas">Selected: </string>
+    <string name="errorUbicacion">Location not obtained</string>
+    <string name="labelTitulo">Residence title:</string>
+    <string name="inputTitulo">Enter a title for your residence</string>
+    <string name="errorTitulo">The title cannot be empty</string>
     <string-array name="amenidades_array">
         <item>WiFi</item>
         <item>Pool</item>

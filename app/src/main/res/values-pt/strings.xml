@@ -141,9 +141,26 @@
     <string name="btnPhoto">Adicionar Foto</string>
     <string name="ubicacion">Localização</string>
     <string name="elegir_ubicaci_n">Escolha o local</string>
-    <string name="hint_latitud">Largura:</string>
-    <string name="hint_longitud">Comprimento:</string>
+    <string name="hint_latitud">Largura: </string>
+    <string name="hint_longitud">Comprimento: </string>
     <string name="aceptar">Aceitar</string>
+    <string name="maxFotoCasa">Há um máximo de 10 fotos por casa</string>
+    <string name="publicarCasa">Publicando a casa...</string>
+    <string name="validarDescripcion">A descrição não pode ficar vazia</string>
+    <string name="validarPrecio">O preço não pode estar vazio</string>
+    <string name="validarUbicacion">Você deve escolher um local</string>
+    <string name="validarFoto">Você deve adicionar pelo menos uma foto</string>
+    <string name="validarReglas">Você deve adicionar pelo menos uma regra de uso</string>
+    <string name="validarAmenidades">Você deve selecionar pelo menos uma comodidade</string>
+    <string name="validarcheckInCheckOut">Você deve aceitar os termos de check-in e check-out</string>
+    <string name="ok">Ok</string>
+    <string name="seleccionAmenidades">Selecione comodidades</string>
+    <string name="amenidadSeleccionadas">Comodidades selecionadas: </string>
+    <string name="amenidadesSeleccionadas">Selecionado: </string>
+    <string name="errorUbicacion">A localização não foi obtida</string>
+    <string name="labelTitulo">Título da residência:</string>
+    <string name="inputTitulo">Insira um título para sua residência</string>
+    <string name="errorTitulo">O título não pode estar vazio</string>
     <string-array name="amenidades_array">
         <item>WiFi</item>
         <item>Piscina</item>
