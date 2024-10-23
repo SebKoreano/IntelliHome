@@ -240,43 +240,6 @@ def generar_nueva_contraseña():
             any(char in digitos for char in contraseña) and
             any(char in caracteresEspeciales for char in contraseña)):
             return contraseña
-                
-###################################### Conexión domótica ###################################
-
-# Dirección IP de la Raspberry Pi Pico
-ip_pico = "192.168.0.108"  # Cambia esto si es necesario
-puerto = 1234  # Puerto que estamos usando en la Pico
-
-# Crear un socket
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-try:
-    # Conectar al servidor
-    client_socket.connect((ip_pico, puerto))
-
-    # Letras disponibles para enviar
-    letras = ['z', 'x', 'c', 'v', 'b', 'n', 'm']
-
-    print("Letras disponibles para enviar:", ", ".join(letras))
-    print("Escribe 'salir' para terminar.")
-
-    while True:
-        # Solicitar al usuario que ingrese una letra
-        letra_a_enviar = input("Ingresa una letra (z, x, c, v, b, n, m): ").lower()
-
-        if letra_a_enviar == 'salir':
-            print("Cerrando conexión...")
-            break  # Sale del bucle si el usuario escribe 'salir'
-
-        if letra_a_enviar in letras:
-            client_socket.send(letra_a_enviar.encode('utf-8'))  # Envía la letra seleccionada
-            print(f"Enviado: {letra_a_enviar}")
-        else:
-            print("Selección inválida. Debes elegir una de las letras disponibles.")
-
-finally:
-    client_socket.close()  # Cierra la conexión
-
 
 # Definir parametros para la contraseña random
 letrasMayusculas = string.ascii_uppercase  
