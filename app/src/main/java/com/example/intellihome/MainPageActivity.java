@@ -12,9 +12,13 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
 
 public class MainPageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -23,6 +27,8 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     private BottomNavigationView bottomNavigationView;
     private Toolbar toolbar;
     private SearchView searchView;
+    private RecyclerView recyclerView;
+    private ArrayList<CardViewObj> arrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,20 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         toolbar = findViewById(R.id.menu_toolbar);
         searchView = findViewById(R.id.mainpage_search_bar);
         bottomNavigationView = findViewById(R.id.bottom_nav);
+        recyclerView = findViewById(R.id.recyclerView);
+
+        /*
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        arrayList.add(new CardViewObj(300, "9.17", "Casas de Casas", "(123,456)", "casa0"));
+        arrayList.add(new CardViewObj(300, "8.16", "Casas y Casas", "(0,46)", "casaI"));
+        arrayList.add(new CardViewObj(300, "7.15", "Casas o Casas", "(23,4)", "casaII"));
+        arrayList.add(new CardViewObj(300, "6.14", "Casas e Casas", "(13,78)", "casaIII"));
+
+        CardViewObjRecycleView cardViewObjRecycleView = new CardViewObjRecycleView(arrayList, this);
+        recyclerView.setAdapter(cardViewObjRecycleView);
+
+         */
 
         navigationView.bringToFront();
         setSupportActionBar(toolbar);
@@ -64,7 +84,8 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
             Intent intent = new Intent(MainPageActivity.this, PublicarCasaActivity.class);
             startActivity(intent);
         } else if (id == R.id.menu_control_house) {
-            // Lógica para monitorear viviendas
+            Intent intent = new Intent(MainPageActivity.this, LightControlActivity.class);
+            startActivity(intent);
         }
 
         // Lógica para el BottomNavigationView

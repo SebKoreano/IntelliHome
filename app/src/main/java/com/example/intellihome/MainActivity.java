@@ -114,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }).start();
 
+            // Short-Cut
+            moveToMainPage();
         });
 
         rememberMeCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {

@@ -158,7 +158,7 @@
     <string name="amenidadSeleccionadas">Selected amenities: </string>
     <string name="amenidadesSeleccionadas">Selected: </string>
     <string name="errorUbicacion">Location not obtained</string>
-    <string name="labelTitulo">Residence title:</string>
+    <string name="labelTitulo">Residence title</string>
     <string name="inputTitulo">Enter a title for your residence</string>
     <string name="errorTitulo">The title cannot be empty</string>
     <string-array name="amenidades_array">

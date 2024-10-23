@@ -227,6 +227,7 @@
                             android:id="@+id/selectCasa"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:inputType="none"
                             android:hint="@string/prompt_casa_preferida" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -244,6 +245,7 @@
                             android:id="@+id/selectVehiculo"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:inputType="none"
                             android:hint="@string/prompt_vehiculo" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
@@ -258,6 +260,7 @@
                         android:id="@+id/selectDomicilio"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:inputType="none"
                         android:hint="@string/prompt_domicilio" />
                 </com.google.android.material.textfield.TextInputLayout>
 
