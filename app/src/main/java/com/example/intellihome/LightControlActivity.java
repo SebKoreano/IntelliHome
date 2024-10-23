@@ -1,20 +1,25 @@
 package com.example.intellihome;
 
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Scanner;
 
 public class LightControlActivity extends AppCompatActivity {
 
-    // Declaración de botones
     private Button btnCuartoPrincipal, btnBanoCuartoPrincipal, btnCuarto1, btnCuarto2;
     private Button btnSala, btnBano, btnLavanderia;
+    private Socket socket;
+    private PrintWriter out;
+    private Scanner in;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_light_control); // Asegúrate de que este archivo XML exista
+        setContentView(R.layout.activity_light_control);
 
         // Inicialización de los botones
         btnCuartoPrincipal = findViewById(R.id.btnCuartoPrincipal);
@@ -26,18 +31,56 @@ public class LightControlActivity extends AppCompatActivity {
         btnLavanderia = findViewById(R.id.btnLavanderia);
 
         // Configuración de listeners para cada botón
-        btnCuartoPrincipal.setOnClickListener(v -> controlarLuces("Cuarto Principal"));
-        btnBanoCuartoPrincipal.setOnClickListener(v -> controlarLuces("Baño Cuarto Principal"));
-        btnCuarto1.setOnClickListener(v -> controlarLuces("Cuarto 1"));
-        btnCuarto2.setOnClickListener(v -> controlarLuces("Cuarto 2"));
-        btnSala.setOnClickListener(v -> controlarLuces("Sala"));
-        btnBano.setOnClickListener(v -> controlarLuces("Baño"));
-        btnLavanderia.setOnClickListener(v -> controlarLuces("Lavandería"));
+        btnCuartoPrincipal.setOnClickListener(v -> sendMessage("Z"));
+        btnBanoCuartoPrincipal.setOnClickListener(v -> sendMessage("X"));
+        btnCuarto1.setOnClickListener(v -> sendMessage("C"));
+        btnCuarto2.setOnClickListener(v -> sendMessage("V"));
+        btnSala.setOnClickListener(v -> sendMessage("B"));
+        btnBano.setOnClickListener(v -> sendMessage("N"));
+        btnLavanderia.setOnClickListener(v -> sendMessage("M"));
+
+        // Iniciar el hilo para conectarse al servidor y recibir mensajes
+        new Thread(() -> {
+            try {
+                socket = new Socket("192.168.18.134", 6969);
+                out = new PrintWriter(socket.getOutputStream(), true);
+                in = new Scanner(socket.getInputStream());
+
+            } catch (Exception e) {
+                runOnUiThread(() -> Toast.makeText(this, "Error de conexión", Toast.LENGTH_SHORT).show());
+                e.printStackTrace();
+            }
+        }).start();
     }
 
-    // Método para controlar las luces
-    private void controlarLuces(String habitacion) {
-        // Mostrar mensaje de éxito
-        Toast.makeText(this, "Éxito: Las luces del " + habitacion + " han sido controladas.", Toast.LENGTH_SHORT).show();
+    private void sendMessage(String message) {
+        new Thread(() -> {
+            try {
+                if (out != null) {
+                    out.println(message);
+                    runOnUiThread(() -> mostrarMensaje("Éxito: Mensaje enviado para controlar las luces."));
+                }
+            } catch (Exception e) {
+                runOnUiThread(() -> Toast.makeText(this, "Error al enviar el mensaje", Toast.LENGTH_SHORT).show());
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Cerrar el socket si está conectado
+        if (socket != null) {
+            try {
+                socket.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void mostrarMensaje(String mensaje) {
+        Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
     }
 }
