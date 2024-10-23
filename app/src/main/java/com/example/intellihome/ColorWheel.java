@@ -77,7 +77,10 @@ public class ColorWheel extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-                String direccionCreacionCarpeta = "Usuarios/" + "Alquilador" + "/" + "Eudus123" + "/";
+                GlobalColor variableGlobales = (GlobalColor) getApplication();
+                String tipoUsuario = variableGlobales.getCurrenttipoUsuario();
+                String userName = variableGlobales.getCurrentuserName();
+                String direccionCreacionCarpeta = "Usuarios/" +  tipoUsuario + "/" + userName+ "/";
                 StorageReference carpetaRef = FirebaseStorage.getInstance().getReference(direccionCreacionCarpeta);
                 crearYSubirTxtConColores(carpetaRef.child("Colores.txt"));
             }
@@ -90,8 +93,14 @@ public class ColorWheel extends AppCompatActivity {
             StringBuilder contenidoArchivo = new StringBuilder();
 
             String RGBHexaColor = ((TextView) findViewById(R.id.displayValues)).getText().toString();
-            // Añadir líneas de ejemplo (puedes reemplazar con tus propios datos)
-            contenidoArchivo.append(RGBHexaColor).append("\n");
+
+            String[] lines = RGBHexaColor.split("\n");
+            String hexValue = lines[1].replace("HEX: ", "").trim();
+
+            hexValue = hexValue.substring(1);
+            hexValue = "0x" + hexValue;
+
+            contenidoArchivo.append(hexValue).append("\n");
 
             // Convertir el contenido a bytes
             byte[] data = contenidoArchivo.toString().getBytes("UTF-8");

@@ -11,11 +11,20 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.io.PrintWriter;
 import androidx.appcompat.app.AlertDialog;
 import java.util.Scanner;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -159,9 +168,22 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         else {
+            String[] parts = response.split("_");
+            String user = parts[0];
+            String tipo = parts[1];
+
+            String direccionCreacionCarpeta = "Usuarios/" + tipo + "/" + user + "/" + "Colores.txt";
+
             //Se crean variables globales con nombre de usuario
-            String ColorElegido = " ";
+            GlobalColor globalVariables = (GlobalColor) getApplication();
+
+            globalVariables.setCurrentuserName(user);
+            globalVariables.setCurrenttipoUsuario(tipo);
+
+            //Aquí falta cambiar el color con base en lo escrito en Colores.txt
+
             moveToMainPage();
         }
     }
+
 }
