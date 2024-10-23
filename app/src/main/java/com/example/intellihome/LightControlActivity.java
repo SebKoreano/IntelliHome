@@ -42,7 +42,7 @@ public class LightControlActivity extends AppCompatActivity {
         // Iniciar el hilo para conectarse al servidor y recibir mensajes
         new Thread(() -> {
             try {
-                socket = new Socket("192.168.18.134", 6969);
+                socket = new Socket("192.168.0.107", 6969);
                 out = new PrintWriter(socket.getOutputStream(), true);
                 in = new Scanner(socket.getInputStream());
 
