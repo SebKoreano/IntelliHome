@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.View;
@@ -15,13 +16,14 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Toast;
-
+import android.util.Log;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PublicarCasaActivity extends AppCompatActivity {
 
@@ -36,7 +38,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
     private String[] amenidadesArray;  // Lista de opciones
     private boolean[] selectedItems;   // Lista que guarda qué opciones están seleccionadas
     private ArrayList<String> selectedAmenidades;  // Lista para almacenar las opciones seleccionadas
-
+    private List<Bitmap> listaDeFotos = new ArrayList<>();
 
 
     @Override
@@ -352,4 +354,12 @@ public class PublicarCasaActivity extends AppCompatActivity {
             numeroAmenidad++;
         }
     }
+
+    // Método para agregar las imágenes a la lista
+    public void agregarImagenALaLista(Bitmap bitmap) {
+        listaDeFotos.add(bitmap);
+        // Mostrar el tamaño de la lista en los logs
+        Log.d("PublicarCasaActivity", "Total fotos en la lista: " + listaDeFotos.size());
+    }
+
 }
