@@ -154,21 +154,13 @@ public class PublicarCasaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (validarCampos()) {
+
                     // Lógica para publicar la casa (si todo está correcto)
                     Toast.makeText(PublicarCasaActivity.this, getString(R.string.publicarCasa), Toast.LENGTH_SHORT).show();
 
-                    String carpetaVivienda = "Viviendas Arrendadas/" + inputTitulo.getText().toString() + "/";
-                    crearCarpeta(carpetaVivienda);
+                    subirFoto();
 
-                    StorageReference carpetaRef = FirebaseStorage.getInstance().getReference(carpetaVivienda );
-                    crearYSubirTxt(carpetaRef.child("info.txt"));
-
-                    for (int i = 0; i < listaDeFotos.size(); i++) {
-                        Bitmap bit = listaDeFotos.get(i);
-                        Uri imageUri = getUriFromBitmap(bit);
-                        uploadPictureToFirebase(imageUri, i);
-                    }
-
+                    mostrarReglas();
                 }
             }
         });
@@ -188,6 +180,33 @@ public class PublicarCasaActivity extends AppCompatActivity {
                 // Manejar imagen de la galería
                 photoManager.handleGalleryImage(data,false);
             }
+        }
+    }
+
+    private void mostrarReglas(){
+        // Convertir la lista de textos a una sola cadena
+        List<String> textosReglas = obtenerTextosReglas();
+        StringBuilder reglasConcatenadas = new StringBuilder();
+
+        for (String regla : textosReglas) {
+            reglasConcatenadas.append(regla).append("\n");  // Concatenar cada regla con un salto de línea
+        }
+
+        // Mostrar el resultado en un Toast
+        Toast.makeText(PublicarCasaActivity.this, reglasConcatenadas.toString(), Toast.LENGTH_LONG).show();
+    }
+
+    private void subirFoto(){
+        String carpetaVivienda = "Viviendas Arrendadas/" + inputTitulo.getText().toString() + "/";
+        crearCarpeta(carpetaVivienda);
+
+        StorageReference carpetaRef = FirebaseStorage.getInstance().getReference(carpetaVivienda );
+        crearYSubirTxt(carpetaRef.child("info.txt"));
+
+        for (int i = 0; i < listaDeFotos.size(); i++) {
+            Bitmap bit = listaDeFotos.get(i);
+            Uri imageUri = getUriFromBitmap(bit);
+            uploadPictureToFirebase(imageUri, i);
         }
     }
 
@@ -415,8 +434,6 @@ public class PublicarCasaActivity extends AppCompatActivity {
 
         return textosReglas;
     }
-
-
 
     // Método para agregar las imágenes a la lista
     public void agregarImagenALaLista(Bitmap bitmap) {
