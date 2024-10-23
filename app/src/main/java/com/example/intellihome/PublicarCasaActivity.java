@@ -183,6 +183,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
         }
     }
 
+    //Metodo que obtiene y muestra las reglas introducidas por el usuario
     private void mostrarReglas(){
         // Convertir la lista de textos a una sola cadena
         List<String> textosReglas = obtenerTextosReglas();
@@ -196,19 +197,23 @@ public class PublicarCasaActivity extends AppCompatActivity {
         Toast.makeText(PublicarCasaActivity.this, reglasConcatenadas.toString(), Toast.LENGTH_LONG).show();
     }
 
-    private void subirFoto(){
+    //Metodo que se encarga de subir las imagenes introducidas por el usuario a la base de datos
+    private void subirFoto() {
         String carpetaVivienda = "Viviendas Arrendadas/" + inputTitulo.getText().toString() + "/";
         crearCarpeta(carpetaVivienda);
 
-        StorageReference carpetaRef = FirebaseStorage.getInstance().getReference(carpetaVivienda );
+        StorageReference carpetaRef = FirebaseStorage.getInstance().getReference(carpetaVivienda);
         crearYSubirTxt(carpetaRef.child("info.txt"));
 
         for (int i = 0; i < listaDeFotos.size(); i++) {
             Bitmap bit = listaDeFotos.get(i);
             Uri imageUri = getUriFromBitmap(bit);
+
+            // Subir cada imagen usando el índice i como identificador
             uploadPictureToFirebase(imageUri, i);
         }
     }
+
 
     // Método para validar todos los campos antes de publicar
     private boolean validarCampos() {
@@ -535,32 +540,32 @@ public class PublicarCasaActivity extends AppCompatActivity {
         }
     }
 
+    // Método de subida ajustado, con nombre único para cada imagen
     private void uploadPictureToFirebase(Uri imageUri, int numImagen) {
         if (imageUri != null) {
             // Crear una referencia a Firebase Storage
             String nombreCasa = inputTitulo.getText().toString();
             String direccionCreacionCarpeta = "Viviendas Arrendadas/" + nombreCasa + "/";
-            String nombre = "Imagen" + numImagen;
+
+            // Añadimos un sufijo único al nombre de la imagen usando una marca de tiempo
+            String nombreArchivo = "Imagen" + numImagen + "_" + System.currentTimeMillis();
 
             // Crear la referencia para la carpeta del usuario
-            StorageReference carpetaRef = FirebaseStorage.getInstance().getReference(direccionCreacionCarpeta + nombre + "/");
-
-            // Crear un nombre único para el archivo de imagen
-            String fileName = "Imagen" + numImagen;
-            StorageReference fileReference = carpetaRef; // Asegúrate de que esté dentro de la misma carpeta
+            StorageReference carpetaRef = FirebaseStorage.getInstance().getReference(direccionCreacionCarpeta + nombreArchivo);
 
             // Subir la imagen
-            fileReference.putFile(imageUri)
+            carpetaRef.putFile(imageUri)
                     .addOnSuccessListener(taskSnapshot -> {
                         // Imagen subida con éxito
-                        Toast.makeText(PublicarCasaActivity.this, "Imagen subida exitosamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PublicarCasaActivity.this, "Imagen " + numImagen + " subida exitosamente", Toast.LENGTH_SHORT).show();
                     })
                     .addOnFailureListener(e -> {
                         // Manejo de errores
-                        Toast.makeText(PublicarCasaActivity.this, "Error al subir la imagen: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PublicarCasaActivity.this, "Error al subir la imagen " + numImagen + ": " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         } else {
             Toast.makeText(this, "Por favor selecciona una imagen", Toast.LENGTH_SHORT).show();
         }
     }
+    
 }
