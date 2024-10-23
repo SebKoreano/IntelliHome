@@ -4,6 +4,8 @@ import android.app.Application;
 
 public class GlobalColor extends Application {
     private int currentColor = 0x57cdf5;
+    private String userName;
+    private String tipoUsuario;
 
     public int getCurrentColor() {
         return currentColor;
@@ -12,4 +14,12 @@ public class GlobalColor extends Application {
     public void setCurrentColor(int currentColor) {
         this.currentColor = currentColor;
     }
+
+    public String getCurrentuserName(){ return userName;}
+
+    public void setCurrentuserName(String newUser){this.userName = newUser;}
+
+    public String getCurrenttipoUsuario(){ return tipoUsuario;}
+
+    public void setCurrenttipoUsuario(String newUserType){this.tipoUsuario = newUserType;}
 }

@@ -5,7 +5,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.InputFilter;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -15,6 +19,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.util.Log;
 import androidx.activity.result.ActivityResultLauncher;
@@ -22,6 +27,12 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,16 +157,18 @@ public class PublicarCasaActivity extends AppCompatActivity {
                     // Lógica para publicar la casa (si todo está correcto)
                     Toast.makeText(PublicarCasaActivity.this, getString(R.string.publicarCasa), Toast.LENGTH_SHORT).show();
 
-                    // Convertir la lista de textos a una sola cadena
-                    List<String> textosReglas = obtenerTextosReglas();
-                    StringBuilder reglasConcatenadas = new StringBuilder();
+                    String carpetaVivienda = "Viviendas Arrendadas/" + inputTitulo.getText().toString() + "/";
+                    crearCarpeta(carpetaVivienda);
 
-                    for (String regla : textosReglas) {
-                        reglasConcatenadas.append(regla).append("\n");  // Concatenar cada regla con un salto de línea
+                    StorageReference carpetaRef = FirebaseStorage.getInstance().getReference(carpetaVivienda );
+                    crearYSubirTxt(carpetaRef.child("info.txt"));
+
+                    for (int i = 0; i < listaDeFotos.size(); i++) {
+                        Bitmap bit = listaDeFotos.get(i);
+                        Uri imageUri = getUriFromBitmap(bit);
+                        uploadPictureToFirebase(imageUri, i);
                     }
 
-                    // Mostrar el resultado en un Toast
-                    Toast.makeText(PublicarCasaActivity.this, reglasConcatenadas.toString(), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -412,4 +425,125 @@ public class PublicarCasaActivity extends AppCompatActivity {
         Log.d("PublicarCasaActivity", "Total fotos en la lista: " + listaDeFotos.size());
     }
 
+
+    private void crearCarpeta(String rutaCarpeta) {
+        try {
+
+            // Obtener el nombre del archivo del input (nombre del usuario)
+            String name = inputTitulo.getText().toString().trim(); // Eliminar espacios innecesarios
+            String archivoDummy = name + ".txt"; // Archivo vacío
+            String rutaCompleta = rutaCarpeta + archivoDummy; // Ruta completa combinada
+
+            // Obtener la referencia al Storage de Firebase
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReference();
+
+            // Crear una referencia a la ruta completa
+            StorageReference carpetaRef = storageRef.child(rutaCompleta);
+
+        } catch (Exception e) {
+            System.err.println("Error al crear la carpeta: " + e.getMessage());
+        }
+    }
+
+    private Uri getUriFromBitmap(Bitmap bitmap) {
+        // Guardar el bitmap en un archivo temporal
+        try {
+            File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_image.png");
+            FileOutputStream fos = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+
+            // Crear y retornar el Uri del archivo
+            return Uri.fromFile(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void crearYSubirTxt(StorageReference storageRef) {
+        try {
+            // Crear un StringBuilder para formar el contenido del archivo
+            StringBuilder contenidoArchivo = new StringBuilder();
+            Spinner vehiculo = findViewById(R.id.spinnerVehiculo);
+            Spinner casa = findViewById(R.id.spinnerTipoCasa);
+            String nombreCasa = inputTitulo.getText().toString();
+            String descripcionCasa = descripcionInput.getText().toString();
+            String precioPorNoche = precioInput.getText().toString();
+            GlobalColor globalVariable = (GlobalColor) getApplication();
+
+
+            // Añadir líneas de ejemplo (puedes reemplazar con tus propios datos)
+            contenidoArchivo.append("DuenoDeVivienda:").append(globalVariable.getCurrentuserName()).append("\n");
+            contenidoArchivo.append("NombreDeVivienda:").append(nombreCasa).append("\n");
+            contenidoArchivo.append("DescripcionGeneral:").append(descripcionCasa).append("\n");
+            contenidoArchivo.append("NumeroHabitaciones:").append(numHabitacionesPicker.getValue()).append("\n");
+            contenidoArchivo.append("Precio:").append(precioPorNoche).append("\n");
+            contenidoArchivo.append("Longitud:").append(longitudHome).append("\n");
+            contenidoArchivo.append("Latitud:").append(latitudHome).append("\n");
+
+            //int j = 0;
+            //for (String strg:
+              //   ) {
+
+            //}
+
+            int i = 0;
+            for (String strg: selectedAmenidades
+                 ) {
+                contenidoArchivo.append("Amenidad").append(i).append(":").append(strg).append("\n");
+                i++;
+            }
+            contenidoArchivo.append("TipoCasa:").append(casa.getSelectedItem().toString()).append("\n");
+            contenidoArchivo.append("VehiculoPreferencia:").append(vehiculo.getSelectedItem().toString()).append("\n");
+
+
+            // Convertir el contenido a bytes
+            byte[] data = contenidoArchivo.toString().getBytes("UTF-8");
+
+            // Subir el archivo al Storage en la referencia dada
+            storageRef.putBytes(data)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Manejar el éxito de la subida
+                        System.out.println("Archivo subido exitosamente a: " + storageRef.getPath());
+                    })
+                    .addOnFailureListener(e -> {
+                        // Manejar errores en la subida
+                        System.err.println("Error al subir el archivo: " + e.getMessage());
+                    });
+
+        } catch (Exception e) {
+            System.err.println("Error al crear o subir el archivo: " + e.getMessage());
+        }
+    }
+
+    private void uploadPictureToFirebase(Uri imageUri, int numImagen) {
+        if (imageUri != null) {
+            // Crear una referencia a Firebase Storage
+            String nombreCasa = inputTitulo.getText().toString();
+            String direccionCreacionCarpeta = "Viviendas Arrendadas/" + nombreCasa + "/";
+            String nombre = "Imagen" + numImagen;
+
+            // Crear la referencia para la carpeta del usuario
+            StorageReference carpetaRef = FirebaseStorage.getInstance().getReference(direccionCreacionCarpeta + nombre + "/");
+
+            // Crear un nombre único para el archivo de imagen
+            String fileName = "Imagen" + numImagen;
+            StorageReference fileReference = carpetaRef; // Asegúrate de que esté dentro de la misma carpeta
+
+            // Subir la imagen
+            fileReference.putFile(imageUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Imagen subida con éxito
+                        Toast.makeText(PublicarCasaActivity.this, "Imagen subida exitosamente", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        // Manejo de errores
+                        Toast.makeText(PublicarCasaActivity.this, "Error al subir la imagen: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            Toast.makeText(this, "Por favor selecciona una imagen", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
