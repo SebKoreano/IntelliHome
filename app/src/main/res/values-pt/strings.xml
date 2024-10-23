@@ -158,6 +158,9 @@
     <string name="amenidadSeleccionadas">Comodidades selecionadas: </string>
     <string name="amenidadesSeleccionadas">Selecionado: </string>
     <string name="errorUbicacion">A localização não foi obtida</string>
+    <string name="labelTitulo">Título da residência:</string>
+    <string name="inputTitulo">Insira um título para sua residência</string>
+    <string name="errorTitulo">O título não pode estar vazio</string>
     <string-array name="amenidades_array">
         <item>WiFi</item>
         <item>Piscina</item>

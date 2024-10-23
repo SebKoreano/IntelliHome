@@ -27,7 +27,7 @@ import java.util.List;
 
 public class PublicarCasaActivity extends AppCompatActivity {
 
-    private EditText descripcionInput, precioInput;
+    private EditText descripcionInput, precioInput, inputTitulo;
     private NumberPicker numHabitacionesPicker;
     private Button btnAddReglas, btnAddAmenidades, btnPhoto, btnPublicar;
     private int numeroReglas = 1, numeroAmenidad= 1, totalFotos = 0;;
@@ -55,6 +55,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
         btnPhoto = findViewById(R.id.btnHousePhoto);
         linearLayout = findViewById(R.id.linearLayout);
         btnPublicar = findViewById((R.id.btnPublish));
+        inputTitulo = findViewById((R.id.inputTitulo));
 
         // Configurar el NumberPicker
         numHabitacionesPicker.setMinValue(1);  // Valor mínimo
@@ -168,6 +169,12 @@ public class PublicarCasaActivity extends AppCompatActivity {
 
     // Método para validar todos los campos antes de publicar
     private boolean validarCampos() {
+        // Verificar si la el titulo está vacío
+        if (inputTitulo.getText().toString().trim().isEmpty()) {
+            Toast.makeText(this, getString(R.string.errorTitulo), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         // Verificar si la descripción está vacía
         if (descripcionInput.getText().toString().trim().isEmpty()) {
             Toast.makeText(this, getString(R.string.validarDescripcion), Toast.LENGTH_SHORT).show();
