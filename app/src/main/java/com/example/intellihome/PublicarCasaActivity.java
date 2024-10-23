@@ -70,7 +70,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
         });
 
         // Lista de amenidades (opciones)
-        amenidadesArray = getResources().getStringArray(R.array.amenidades_array);  // Puedes definirlo en res/values/strings.xml
+        amenidadesArray = getResources().getStringArray(R.array.amenidades_array);
         selectedItems = new boolean[amenidadesArray.length];
         selectedAmenidades = new ArrayList<>();
 
@@ -139,16 +139,27 @@ public class PublicarCasaActivity extends AppCompatActivity {
             });
         });
 
-        // Acción del botón "Publicar"
         btnPublicar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validarCampos()) {
                     // Lógica para publicar la casa (si todo está correcto)
                     Toast.makeText(PublicarCasaActivity.this, getString(R.string.publicarCasa), Toast.LENGTH_SHORT).show();
+
+                    // Convertir la lista de textos a una sola cadena
+                    List<String> textosReglas = obtenerTextosReglas();
+                    StringBuilder reglasConcatenadas = new StringBuilder();
+
+                    for (String regla : textosReglas) {
+                        reglasConcatenadas.append(regla).append("\n");  // Concatenar cada regla con un salto de línea
+                    }
+
+                    // Mostrar el resultado en un Toast
+                    Toast.makeText(PublicarCasaActivity.this, reglasConcatenadas.toString(), Toast.LENGTH_LONG).show();
                 }
             }
         });
+
 
     }
 
@@ -332,8 +343,15 @@ public class PublicarCasaActivity extends AppCompatActivity {
         ));
         // Establecer el límite de 100 caracteres
         nuevoCampo.setFilters(new InputFilter[] { new InputFilter.LengthFilter(100) });
+
+        if (tipoCampo.equals("regla")) {
+            // Asignar un id único basado en el número de regla
+            nuevoCampo.setId(View.generateViewId());  // Genera un ID único
+        }
+
         return nuevoCampo;
     }
+
 
     // Método para obtener el hint según el tipo de campo
     private String obtenerHint(String tipoCampo) {
@@ -361,6 +379,31 @@ public class PublicarCasaActivity extends AppCompatActivity {
             numeroAmenidad++;
         }
     }
+
+    // Método para obtener todos los datos de los campos de reglas
+    private List<String> obtenerTextosReglas() {
+        List<String> textosReglas = new ArrayList<>();
+
+        LinearLayout reglasLayout = findViewById(R.id.reglasLayout);
+
+        // Iterar sobre todos los hijos del LinearLayout
+        for (int i = 0; i < numeroReglas; i++) {
+            // Obtener cada EditText basado en el ID generado
+            EditText reglaCampo = (EditText) reglasLayout.getChildAt(i);
+
+            // Verificar si el campo no es nulo y añadir el texto a la lista
+            if (reglaCampo != null) {
+                String texto = reglaCampo.getText().toString().trim();
+                if (!texto.isEmpty()) {
+                    textosReglas.add(texto);
+                }
+            }
+        }
+
+        return textosReglas;
+    }
+
+
 
     // Método para agregar las imágenes a la lista
     public void agregarImagenALaLista(Bitmap bitmap) {
