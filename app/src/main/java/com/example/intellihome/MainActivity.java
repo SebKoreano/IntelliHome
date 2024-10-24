@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnRecoverPassword.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, RecuperationActivity.class);
+            Intent intent = new Intent(MainActivity.this, LightControlActivity.class);
             startActivity(intent);
         });
     }
