@@ -3,6 +3,7 @@ package com.example.intellihome;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -28,11 +29,14 @@ public class RecuperationActivity extends AppCompatActivity {
 
         Correo = findViewById(R.id.correorecuper);
         confirmation_but = findViewById(R.id.button_recuerpa);
+        View background = findViewById(R.id.background);
 
+        GlobalColor globalColor = (GlobalColor) getApplication();
+        int currentColor =  globalColor.getCurrentColor();
 
-        GlobalColor globalVariables = (GlobalColor) getApplicationContext();
-        int currentColor = globalVariables.getCurrentColor();
         confirmation_but.setBackgroundColor(currentColor);
+        background.setBackgroundColor(currentColor);
+
 
         // Obtener la IP de forma asíncrona
         new Thread(() -> {

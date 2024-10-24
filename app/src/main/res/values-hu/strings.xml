@@ -170,4 +170,5 @@
         <item>Gyógyfürdő</item>
     </string-array>
     <string name="Propietario">Tulajdonos</string>
+    <string name="Rent">Bérlés</string>
 </resources>

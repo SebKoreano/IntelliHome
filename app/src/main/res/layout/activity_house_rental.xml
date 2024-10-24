@@ -94,7 +94,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="$$$"
                                     android:drawableEnd="@drawable/colones_symbol"
-                                    android:textStyle="italic"/>
+                                    android:textSize="25sp"/>
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -232,7 +232,7 @@
                     android:layout_height="60dp"
                     android:id="@+id/btnRent"
                     android:backgroundTint="@color/mainColor"
-                    android:text="@string/btnPublish"
+                    android:text="@string/Rent"
                     android:textStyle="bold"
                     app:cornerRadius="32dp"
                     android:layout_marginBottom="20dp"

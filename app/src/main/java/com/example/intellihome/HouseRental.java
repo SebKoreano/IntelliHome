@@ -2,6 +2,9 @@ package com.example.intellihome;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
@@ -18,6 +21,7 @@ public class HouseRental extends AppCompatActivity {
     private TextView coords;
     private TextView rules;
     private TextView amenities;
+    private Button rent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,12 @@ public class HouseRental extends AppCompatActivity {
         coords = findViewById(R.id.property_coords);
         rules = findViewById(R.id.property_rules);
         amenities = findViewById(R.id.property_amenities);
+        rent = findViewById(R.id.btnRent);
+
+        GlobalColor globalColor = (GlobalColor) getApplication();
+        int currentColor =  globalColor.getCurrentColor();
+
+        rent.setBackgroundColor(currentColor);
 
         // Set the information of the house
         if (house != null) {

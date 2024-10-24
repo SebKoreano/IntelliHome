@@ -170,4 +170,5 @@
         <item>Spa</item>
     </string-array>
     <string name="Propietario">Proprietário</string>
+    <string name="Rent">Aluguel</string>
 </resources>

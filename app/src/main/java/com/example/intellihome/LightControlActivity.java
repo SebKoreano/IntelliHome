@@ -2,7 +2,9 @@ package com.example.intellihome;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -29,6 +31,17 @@ public class LightControlActivity extends AppCompatActivity {
         btnSala = findViewById(R.id.btnSala);
         btnBano = findViewById(R.id.btnBano);
         btnLavanderia = findViewById(R.id.btnLavanderia);
+
+        GlobalColor globalColor = (GlobalColor) getApplication();
+        int currentColor =  globalColor.getCurrentColor();
+
+        btnCuartoPrincipal.setBackgroundColor(currentColor);
+        btnBanoCuartoPrincipal.setBackgroundColor(currentColor);
+        btnCuarto1.setBackgroundColor(currentColor);
+        btnCuarto2.setBackgroundColor(currentColor);
+        btnSala.setBackgroundColor(currentColor);
+        btnBano.setBackgroundColor(currentColor);
+        btnLavanderia.setBackgroundColor(currentColor);
 
         // Configuración de listeners para cada botón
         btnCuartoPrincipal.setOnClickListener(v -> sendMessage("Z"));

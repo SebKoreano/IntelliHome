@@ -49,6 +49,11 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         recyclerView = findViewById(R.id.recyclerView);
         tagsbtn = findViewById(R.id.tags);
 
+        GlobalColor globalColor = (GlobalColor) getApplication();
+        int currentColor = globalColor.getCurrentColor();
+
+        changeHeader(currentColor);
+
         navigationView.bringToFront();
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav_drawer, R.string.close_nav_drawer);
@@ -72,6 +77,15 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
                 showMultiSelectDialog();
             }
         });
+    }
+
+    private void changeHeader(int currentColor) {
+        NavigationView navigationView = findViewById(R.id.nav_view);
+
+        View headerView = navigationView.getHeaderView(0);
+
+        LinearLayout menuHeader = headerView.findViewById(R.id.menu_header);
+        menuHeader.setBackgroundColor(currentColor);
     }
 
     private void showMultiSelectDialog() {

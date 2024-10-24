@@ -67,6 +67,15 @@ public class PublicarCasaActivity extends AppCompatActivity {
         linearLayout = findViewById(R.id.linearLayout);
         btnPublicar = findViewById((R.id.btnPublish));
         inputTitulo = findViewById((R.id.inputTitulo));
+        View background = findViewById(R.id.background);
+
+        GlobalColor globalColor = (GlobalColor) getApplication();
+        int currentColor =  globalColor.getCurrentColor();
+
+        btnAddReglas.setBackgroundColor(currentColor);
+        btnAddAmenidades.setBackgroundColor(currentColor);
+        btnPublicar.setBackgroundColor(currentColor);
+        background.setBackgroundColor(currentColor);
 
         // Configurar el NumberPicker
         numHabitacionesPicker.setMinValue(1);  // Valor mínimo
@@ -121,6 +130,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
 
         // Configura el botón para abrir el mapa
         Button btnElegirUbicacion = findViewById(R.id.btnElegirUbicacion);
+        btnElegirUbicacion.setBackgroundColor(currentColor);
         btnElegirUbicacion.setOnClickListener(v -> {
             // Lanzar la actividad de MapActivity
             Intent intent = new Intent(PublicarCasaActivity.this, MapActivity.class);

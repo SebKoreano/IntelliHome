@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -115,9 +116,14 @@ public class RegisterActivity extends AppCompatActivity {
         btnTogglePassword2 = findViewById(R.id.btnTogglePassword2);
         dialogManager = new DialogManager(this);
         photoManager = new PhotoManager(this, btnProfilePhoto);
+        View background = findViewById(R.id.background);
+        TextView title = findViewById(R.id.title);
 
-        GlobalColor globalVariables = (GlobalColor) getApplicationContext();
-        int currentColor = globalVariables.getCurrentColor();
+        GlobalColor globalColor = (GlobalColor) getApplication();
+        int currentColor =  globalColor.getCurrentColor();
+
+        background.setBackgroundColor(currentColor);
+        title.setTextColor(currentColor);
         btnCreateAccount.setBackgroundColor(currentColor);
 
         // Conectar al servidor
