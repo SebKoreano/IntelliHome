@@ -1,17 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".HouseRental">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/property_title"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="50dp"
-        android:text="Hola"/>
+        android:orientation="vertical"
+        android:padding="16dp">
 
-</RelativeLayout>
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title:"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/property_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sample Title" />
+
+        <!-- Type -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Type:"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/property_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="House" />
+
+        <!-- Vehicle -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vehicle:"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/property_vehicle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Garage" />
+
+        <!-- Description -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description:"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/property_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sample Description" />
+
+        <!-- Rooms -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rooms:"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/property_rooms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3" />
+
+        <!-- Money -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price:"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/property_money"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="$1500" />
+
+        <!-- Owner -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Owner:"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/property_owner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="John Doe" />
+
+        <!-- Coordinates -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Coordinates:"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/property_coords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="X: 12.34, Y: 56.78" />
+
+        <!-- Rules -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rules:"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/property_rules"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No smoking, No pets" />
+
+        <!-- Amenities -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Amenities:"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/property_amenities"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pool, Wi-Fi, Parking" />
+
+    </LinearLayout>
+</ScrollView>
