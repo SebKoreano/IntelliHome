@@ -19,11 +19,6 @@ public class LightControlActivity extends AppCompatActivity {
     private PrintWriter out;
     private Scanner in;
 
-    // Variables para la conexión al servidor
-    private Socket socket;
-    private PrintWriter out;  // Para enviar datos al servidor
-    private Scanner in;       // Para recibir datos del servidor (si se implementara)
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,22 +105,5 @@ public class LightControlActivity extends AppCompatActivity {
     // Método para mostrar mensajes en forma de Toast (pequeños mensajes emergentes en la UI)
     private void mostrarMensaje(String mensaje) {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();  // Mostrar el mensaje en pantalla
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Cerrar el socket si está conectado
-        if (socket != null) {
-            try {
-                socket.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void mostrarMensaje(String mensaje) {
-        Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
     }
 }
