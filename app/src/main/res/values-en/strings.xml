@@ -161,12 +161,38 @@
     <string name="labelTitulo">Residence title:</string>
     <string name="inputTitulo">Enter a title for your residence</string>
     <string name="errorTitulo">The title cannot be empty</string>
+    <string name="seleccionar_rango_fechas">Select date range</string>
+    <string name="de_fecha">From: %1$s to: %2$s</string>
+    <string name="btn_seleccionar_rango">Select date range</string>
+    <string name="rango_seleccionado">Selected range will appear here</string>
+    <string name="seleccionar_rango_de_fechas">Select date range</string>
+    <string name="rango_seleccionado_aparecer_aqu">Selected range will appear here</string>
     <string-array name="amenidades_array">
-        <item>WiFi</item>
-        <item>Pool</item>
+        <item>Equipped kitchen</item>
+        <item>Heating</item>
+        <item>Air conditioning</item>
+        <item>Free Wi-Fi</item>
+        <item>Cable TV</item>
+        <item>Washer dryer</item>
+        <item>Garden</item>
+        <item>Swimming pool</item>
+        <item>Security</item>
         <item>Gym</item>
-        <item>Parking</item>
-        <item>Restaurant</item>
-        <item>Spa</item>
+        <item>Terrace</item>
+        <item>Balcony</item>
+        <item>Room with bathroom</item>
+        <item>Outdoor furniture</item>
+        <item>Dishwasher</item>
+        <item>Coffee maker</item>
+        <item>Towels included</item>
+        <item>Access to common areas</item>
+        <item>Sofa bed</item>
+        <item>Additional cleaning service</item>
+        <item>Nearby public transportation</item>
+        <item>Nearby restaurant</item>
+        <item>Work area</item>
+        <item>Entertainment</item>
+        <item>Fireplace</item>
+        <item>High-speed Wi-Fi</item>
     </string-array>
 </resources>

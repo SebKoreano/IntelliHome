@@ -161,12 +161,38 @@
     <string name="labelTitulo">Título da residência:</string>
     <string name="inputTitulo">Insira um título para sua residência</string>
     <string name="errorTitulo">O título não pode estar vazio</string>
+    <string name="seleccionar_rango_fechas">Selecione o intervalo de datas</string>
+    <string name="de_fecha">De: %1$s a: %2$s</string>
+    <string name="btn_seleccionar_rango">Selecionar intervalo de datas</string>
+    <string name="rango_seleccionado">O intervalo selecionado aparecerá aqui</string>
+    <string name="seleccionar_rango_de_fechas">Selecione o período</string>
+    <string name="rango_seleccionado_aparecer_aqu">O intervalo selecionado aparecerá aqui</string>
     <string-array name="amenidades_array">
-        <item>WiFi</item>
+        <item>Cozinha equipada</item>
+        <item>Aquecimento</item>
+        <item>Ar condicionado</item>
+        <item>Wi-Fi grátis</item>
+        <item>TV a cabo</item>
+        <item>Lavadora e secadora</item>
+        <item>Jardim</item>
         <item>Piscina</item>
+        <item>Segurança</item>
         <item>Academia</item>
-        <item>Estacionamento</item>
-        <item>Restaurante</item>
-        <item>Spa</item>
+        <item>Terraço</item>
+        <item>Varanda</item>
+        <item>Quarto com banheiro</item>
+        <item>Móveis externos</item>
+        <item>Lava-louças</item>
+        <item>Cafeteira</item>
+        <item>Toalhas incluídas</item>
+        <item>Acesso a áreas comuns</item>
+        <item>Sofá-cama</item>
+        <item>Serviço de limpeza adicional</item>
+        <item>Transporte público próximo</item>
+        <item>Restaurante próximo</item>
+        <item>Área de trabalho</item>
+        <item>Entretenimento</item>
+        <item>Lareira</item>
+        <item>Wi-Fi de alta velocidade</item>
     </string-array>
 </resources>

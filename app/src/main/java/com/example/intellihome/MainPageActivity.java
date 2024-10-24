@@ -67,7 +67,8 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
 
         // Lógica para el NavigationView
         if (id == R.id.menu_profile) {
-            // Lógica para perfil
+            Intent intent = new Intent(MainPageActivity.this, AlquilarActivity.class);
+            startActivity(intent);
         } else if (id == R.id.menu_settings) {
             Intent intent = new Intent(MainPageActivity.this, ConfigActivity.class);
             startActivity(intent);

@@ -161,12 +161,38 @@
     <string name="labelTitulo">Rezidencia címe:</string>
     <string name="inputTitulo">Adjon meg egy címet a rezidenciájához</string>
     <string name="errorTitulo">A cím nem lehet üres</string>
+    <string name="seleccionar_rango_fechas">Válassza ki az időtartamot</string>
+    <string name="de_fecha">Tól: %1$s, ig: %2$s</string>
+    <string name="btn_seleccionar_rango">Időtartam kiválasztása</string>
+    <string name="rango_seleccionado">A kiválasztott időtartam itt jelenik meg</string>
+    <string name="seleccionar_rango_de_fechas">Válassza ki a dátumtartományt</string>
+    <string name="rango_seleccionado_aparecer_aqu">Itt jelenik meg a kiválasztott tartomány</string>
     <string-array name="amenidades_array">
-        <item>WiFi</item>
+        <item>Felszerelt konyha</item>
+        <item>Fűtés</item>
+        <item>Légkondicionáló</item>
+        <item>Ingyenes Wi-Fi</item>
+        <item>Kábel TV</item>
+        <item>Mosó-szárító</item>
+        <item>Kert</item>
         <item>Medence</item>
-        <item>Tornaterem</item>
-        <item>Parkolóhely</item>
-        <item>Étterem</item>
-        <item>Gyógyfürdő</item>
+        <item>Biztonság</item>
+        <item>Edzőterem</item>
+        <item>Terasz</item>
+        <item>Erkély</item>
+        <item>Fürdőszobás szoba</item>
+        <item>Kültéri bútorok</item>
+        <item>Mosogatógép</item>
+        <item>Kávéfőző</item>
+        <item>Törölközők biztosítva</item>
+        <item>Közös helyiségekhez való hozzáférés</item>
+        <item>Kinyitható kanapé</item>
+        <item>Takarítási szolgáltatás</item>
+        <item>Közeli tömegközlekedés</item>
+        <item>Közeli étterem</item>
+        <item>Dolgozósarok</item>
+        <item>Szórakozás</item>
+        <item>Kandalló</item>
+        <item>Nagy sebességű Wi-Fi</item>
     </string-array>
 </resources>

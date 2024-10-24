@@ -38,6 +38,7 @@
         <activity android:name=".PublicarCasaActivity" />
         <activity android:name=".MapActivity" />
         <activity android:name=".LightControlActivity" />
+        <activity android:name=".AlquilarActivity" />
 
 
         <activity

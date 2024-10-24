@@ -114,6 +114,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }).start();
 
+            Intent intent = new Intent(MainActivity.this, MainPageActivity.class);
+            startActivity(intent);
+
         });
 
         rememberMeCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
