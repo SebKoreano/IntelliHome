@@ -26,9 +26,6 @@
         android:background="@drawable/croquis"
         app:layout_constraintTop_toBottomOf="@+id/tvTitulo">
 
-        <!-- Primer grupo de botones (izquierda) -->
-
-        <!-- Segundo grupo de botones (derecha) -->
         <LinearLayout
             android:id="@+id/leftButtonGroup"
             android:layout_width="wrap_content"

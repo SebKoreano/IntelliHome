@@ -1,9 +1,12 @@
 package com.example.intellihome;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -31,6 +34,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     private SearchView searchView;
     private RecyclerView recyclerView;
     private List<PropertyModule> elements, originalElements;
+    private ImageButton tagsbtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         searchView = findViewById(R.id.mainpage_search_bar);
         bottomNavigationView = findViewById(R.id.bottom_nav);
         recyclerView = findViewById(R.id.recyclerView);
+        tagsbtn = findViewById(R.id.tags);
 
         navigationView.bringToFront();
         setSupportActionBar(toolbar);
@@ -60,6 +65,63 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
                 return MainPageActivity.this.onNavigationItemSelected(menuItem);
             }
         });
+
+        tagsbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMultiSelectDialog();
+            }
+        });
+    }
+
+    private void showMultiSelectDialog() {
+        // Opciones de tags para seleccionar
+        String[] tags = {"Wi-Fi", "Parking", "Pool", "Gym", "Laundry"};
+        boolean[] checkedTags = new boolean[tags.length];
+        List<String> selectedTags = new ArrayList<>();
+
+        // Configuración del diálogo
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainPageActivity.this);
+        builder.setTitle("Select Tags");
+
+        // Checkbox para múltiples selecciones
+        builder.setMultiChoiceItems(tags, checkedTags, (dialog, which, isChecked) -> {
+            if (isChecked) {
+                selectedTags.add(tags[which]);
+            } else {
+                selectedTags.remove(tags[which]);
+            }
+        });
+
+        // Botón OK para buscar con los tags seleccionados
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            searchByTags(selectedTags); // Llamada al método para filtrar por tags
+        });
+
+        // Botón Cancel para cerrar el diálogo
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        // Mostrar el diálogo
+        builder.create().show();
+    }
+
+    private void searchByTags(List<String> selectedTags) {
+        List<PropertyModule> filteredProperties = new ArrayList<>();
+
+        // Filtrar las propiedades que tienen al menos un tag seleccionado
+        for (PropertyModule property : originalElements) {
+            for (String tag : selectedTags) {
+                if (property.getAmenities().contains(tag)) {
+                    filteredProperties.add(property);
+                    break;
+                }
+            }
+        }
+
+        // Actualizar la lista de propiedades en el RecyclerView
+        elements.clear();
+        elements.addAll(filteredProperties);
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 
     public void initListener() {
