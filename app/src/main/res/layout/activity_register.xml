@@ -9,6 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/background"
         android:background="@color/mainColor"/>
 
     <ImageView
@@ -28,7 +29,7 @@
         android:layout_marginBottom="-20dp"
         app:cardCornerRadius="28dp">
 
-        <ScrollView
+        <com.example.intellihome.CustomScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fillViewport="true">
@@ -40,6 +41,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/signUp"
@@ -227,6 +229,7 @@
                             android:id="@+id/selectCasa"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:inputType="none"
                             android:hint="@string/prompt_casa_preferida" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -244,6 +247,7 @@
                             android:id="@+id/selectVehiculo"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:inputType="none"
                             android:hint="@string/prompt_vehiculo" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
@@ -258,13 +262,16 @@
                         android:id="@+id/selectDomicilio"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:inputType="none"
                         android:hint="@string/prompt_domicilio" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <DatePicker
+                    android:gravity="center"
                     android:id="@+id/datePicker"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -333,6 +340,7 @@
                         android:orientation="vertical">
 
                         <DatePicker
+                            android:layout_marginTop="20dp"
                             android:id="@+id/expDatePicker"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
@@ -377,6 +385,6 @@
                     android:textStyle="bold"
                     app:cornerRadius="32dp"/>
             </LinearLayout>
-        </ScrollView>
+        </com.example.intellihome.CustomScrollView>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

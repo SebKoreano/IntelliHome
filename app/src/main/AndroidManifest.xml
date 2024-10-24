@@ -2,19 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-<uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <!-- Agrega otros permisos según sea necesario -->
-
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
-
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" /> <!-- Agrega otros permisos según sea necesario -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
-        android:allowBackup="true"
         android:name=".GlobalColor"
+        android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/logo"
@@ -26,20 +25,18 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyC5Xy3Y-UblR89jL0Ig3ffdmirmgkXejvQ"
-            />
+            android:value="AIzaSyC5Xy3Y-UblR89jL0Ig3ffdmirmgkXejvQ" />
 
+        <activity android:name=".HouseRental" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".RecuperationActivity" />
         <activity android:name=".ConfigActivity" />
         <activity android:name=".ColorWheel" />
         <activity android:name=".PhotoManager" />
-        <activity android:name=".MainPageActivity"/>
+        <activity android:name=".MainPageActivity" />
         <activity android:name=".PublicarCasaActivity" />
         <activity android:name=".MapActivity" />
         <activity android:name=".LightControlActivity" />
-
-
         <activity
             android:name=".MainActivity"
             android:exported="true">

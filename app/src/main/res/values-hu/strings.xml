@@ -155,10 +155,10 @@
     <string name="validarcheckInCheckOut">El kell fogadnia a be- és kijelentkezés feltételeit</string>
     <string name="ok">Rendben</string>
     <string name="seleccionAmenidades">Válassza a Felszerelések lehetőséget</string>
-    <string name="amenidadSeleccionadas">Válogatott szolgáltatások: </string>
-    <string name="amenidadesSeleccionadas">Kiválasztott: </string>
+    <string name="amenidadSeleccionadas">Válogatott szolgáltatások</string>
+    <string name="amenidadesSeleccionadas">Kiválasztott</string>
     <string name="errorUbicacion">A helyszín nem sikerült</string>
-    <string name="labelTitulo">Rezidencia címe:</string>
+    <string name="labelTitulo">Rezidencia címe</string>
     <string name="inputTitulo">Adjon meg egy címet a rezidenciájához</string>
     <string name="errorTitulo">A cím nem lehet üres</string>
     <string-array name="amenidades_array">
@@ -169,4 +169,6 @@
         <item>Étterem</item>
         <item>Gyógyfürdő</item>
     </string-array>
+    <string name="Propietario">Tulajdonos</string>
+    <string name="Rent">Bérlés</string>
 </resources>

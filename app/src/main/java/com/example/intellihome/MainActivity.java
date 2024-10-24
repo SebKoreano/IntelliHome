@@ -3,8 +3,10 @@ package com.example.intellihome;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -49,10 +51,15 @@ public class MainActivity extends AppCompatActivity {
         TextView btnRecoverPassword = findViewById(R.id.btnRecoverPassword);
         ImageView btnAbout = findViewById(R.id.btnAbout);
         ImageView btnTogglePassword = findViewById(R.id.btnTogglePassword);
+        View background = findViewById(R.id.background);
+        TextView title = findViewById(R.id.appName);
 
-        GlobalColor globalVariables = (GlobalColor) getApplicationContext();
-        int currentColor = globalVariables.getCurrentColor();
+        GlobalColor globalColor = (GlobalColor) getApplication();
+        int currentColor =  globalColor.getCurrentColor();
+
         btnLogin.setBackgroundColor(currentColor);
+        background.setBackgroundColor(currentColor);
+        title.setTextColor(currentColor);
 
         //Accion del boton para ver o no la contraseña
         btnTogglePassword.setOnClickListener(v -> {
@@ -114,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }).start();
 
+            // Short-Cut
+            moveToMainPage();
         });
 
         rememberMeCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -128,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnRecoverPassword.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, RecuperationActivity.class);
+            Intent intent = new Intent(MainActivity.this, LightControlActivity.class);
             startActivity(intent);
         });
     }
