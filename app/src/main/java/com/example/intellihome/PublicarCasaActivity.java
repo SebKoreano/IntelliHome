@@ -29,6 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -161,6 +162,9 @@ public class PublicarCasaActivity extends AppCompatActivity {
                     subirFoto();
 
                     mostrarReglas();
+
+                    Intent intent = new Intent(PublicarCasaActivity.this, MainPageActivity.class);
+                    startActivity(intent);
                 }
             }
         });
@@ -203,7 +207,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
         crearCarpeta(carpetaVivienda);
 
         StorageReference carpetaRef = FirebaseStorage.getInstance().getReference(carpetaVivienda);
-        crearYSubirTxt(carpetaRef.child("info.txt"));
+        crearYSubirTxt(carpetaVivienda);
 
         for (int i = 0; i < listaDeFotos.size(); i++) {
             Bitmap bit = listaDeFotos.get(i);
@@ -468,6 +472,36 @@ public class PublicarCasaActivity extends AppCompatActivity {
         }
     }
 
+    private void crearArchivo(String rutaCarpeta, String nombreArchivo) {
+        try {
+            // Ruta completa combinada
+            String rutaCompleta = rutaCarpeta + "/" + nombreArchivo;
+
+            // Obtener la referencia al Storage de Firebase
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReference();
+
+            // Crear una referencia a la ruta completa
+            StorageReference archivoRef = storageRef.child(rutaCompleta);
+
+            // Crear un archivo vacío (bytes vacíos)
+            byte[] contenidoBytes = new byte[0];
+
+            // Subir el archivo vacío a Firebase Storage
+            UploadTask uploadTask = archivoRef.putBytes(contenidoBytes);
+
+            // Manejar el éxito o fallo de la subida
+            uploadTask.addOnSuccessListener(taskSnapshot -> {
+                System.out.println("Archivo vacío creado y subido exitosamente: " + nombreArchivo);
+            }).addOnFailureListener(e -> {
+                System.err.println("Error al subir el archivo: " + e.getMessage());
+            });
+
+        } catch (Exception e) {
+            System.err.println("Error al crear el archivo: " + e.getMessage());
+        }
+    }
+
     private Uri getUriFromBitmap(Bitmap bitmap) {
         // Guardar el bitmap en un archivo temporal
         try {
@@ -484,63 +518,43 @@ public class PublicarCasaActivity extends AppCompatActivity {
         }
     }
 
-    private void crearYSubirTxt(StorageReference storageRef) {
-        try {
-            // Crear un StringBuilder para formar el contenido del archivo
-            StringBuilder contenidoArchivo = new StringBuilder();
-            Spinner vehiculo = findViewById(R.id.spinnerVehiculo);
-            Spinner casa = findViewById(R.id.spinnerTipoCasa);
-            String nombreCasa = inputTitulo.getText().toString();
-            String descripcionCasa = descripcionInput.getText().toString();
-            String precioPorNoche = precioInput.getText().toString();
-            GlobalColor globalVariable = (GlobalColor) getApplication();
-            List<String> reglasVivienda =   obtenerTextosReglas();
+    private void crearYSubirTxt(String storageRef) {
 
+        //String por publicar
+        Spinner vehiculo = findViewById(R.id.spinnerVehiculo);
+        Spinner casa = findViewById(R.id.spinnerTipoCasa);
+        String nombreCasa = inputTitulo.getText().toString();
+        String descripcionCasa = descripcionInput.getText().toString();
+        String precioPorNoche = precioInput.getText().toString();
+        GlobalColor globalVariable = (GlobalColor) getApplication();
+        List<String> reglasVivienda =   obtenerTextosReglas();
 
+        // Añadir líneas de ejemplo (puedes reemplazar con tus propios datos)
+        crearArchivo(storageRef, "DuenoDeVivienda:" + globalVariable.getCurrentuserName());
+        crearArchivo(storageRef, "NombreDeVivienda:"+ nombreCasa );
+        crearArchivo(storageRef, "DescripcionGeneral:" + descripcionCasa);
+        crearArchivo(storageRef, "NumeroHabitaciones:" + numHabitacionesPicker.getValue());
+        crearArchivo(storageRef, "Precio:" + precioPorNoche);
+        crearArchivo(storageRef,"Longitud:" + longitudHome );
+        crearArchivo(storageRef,"Latitud:" + latitudHome );
 
-                // Añadir líneas de ejemplo (puedes reemplazar con tus propios datos)
-            contenidoArchivo.append("DuenoDeVivienda:").append(globalVariable.getCurrentuserName()).append("\n");
-            contenidoArchivo.append("NombreDeVivienda:").append(nombreCasa).append("\n");
-            contenidoArchivo.append("DescripcionGeneral:").append(descripcionCasa).append("\n");
-            contenidoArchivo.append("NumeroHabitaciones:").append(numHabitacionesPicker.getValue()).append("\n");
-            contenidoArchivo.append("Precio:").append(precioPorNoche).append("\n");
-            contenidoArchivo.append("Longitud:").append(longitudHome).append("\n");
-            contenidoArchivo.append("Latitud:").append(latitudHome).append("\n");
-
-            int j = 0;
-            for (String strg:reglasVivienda
-                 ) {
-                contenidoArchivo.append("Regla").append(j).append(":").append(strg).append("\n");
-                j++;
-            }
-
-            int i = 0;
-            for (String strg: selectedAmenidades
-                 ) {
-                contenidoArchivo.append("Amenidad").append(i).append(":").append(strg).append("\n");
-                i++;
-            }
-            contenidoArchivo.append("TipoCasa:").append(casa.getSelectedItem().toString()).append("\n");
-            contenidoArchivo.append("VehiculoPreferencia:").append(vehiculo.getSelectedItem().toString()).append("\n");
-
-
-            // Convertir el contenido a bytes
-            byte[] data = contenidoArchivo.toString().getBytes("UTF-8");
-
-            // Subir el archivo al Storage en la referencia dada
-            storageRef.putBytes(data)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        // Manejar el éxito de la subida
-                        System.out.println("Archivo subido exitosamente a: " + storageRef.getPath());
-                    })
-                    .addOnFailureListener(e -> {
-                        // Manejar errores en la subida
-                        System.err.println("Error al subir el archivo: " + e.getMessage());
-                    });
-
-        } catch (Exception e) {
-            System.err.println("Error al crear o subir el archivo: " + e.getMessage());
+        int j = 0;
+        for (String strg:reglasVivienda
+             ) {
+            String salida = "Regla" + j + ":"+ strg;
+            crearArchivo(storageRef, salida);
+            j++;
         }
+
+        int i = 0;
+        for (String strg: selectedAmenidades
+             ) {
+            String salida = "Amenidad" + i + ":" + strg;
+            crearArchivo(storageRef, salida);
+            i++;
+        }
+        crearArchivo(storageRef, "TipoCasa:" + casa.getSelectedItem().toString());
+        crearArchivo(storageRef, "VehiculoPreferencia:" + vehiculo.getSelectedItem().toString());
     }
 
     // Método de subida ajustado, con nombre único para cada imagen
@@ -570,5 +584,64 @@ public class PublicarCasaActivity extends AppCompatActivity {
             Toast.makeText(this, "Por favor selecciona una imagen", Toast.LENGTH_SHORT).show();
         }
     }
-    
+
+
+    //Funcion de respaldo por si método usado actualmente falla. Este método mete toda la info en .txt
+    private void crearYSubirTxt_Borrado(StorageReference storageRef) {
+        try {
+            // Crear un StringBuilder para formar el contenido del archivo
+            StringBuilder contenidoArchivo = new StringBuilder();
+            Spinner vehiculo = findViewById(R.id.spinnerVehiculo);
+            Spinner casa = findViewById(R.id.spinnerTipoCasa);
+            String nombreCasa = inputTitulo.getText().toString();
+            String descripcionCasa = descripcionInput.getText().toString();
+            String precioPorNoche = precioInput.getText().toString();
+            GlobalColor globalVariable = (GlobalColor) getApplication();
+            List<String> reglasVivienda =   obtenerTextosReglas();
+
+
+
+            // Añadir líneas de ejemplo (puedes reemplazar con tus propios datos)
+            contenidoArchivo.append("DuenoDeVivienda:").append(globalVariable.getCurrentuserName()).append("\n");
+            contenidoArchivo.append("NombreDeVivienda:").append(nombreCasa).append("\n");
+            contenidoArchivo.append("DescripcionGeneral:").append(descripcionCasa).append("\n");
+            contenidoArchivo.append("NumeroHabitaciones:").append(numHabitacionesPicker.getValue()).append("\n");
+            contenidoArchivo.append("Precio:").append(precioPorNoche).append("\n");
+            contenidoArchivo.append("Longitud:").append(longitudHome).append("\n");
+            contenidoArchivo.append("Latitud:").append(latitudHome).append("\n");
+
+            int j = 0;
+            for (String strg:reglasVivienda
+            ) {
+                contenidoArchivo.append("Regla").append(j).append(":").append(strg).append("\n");
+                j++;
+            }
+
+            int i = 0;
+            for (String strg: selectedAmenidades
+            ) {
+                contenidoArchivo.append("Amenidad").append(i).append(":").append(strg).append("\n");
+                i++;
+            }
+            contenidoArchivo.append("TipoCasa:").append(casa.getSelectedItem().toString()).append("\n");
+            contenidoArchivo.append("VehiculoPreferencia:").append(vehiculo.getSelectedItem().toString()).append("\n");
+
+
+            // Convertir el contenido a bytes
+            byte[] data = contenidoArchivo.toString().getBytes("UTF-8");
+
+            // Subir el archivo al Storage en la referencia dada
+            storageRef.putBytes(data)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Manejar el éxito de la subida
+                        System.out.println("Archivo subido exitosamente a: " + storageRef.getPath());
+                    })
+                    .addOnFailureListener(e -> {
+                        // Manejar errores en la subida
+                        System.err.println("Error al subir el archivo: " + e.getMessage());
+                    });
+        } catch (Exception e) {
+            System.err.println("Error al crear o subir el archivo: " + e.getMessage());
+        }
+    }
 }

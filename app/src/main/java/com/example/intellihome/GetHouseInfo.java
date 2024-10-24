@@ -5,9 +5,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.BufferedReader;
@@ -36,7 +39,8 @@ public class GetHouseInfo extends Application {
     }
 
     public void SetAllInfo() {
-        String ubicacion = "Viviendas Arrendadas/" + this.houseName + "/info.txt";
+        String ubicacion = "Viviendas Arrendadas/" + this.houseName;
+        procesarDatos(obtenerNombresDeElementos(ubicacion));
     }
 
     public List<String> getReglas() {
@@ -73,6 +77,48 @@ public class GetHouseInfo extends Application {
 
     public String getTipoCasa() {
         return this.tipoCasa;
+    }
+
+    private List<String> obtenerNombresDeElementos(String carpetaBase) {
+        // Inicializa FirebaseStorage
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+
+        // Referencia a la carpeta base pasada como parámetro
+        StorageReference carpetaRef = storageRef.child(carpetaBase);
+
+        // Lista para guardar los nombres de carpetas y archivos
+        List<String> listaElementos = new ArrayList<>();
+
+        // Llama a listAll() para obtener todos los items dentro de la carpeta especificada
+        carpetaRef.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
+            @Override
+            public void onSuccess(ListResult listResult) {
+                // Obtén los directorios dentro de la carpeta base (subcarpetas)
+                for (StorageReference prefix : listResult.getPrefixes()) {
+                    // Extrae el nombre de cada carpeta
+                    String folderName = prefix.getName();
+                    listaElementos.add("Carpeta: " + folderName.trim());
+                }
+
+                // Obtén los archivos dentro de la carpeta base
+                for (StorageReference item : listResult.getItems()) {
+                    // Extrae el nombre de cada archivo
+                    String fileName = item.getName();
+                    listaElementos.add("Archivo: " + fileName.trim());
+                }
+
+                // Opcional: Convierte la lista de nombres a un solo string para visualizar
+                StringBuilder elementosString = new StringBuilder();
+                for (String nombre : listaElementos) {
+                    elementosString.append(nombre).append("\n");
+                }
+            }
+        }).addOnFailureListener(e -> {
+            System.err.println("Error al obtener los elementos: " + e.getMessage());
+        });
+
+        return listaElementos;
     }
 
     public void procesarDatos(List<String> lineas) {
