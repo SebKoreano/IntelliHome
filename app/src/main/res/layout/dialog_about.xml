@@ -7,12 +7,11 @@
     android:padding="16dp">
 
     <ImageView
-        android:id="@+id/logoApp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/logo"
-        android:layout_gravity="center"
-        android:contentDescription="App Logo" />
+        android:id="@+id/team"
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:src="@drawable/team"
+        android:layout_gravity="center" />
 
     <TextView
         android:id="@+id/appName"

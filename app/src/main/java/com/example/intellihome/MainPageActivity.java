@@ -22,7 +22,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainPageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainPageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -30,7 +30,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     private Toolbar toolbar;
     private SearchView searchView;
     private RecyclerView recyclerView;
-    List<PropertyModule> elements;
+    private List<PropertyModule> elements, originalElements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +50,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         toggle.syncState();
 
         initModules();
+        initListener();
 
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -61,8 +62,13 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         });
     }
 
+    public void initListener() {
+        searchView.setOnQueryTextListener(this);
+    }
+
     public void initModules() {
         elements = new ArrayList<>();
+        originalElements = new ArrayList<>();
 
         List<String> rules1 = new ArrayList<>();
         rules1.add("No smoking");
@@ -120,6 +126,8 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         elements.add(property4);
         elements.add(property5);
 
+        originalElements.addAll(elements);
+
         CardViewAdapter cardViewAdapter = new CardViewAdapter(elements, this, new CardViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(PropertyModule obj) {
@@ -129,6 +137,24 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(cardViewAdapter);
+    }
+
+    public void filter(String strSearch) {
+        if (strSearch.length() == 0) {
+            elements.clear();
+            elements.addAll(originalElements);
+        } else {
+            List<PropertyModule> filterElements = new ArrayList<>();
+
+            for (PropertyModule property : originalElements) {
+                if (property.getTitle().toLowerCase().contains(strSearch)) {
+                    filterElements.add(property);
+                }
+            }
+
+            elements.clear();
+            elements.addAll(filterElements);
+        }
     }
 
     @Override
@@ -165,4 +191,18 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         intent.putExtra("property", item);
         startActivity(intent);
     }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        filter(newText.toLowerCase());
+
+        recyclerView.getAdapter().notifyDataSetChanged();
+        return true;
+    }
+
 }
