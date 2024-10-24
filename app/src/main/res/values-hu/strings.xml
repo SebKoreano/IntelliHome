@@ -169,4 +169,5 @@
         <item>Étterem</item>
         <item>Gyógyfürdő</item>
     </string-array>
+    <string name="Propietario">Tulajdonos</string>
 </resources>

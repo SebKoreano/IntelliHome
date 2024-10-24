@@ -169,4 +169,5 @@
         <item>Restaurant</item>
         <item>Spa</item>
     </string-array>
+    <string name="Propietario">Owner</string>
 </resources>
