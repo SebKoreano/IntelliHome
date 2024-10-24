@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -19,6 +20,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainPageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -28,7 +30,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     private Toolbar toolbar;
     private SearchView searchView;
     private RecyclerView recyclerView;
-    private ArrayList<CardViewObj> arrayList = new ArrayList<>();
+    List<PropertyModule> elements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,23 +44,12 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         bottomNavigationView = findViewById(R.id.bottom_nav);
         recyclerView = findViewById(R.id.recyclerView);
 
-        /*
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        arrayList.add(new CardViewObj(300, "9.17", "Casas de Casas", "(123,456)", "casa0"));
-        arrayList.add(new CardViewObj(300, "8.16", "Casas y Casas", "(0,46)", "casaI"));
-        arrayList.add(new CardViewObj(300, "7.15", "Casas o Casas", "(23,4)", "casaII"));
-        arrayList.add(new CardViewObj(300, "6.14", "Casas e Casas", "(13,78)", "casaIII"));
-
-        CardViewObjRecycleView cardViewObjRecycleView = new CardViewObjRecycleView(arrayList, this);
-        recyclerView.setAdapter(cardViewObjRecycleView);
-
-         */
-
         navigationView.bringToFront();
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav_drawer, R.string.close_nav_drawer);
         toggle.syncState();
+
+        initModules();
 
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -70,11 +61,80 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         });
     }
 
+    public void initModules() {
+        elements = new ArrayList<>();
+
+        List<String> rules1 = new ArrayList<>();
+        rules1.add("No smoking");
+        rules1.add("No pets");
+
+        List<String> amenities1 = new ArrayList<>();
+        amenities1.add("Pool");
+        amenities1.add("Wi-Fi");
+        amenities1.add("Parking");
+
+        List<String> rules2 = new ArrayList<>();
+        rules2.add("No parties");
+        rules2.add("No loud music");
+
+        List<String> amenities2 = new ArrayList<>();
+        amenities2.add("Gym");
+        amenities2.add("Laundry");
+        amenities2.add("Wi-Fi");
+
+        List<String> rules3 = new ArrayList<>();
+        rules3.add("No smoking");
+        rules3.add("No loud music");
+
+        List<String> amenities3 = new ArrayList<>();
+        amenities3.add("Pool");
+        amenities3.add("Parking");
+
+        List<String> rules4 = new ArrayList<>();
+        rules4.add("No pets");
+        rules4.add("No loud music");
+
+        List<String> amenities4 = new ArrayList<>();
+        amenities4.add("Wi-Fi");
+        amenities4.add("Gym");
+        amenities4.add("Laundry");
+
+        List<String> rules5 = new ArrayList<>();
+        rules5.add("No parties");
+        rules5.add("No smoking");
+
+        List<String> amenities5 = new ArrayList<>();
+        amenities5.add("Parking");
+        amenities5.add("Wi-Fi");
+        amenities5.add("Pool");
+
+        PropertyModule property1 = new PropertyModule("House 1", "Apartment", "No parking", "Beautiful apartment with 2 rooms", "2", "1000", "John Doe", "12.34", "56.78", rules1, amenities1);
+        PropertyModule property2 = new PropertyModule("House 2", "House", "Garage", "Spacious house with a garden", "3", "1500", "Jane Smith", "23.45", "67.89", rules2, amenities2);
+        PropertyModule property3 = new PropertyModule("House 3", "Condo", "Street parking", "Modern condo with pool access", "1", "1200", "Bob Johnson", "34.56", "78.90", rules3, amenities3);
+        PropertyModule property4 = new PropertyModule("House 4", "Villa", "Garage", "Luxury villa near the beach", "5", "3000", "Alice Brown", "45.67", "89.01", rules4, amenities4);
+        PropertyModule property5 = new PropertyModule("House 5", "Cabin", "No parking", "Cozy cabin in the mountains", "2", "800", "Charlie Davis", "56.78", "90.12", rules5, amenities5);
+
+        elements.add(property1);
+        elements.add(property2);
+        elements.add(property3);
+        elements.add(property4);
+        elements.add(property5);
+
+        CardViewAdapter cardViewAdapter = new CardViewAdapter(elements, this, new CardViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(PropertyModule obj) {
+                moveToHouseRental(obj);
+            }
+        });
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(cardViewAdapter);
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int id = menuItem.getItemId();
 
-        // Lógica para el NavigationView
         if (id == R.id.menu_profile) {
             // Lógica para perfil
         } else if (id == R.id.menu_settings) {
@@ -88,17 +148,21 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
             startActivity(intent);
         }
 
-        // Lógica para el BottomNavigationView
         if (id == R.id.bottom_nav_home) {
             Intent intent = new Intent(MainPageActivity.this, ConfigActivity.class);
             startActivity(intent);
             return true;
         } else if (id == R.id.bottom_nav_search) {
-            // Lógica para buscar
             return true;
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void moveToHouseRental(PropertyModule item) {
+        Intent intent = new Intent(this, HouseRental.class);
+        intent.putExtra("property", item);
+        startActivity(intent);
     }
 }
