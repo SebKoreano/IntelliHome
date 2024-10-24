@@ -1,133 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".HouseRental">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/background"
+        android:background="@color/mainColor" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <!-- Title -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Title:"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/property_title"
+        <ImageView
+            android:id="@+id/property_image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sample Title" />
+            android:layout_height="0dp"
+            android:src="@drawable/landscape"
+            android:layout_weight="0.35"
+            android:scaleType="centerCrop"/>
 
-        <!-- Type -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Type:"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/property_type"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="House" />
+            android:layout_height="0dp"
+            android:layout_alignParentBottom="true"
+            app:cardCornerRadius="28dp"
+            android:layout_weight="0.7"
+            android:layout_marginBottom="-20dp">
 
-        <!-- Vehicle -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Vehicle:"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/property_vehicle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Garage" />
+            <ScrollView
+                android:id="@+id/scrollview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true">
 
-        <!-- Description -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Description:"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/property_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sample Description" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="28dp">
 
-        <!-- Rooms -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rooms:"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/property_rooms"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="3" />
+                    <TextView
+                        android:id="@+id/property_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Título de la Casa"
+                        android:textStyle="bold" />
 
-        <!-- Money -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Price:"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/property_money"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="$1500" />
+                    <TextView
+                        android:id="@+id/property_owner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Propietario:"
+                        android:textStyle="bold" />
 
-        <!-- Owner -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Owner:"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/property_owner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="John Doe" />
+                    <TextView
+                        android:id="@+id/property_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tipo de casa: "
+                        android:textStyle="bold" />
 
-        <!-- Coordinates -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Coordinates:"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/property_coords"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="X: 12.34, Y: 56.78" />
+                    <TextView
+                        android:id="@+id/property_vehicle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Vehículo preferido: "
+                        android:textStyle="bold" />
 
-        <!-- Rules -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rules:"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/property_rules"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="No smoking, No pets" />
+                    <TextView
+                        android:id="@+id/property_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Descripción: "
+                        android:textStyle="bold"/>
 
-        <!-- Amenities -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Amenities:"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/property_amenities"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Pool, Wi-Fi, Parking" />
+                    <TextView
+                        android:id="@+id/property_rooms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Número de Habitaciones: "
+                        android:textStyle="bold"/>
 
+                    <TextView
+                        android:id="@+id/property_money"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Precio por Noche: "
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/property_coords"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ubicación: "
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/property_rules"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Reglas de Uso: "
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/property_amenities"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Amenidades: "
+                        android:textStyle="bold"/>
+
+                    <CheckBox
+                        android:id="@+id/checkInCheckOutCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Check-in/Check-out"/>
+                </LinearLayout>
+            </ScrollView>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
-</ScrollView>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:id="@+id/btnPublish"
+            android:backgroundTint="@color/mainColor"
+            android:text="Alquilar"
+            android:textStyle="bold"
+            app:cornerRadius="32dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="40dp"/>
+</RelativeLayout>
