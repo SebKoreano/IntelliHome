@@ -1,0 +1,12 @@
+
+DuenoDeVivienda:IRU2004
+NombreDeVivienda:Xd
+DescripcionGeneral:jfjdjfj
+NumeroHabitaciones:1
+Precio:123456
+Longitud:-83.9356105774641
+Latitud:9.927849967973497
+Amenidad0:Spa
+Amenidad1:Restaurant
+TipoCasa:Cabin
+VehiculoPreferencia:PickUp

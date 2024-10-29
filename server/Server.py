@@ -71,8 +71,20 @@ class ChatServer:
                     elif message.startswith("InformacionDeUsuario_"):
                         self.guardarInforDeUsuario(message[len("InformacionDeUsuario_"):])
                         
-                    elif message.startswith("ObtenerInformacion_"):
-                        self.leerInformacionDeUsuario(message[len("ObtenerInformacion_"):])
+                    elif message.startswith("ObtenerInformacionUsuario_"):
+                        message = message[len("ObtenerInformacionUsuario_"):]
+                        info = message.split("_")
+                        self.leerInformacionDeUsuario(info[0], info[1])
+
+
+                    elif message.startswith("InformacionDeVivienda_"):
+                        self.guardarInforDeVivienda(message[len("InformacionDeVivienda_"):])
+
+                    elif message.startswith("ObtenerInformacionVivienda_"):
+                        message = message[len("ObtenerInformacionVivienda_"):]
+                        info = message.split("_")
+                        self.leerInformacionDeVivienda(info[0], info[1])
+
 
                     elif message.startswith("Login_"):
                         print(message)
@@ -81,7 +93,6 @@ class ChatServer:
                     elif message.startswith("Recuperacion_"):
                         print(message)
                         self.existe_correo(message[len("Recuperacion_"):], client_socket)
-                        #self.recuperar_contraseña(self,"sebasboza.cr@gmail.com",None) 
                     else:
                         print("No llegó mensaje relevante")
             except Exception as e:
@@ -99,9 +110,7 @@ class ChatServer:
 
     #Envia mensaje a socket 
     def send_message_to_respond_request(self, client_socket, message):
-        """Enviar una respuesta al cliente con el estado del inicio de sesión."""
         threading.Thread(target=self.broadcast, args=(message +"\n", client_socket)).start()
-     # Enviar al cliente que hizo la solicitud
 
     #Escriba cuenta creada en .txt
     def write_message_to_file(self, message):
@@ -354,6 +363,7 @@ class ChatServer:
         self.cambiar_Contraseña(correo, new_pass, Tipo)  # Cambiar la contraseña en la matriz
 
 
+
     #De aquí en adelante estará la lógica para guardar y acceder a InformacionDeUsuarios
     def guardarInforDeUsuario(self, info_usuario,):
         # Buscar el nombre de usuario en la cadena de entrada
@@ -375,7 +385,6 @@ class ChatServer:
         with open(ruta_archivo, 'w') as archivo:
             archivo.write(info_usuario)
 
-
     def leerInformacionDeUsuario(self, informacionRequerida, userName):
         ruta_archivo = f'server/InformacionDeUsuarios/{userName}.txt'
         
@@ -389,12 +398,65 @@ class ChatServer:
             for linea in archivo:
                 # Verificar si la línea contiene la información requerida
                 if linea.startswith(f"{informacionRequerida}:"):
-                    return linea.split(":", 1)[1].strip()
+                    return self.send_message_to_respond_request(linea.split(":", 1)[1].strip())
         
         # Si no se encuentra la información requerida, retornar None
         print(f"No se encontró '{informacionRequerida}' en {ruta_archivo}.")
         return None
 
+
+
+
+    #Aqiuí estarán las funciones para guardar y acceder a InformacionDeViviendas
+    def guardarInforDeVivienda(self, info_usuario,):
+        # Buscar el nombre de usuario en la cadena de entrada
+        username = None
+        ruta='server/InformacionDeVivienda/'
+        for linea in info_usuario.splitlines():
+            if linea.startswith("NombreDeVivienda:"):
+                username = linea.split(":", 1)[1].strip()
+                break
+            
+        # Crear la ruta si no existe
+        os.makedirs(ruta, exist_ok=True)
+        
+        # Definir el nombre del archivo usando el username extraído
+        nombre_archivo = f"{username}.txt"
+        ruta_archivo = os.path.join(ruta, nombre_archivo)
+        
+        # Guardar la información en el archivo
+        with open(ruta_archivo, 'w') as archivo:
+            archivo.write(info_usuario)
+
+
+    def leerInformacionDeVivienda(self, informacionRequerida, nombreVivienda):
+        ruta_archivo = f'server/InformacionDeVivienda/{nombreVivienda}.txt'
+        
+        # Verificar si el archivo existe
+        if not os.path.exists(ruta_archivo):
+            print(f"El archivo {ruta_archivo} no existe.")
+            return None
+        
+        # Lista para almacenar las coincidencias de la información requerida
+        resultados = []
+        
+        # Leer el archivo y buscar todas las ocurrencias de la información requerida
+        with open(ruta_archivo, 'r') as archivo:
+            for linea in archivo:
+                # Verificar si la línea comienza con la clave 'informacionRequerida:'
+                if linea.startswith(f"{informacionRequerida}:"):
+                    # Extraer el valor después de 'informacionRequerida:'
+                    resultado = linea.split(":", 1)[1].strip()
+                    resultados.append(resultado)
+        
+        # Unir todos los resultados encontrados con guiones bajos "_"
+        if resultados:
+            resultado_final = "_".join(resultados)
+            return resultado_final  # Devuelve la cadena unida
+
+        # Si no se encuentra la información requerida, retornar None
+        print(f"No se encontró '{informacionRequerida}' en {ruta_archivo}.")
+        return None
 
 
 def generar_nueva_contraseña():

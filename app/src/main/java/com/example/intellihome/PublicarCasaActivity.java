@@ -21,6 +21,7 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import android.util.Log;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -29,13 +30,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class PublicarCasaActivity extends AppCompatActivity {
 
@@ -51,14 +54,18 @@ public class PublicarCasaActivity extends AppCompatActivity {
     private boolean[] selectedItems;   // Lista que guarda qué opciones están seleccionadas
     private ArrayList<String> selectedAmenidades;  // Lista para almacenar las opciones seleccionadas
     private List<Bitmap> listaDeFotos = new ArrayList<>();
-
+    private Socket socket; // Socket para la conexión
+    private PrintWriter out; // PrintWriter para enviar datos
+    private Scanner in;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publicarcasa);
-
+        // Conectar al servidor
+        connectToServer("192.168.18.206", 3535); //192.168.18.206
         // Inicializar vistas
+
         descripcionInput = findViewById(R.id.inputDescripcion);
         precioInput = findViewById(R.id.inputPrecioPorNoche);
         numHabitacionesPicker = findViewById(R.id.numHabitacionesPicker);
@@ -68,15 +75,6 @@ public class PublicarCasaActivity extends AppCompatActivity {
         linearLayout = findViewById(R.id.linearLayout);
         btnPublicar = findViewById((R.id.btnPublish));
         inputTitulo = findViewById((R.id.inputTitulo));
-        View background = findViewById(R.id.background);
-
-        GlobalColor globalColor = (GlobalColor) getApplication();
-        int currentColor =  globalColor.getCurrentColor();
-
-        btnAddReglas.setBackgroundColor(currentColor);
-        btnAddAmenidades.setBackgroundColor(currentColor);
-        btnPublicar.setBackgroundColor(currentColor);
-        background.setBackgroundColor(currentColor);
 
         // Configurar el NumberPicker
         numHabitacionesPicker.setMinValue(1);  // Valor mínimo
@@ -91,7 +89,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
         });
 
         // Lista de amenidades (opciones)
-        amenidadesArray = getResources().getStringArray(R.array.amenidades_array);
+        amenidadesArray = getResources().getStringArray(R.array.amenidades_array);  // Puedes definirlo en res/values/strings.xml
         selectedItems = new boolean[amenidadesArray.length];
         selectedAmenidades = new ArrayList<>();
 
@@ -131,7 +129,6 @@ public class PublicarCasaActivity extends AppCompatActivity {
 
         // Configura el botón para abrir el mapa
         Button btnElegirUbicacion = findViewById(R.id.btnElegirUbicacion);
-        btnElegirUbicacion.setBackgroundColor(currentColor);
         btnElegirUbicacion.setOnClickListener(v -> {
             // Lanzar la actividad de MapActivity
             Intent intent = new Intent(PublicarCasaActivity.this, MapActivity.class);
@@ -161,24 +158,29 @@ public class PublicarCasaActivity extends AppCompatActivity {
             });
         });
 
+        // Acción del botón "Publicar"
         btnPublicar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validarCampos()) {
-
                     // Lógica para publicar la casa (si todo está correcto)
                     Toast.makeText(PublicarCasaActivity.this, getString(R.string.publicarCasa), Toast.LENGTH_SHORT).show();
 
-                    subirFoto();
+                    String carpetaVivienda = "Viviendas Arrendadas/" + inputTitulo.getText().toString() + "/";
+                    crearCarpeta(carpetaVivienda);
 
-                    mostrarReglas();
+                    StorageReference carpetaRef = FirebaseStorage.getInstance().getReference(carpetaVivienda );
+                    crearYSubirTxt(carpetaRef.child("info.txt"));
 
-                    Intent intent = new Intent(PublicarCasaActivity.this, MainPageActivity.class);
-                    startActivity(intent);
+                    for (int i = 0; i < listaDeFotos.size(); i++) {
+                        Bitmap bit = listaDeFotos.get(i);
+                        Uri imageUri = getUriFromBitmap(bit);
+                        uploadPictureToFirebase(imageUri, i);
+                    }
+
                 }
             }
         });
-
 
     }
 
@@ -196,38 +198,6 @@ public class PublicarCasaActivity extends AppCompatActivity {
             }
         }
     }
-
-    //Metodo que obtiene y muestra las reglas introducidas por el usuario
-    private void mostrarReglas(){
-        // Convertir la lista de textos a una sola cadena
-        List<String> textosReglas = obtenerTextosReglas();
-        StringBuilder reglasConcatenadas = new StringBuilder();
-
-        for (String regla : textosReglas) {
-            reglasConcatenadas.append(regla).append("\n");  // Concatenar cada regla con un salto de línea
-        }
-
-        // Mostrar el resultado en un Toast
-        Toast.makeText(PublicarCasaActivity.this, reglasConcatenadas.toString(), Toast.LENGTH_LONG).show();
-    }
-
-    //Metodo que se encarga de subir las imagenes introducidas por el usuario a la base de datos
-    private void subirFoto() {
-        String carpetaVivienda = "Viviendas Arrendadas/" + inputTitulo.getText().toString() + "/";
-        crearCarpeta(carpetaVivienda);
-
-        StorageReference carpetaRef = FirebaseStorage.getInstance().getReference(carpetaVivienda);
-        crearYSubirTxt(carpetaVivienda);
-
-        for (int i = 0; i < listaDeFotos.size(); i++) {
-            Bitmap bit = listaDeFotos.get(i);
-            Uri imageUri = getUriFromBitmap(bit);
-
-            // Subir cada imagen usando el índice i como identificador
-            uploadPictureToFirebase(imageUri, i);
-        }
-    }
-
 
     // Método para validar todos los campos antes de publicar
     private boolean validarCampos() {
@@ -394,15 +364,8 @@ public class PublicarCasaActivity extends AppCompatActivity {
         ));
         // Establecer el límite de 100 caracteres
         nuevoCampo.setFilters(new InputFilter[] { new InputFilter.LengthFilter(100) });
-
-        if (tipoCampo.equals("regla")) {
-            // Asignar un id único basado en el número de regla
-            nuevoCampo.setId(View.generateViewId());  // Genera un ID único
-        }
-
         return nuevoCampo;
     }
-
 
     // Método para obtener el hint según el tipo de campo
     private String obtenerHint(String tipoCampo) {
@@ -429,29 +392,6 @@ public class PublicarCasaActivity extends AppCompatActivity {
         } else if (tipoCampo.equals("amenidad")) {
             numeroAmenidad++;
         }
-    }
-
-    // Método para obtener todos los datos de los campos de reglas
-    private List<String> obtenerTextosReglas() {
-        List<String> textosReglas = new ArrayList<>();
-
-        LinearLayout reglasLayout = findViewById(R.id.reglasLayout);
-
-        // Iterar sobre todos los hijos del LinearLayout
-        for (int i = 0; i < numeroReglas; i++) {
-            // Obtener cada EditText basado en el ID generado
-            EditText reglaCampo = (EditText) reglasLayout.getChildAt(i);
-
-            // Verificar si el campo no es nulo y añadir el texto a la lista
-            if (reglaCampo != null) {
-                String texto = reglaCampo.getText().toString().trim();
-                if (!texto.isEmpty()) {
-                    textosReglas.add(texto);
-                }
-            }
-        }
-
-        return textosReglas;
     }
 
     // Método para agregar las imágenes a la lista
@@ -482,36 +422,6 @@ public class PublicarCasaActivity extends AppCompatActivity {
         }
     }
 
-    private void crearArchivo(String rutaCarpeta, String nombreArchivo) {
-        try {
-            // Ruta completa combinada
-            String rutaCompleta = rutaCarpeta + "/" + nombreArchivo;
-
-            // Obtener la referencia al Storage de Firebase
-            FirebaseStorage storage = FirebaseStorage.getInstance();
-            StorageReference storageRef = storage.getReference();
-
-            // Crear una referencia a la ruta completa
-            StorageReference archivoRef = storageRef.child(rutaCompleta);
-
-            // Crear un archivo vacío (bytes vacíos)
-            byte[] contenidoBytes = new byte[0];
-
-            // Subir el archivo vacío a Firebase Storage
-            UploadTask uploadTask = archivoRef.putBytes(contenidoBytes);
-
-            // Manejar el éxito o fallo de la subida
-            uploadTask.addOnSuccessListener(taskSnapshot -> {
-                System.out.println("Archivo vacío creado y subido exitosamente: " + nombreArchivo);
-            }).addOnFailureListener(e -> {
-                System.err.println("Error al subir el archivo: " + e.getMessage());
-            });
-
-        } catch (Exception e) {
-            System.err.println("Error al crear el archivo: " + e.getMessage());
-        }
-    }
-
     private Uri getUriFromBitmap(Bitmap bitmap) {
         // Guardar el bitmap en un archivo temporal
         try {
@@ -528,76 +438,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
         }
     }
 
-    private void crearYSubirTxt(String storageRef) {
-
-        //String por publicar
-        Spinner vehiculo = findViewById(R.id.spinnerVehiculo);
-        Spinner casa = findViewById(R.id.spinnerTipoCasa);
-        String nombreCasa = inputTitulo.getText().toString();
-        String descripcionCasa = descripcionInput.getText().toString();
-        String precioPorNoche = precioInput.getText().toString();
-        GlobalColor globalVariable = (GlobalColor) getApplication();
-        List<String> reglasVivienda =   obtenerTextosReglas();
-
-        // Añadir líneas de ejemplo (puedes reemplazar con tus propios datos)
-        crearArchivo(storageRef, "DuenoDeVivienda:" + globalVariable.getCurrentuserName());
-        crearArchivo(storageRef, "NombreDeVivienda:"+ nombreCasa );
-        crearArchivo(storageRef, "DescripcionGeneral:" + descripcionCasa);
-        crearArchivo(storageRef, "NumeroHabitaciones:" + numHabitacionesPicker.getValue());
-        crearArchivo(storageRef, "Precio:" + precioPorNoche);
-        crearArchivo(storageRef,"Longitud:" + longitudHome );
-        crearArchivo(storageRef,"Latitud:" + latitudHome );
-
-        int j = 0;
-        for (String strg:reglasVivienda
-             ) {
-            String salida = "Regla" + j + ":"+ strg;
-            crearArchivo(storageRef, salida);
-            j++;
-        }
-
-        int i = 0;
-        for (String strg: selectedAmenidades
-             ) {
-            String salida = "Amenidad" + i + ":" + strg;
-            crearArchivo(storageRef, salida);
-            i++;
-        }
-        crearArchivo(storageRef, "TipoCasa:" + casa.getSelectedItem().toString());
-        crearArchivo(storageRef, "VehiculoPreferencia:" + vehiculo.getSelectedItem().toString());
-    }
-
-    // Método de subida ajustado, con nombre único para cada imagen
-    private void uploadPictureToFirebase(Uri imageUri, int numImagen) {
-        if (imageUri != null) {
-            // Crear una referencia a Firebase Storage
-            String nombreCasa = inputTitulo.getText().toString();
-            String direccionCreacionCarpeta = "Viviendas Arrendadas/" + nombreCasa + "/";
-
-            // Añadimos un sufijo único al nombre de la imagen usando una marca de tiempo
-            String nombreArchivo = "Imagen" + numImagen + "_" + System.currentTimeMillis();
-
-            // Crear la referencia para la carpeta del usuario
-            StorageReference carpetaRef = FirebaseStorage.getInstance().getReference(direccionCreacionCarpeta + nombreArchivo);
-
-            // Subir la imagen
-            carpetaRef.putFile(imageUri)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        // Imagen subida con éxito
-                        Toast.makeText(PublicarCasaActivity.this, "Imagen " + numImagen + " subida exitosamente", Toast.LENGTH_SHORT).show();
-                    })
-                    .addOnFailureListener(e -> {
-                        // Manejo de errores
-                        Toast.makeText(PublicarCasaActivity.this, "Error al subir la imagen " + numImagen + ": " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    });
-        } else {
-            Toast.makeText(this, "Por favor selecciona una imagen", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-    //Funcion de respaldo por si método usado actualmente falla. Este método mete toda la info en .txt
-    private void crearYSubirTxt_Borrado(StorageReference storageRef) {
+    private void crearYSubirTxt(StorageReference storageRef) {
         try {
             // Crear un StringBuilder para formar el contenido del archivo
             StringBuilder contenidoArchivo = new StringBuilder();
@@ -607,11 +448,10 @@ public class PublicarCasaActivity extends AppCompatActivity {
             String descripcionCasa = descripcionInput.getText().toString();
             String precioPorNoche = precioInput.getText().toString();
             GlobalColor globalVariable = (GlobalColor) getApplication();
-            List<String> reglasVivienda =   obtenerTextosReglas();
-
 
 
             // Añadir líneas de ejemplo (puedes reemplazar con tus propios datos)
+            contenidoArchivo.append("InformacionDeVivienda_").append("\n");
             contenidoArchivo.append("DuenoDeVivienda:").append(globalVariable.getCurrentuserName()).append("\n");
             contenidoArchivo.append("NombreDeVivienda:").append(nombreCasa).append("\n");
             contenidoArchivo.append("DescripcionGeneral:").append(descripcionCasa).append("\n");
@@ -620,12 +460,12 @@ public class PublicarCasaActivity extends AppCompatActivity {
             contenidoArchivo.append("Longitud:").append(longitudHome).append("\n");
             contenidoArchivo.append("Latitud:").append(latitudHome).append("\n");
 
-            int j = 0;
-            for (String strg:reglasVivienda
-            ) {
-                contenidoArchivo.append("Regla").append(j).append(":").append(strg).append("\n");
-                j++;
-            }
+            //int j = 0;
+            //for (String strg:
+            //   ) {
+            //       contenidoArchivo.append("Regla").append(j).append(":").append(strg).append("\n");
+            //       j++;
+            //}
 
             int i = 0;
             for (String strg: selectedAmenidades
@@ -636,7 +476,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
             contenidoArchivo.append("TipoCasa:").append(casa.getSelectedItem().toString()).append("\n");
             contenidoArchivo.append("VehiculoPreferencia:").append(vehiculo.getSelectedItem().toString()).append("\n");
 
-
+            sendMessage(contenidoArchivo.toString());
             // Convertir el contenido a bytes
             byte[] data = contenidoArchivo.toString().getBytes("UTF-8");
 
@@ -650,8 +490,71 @@ public class PublicarCasaActivity extends AppCompatActivity {
                         // Manejar errores en la subida
                         System.err.println("Error al subir el archivo: " + e.getMessage());
                     });
+
         } catch (Exception e) {
             System.err.println("Error al crear o subir el archivo: " + e.getMessage());
+        }
+    }
+    private void connectToServer(String ip, int port) {
+        new Thread(() -> {
+            try {
+                socket = new Socket(ip, port);
+                out = new PrintWriter(socket.getOutputStream(), true);
+                in = new Scanner(socket.getInputStream());
+
+                while (true) {
+                    if (in.hasNextLine()) {
+                        String message = in.nextLine();
+                        runOnUiThread(() -> {
+                            Log.d("RegisterActivity", "Mensaje recibido: " + message);
+                        });
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void sendMessage(String message) {
+        new Thread(() -> {
+            try {
+                if (out != null) {
+                    out.println(message);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+
+    private void uploadPictureToFirebase(Uri imageUri, int numImagen) {
+        if (imageUri != null) {
+            // Crear una referencia a Firebase Storage
+            String nombreCasa = inputTitulo.getText().toString();
+            String direccionCreacionCarpeta = "Viviendas Arrendadas/" + nombreCasa + "/";
+            String nombre = "Imagen" + numImagen;
+
+            // Crear la referencia para la carpeta del usuario
+            StorageReference carpetaRef = FirebaseStorage.getInstance().getReference(direccionCreacionCarpeta + nombre + "/");
+
+            // Crear un nombre único para el archivo de imagen
+            String fileName = "Imagen" + numImagen;
+            StorageReference fileReference = carpetaRef; // Asegúrate de que esté dentro de la misma carpeta
+
+            // Subir la imagen
+            fileReference.putFile(imageUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Imagen subida con éxito
+                        Toast.makeText(PublicarCasaActivity.this, "Imagen subida exitosamente", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        // Manejo de errores
+                        Toast.makeText(PublicarCasaActivity.this, "Error al subir la imagen: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            Toast.makeText(this, "Por favor selecciona una imagen", Toast.LENGTH_SHORT).show();
         }
     }
 }
