@@ -29,7 +29,7 @@
         android:layout_marginBottom="-20dp"
         app:cardCornerRadius="28dp">
 
-        <com.example.intellihome.CustomScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        <com.example.intellihome.CustomScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fillViewport="true">
@@ -377,13 +377,13 @@
                     android:text="@string/termsycondRegister"/>
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCreateAccount"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
-                    android:id="@+id/btnCreateAccount"
                     android:backgroundTint="@color/mainColor"
                     android:text="@string/crearcuentaRegister"
                     android:textStyle="bold"
-                    app:cornerRadius="32dp"/>
+                    app:cornerRadius="32dp" />
             </LinearLayout>
         </com.example.intellihome.CustomScrollView>
     </androidx.cardview.widget.CardView>

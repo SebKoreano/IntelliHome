@@ -2,6 +2,7 @@ import socket
 import threading
 import secrets
 import string
+import os
 
 #Para envio de email.
 import smtplib
@@ -65,8 +66,13 @@ class ChatServer:
 
                     # Verificar el prefijo del mensaje
                     if message.startswith("CrearCuenta_"):  # Nuevo usuario
-                        print(message + "SE CREARÁ ESTA CUENTAAAAAAA")
                         self.write_message_to_file(message[len("CrearCuenta_"):])
+
+                    elif message.startswith("InformacionDeUsuario_"):
+                        self.guardarInforDeUsuario(message[len("InformacionDeUsuario_"):])
+                        
+                    elif message.startswith("ObtenerInformacion_"):
+                        self.leerInformacionDeUsuario(message[len("ObtenerInformacion_"):])
 
                     elif message.startswith("Login_"):
                         print(message)
@@ -102,19 +108,19 @@ class ChatServer:
         """Escribir un mensaje en el archivo .txt indicado"""
         if message.startswith("Propietario_"):
             print(message)
-            with open("server/Propietario.txt", "a") as file:  # Abrir en modo append
+            with open("server/Usuarios/Propietario.txt", "a") as file:  # Abrir en modo append
                 file.write((message[len("Propietario_"):]) + "\n") 
                 
 
         elif message.startswith("Alquilador_"):
             print(message)
-            with open("server/Alquilador.txt", "a") as file:  # Abrir en modo append
+            with open("server/Usuarios/Alquilador.txt", "a") as file:  # Abrir en modo append
                 file.write((message[len("Alquilador_"):]) + "\n") 
 
 
         elif message.startswith("AmbasFunciones_"):
             print(message)
-            with open("server/AmbasFunciones.txt", "a") as file:  # Abrir en modo append
+            with open("server/Usuarios/AmbasFunciones.txt", "a") as file:  # Abrir en modo append
                 file.write((message[len("AmbasFunciones_"):]) + "\n") 
 
 
@@ -176,19 +182,19 @@ class ChatServer:
     def agregar_usuario_a_matriz(self):
         """Leer usuarios del archivo y agregarlos a la matriz."""
         try:
-            with open("server/Alquilador.txt", "r") as file:  # Abrir el archivo en modo lectura
+            with open("server/Usuarios/Alquilador.txt", "r") as file:  # Abrir el archivo en modo lectura
                 for line in file:
                     mensaje = line.strip()  # Limpiar espacios en blanco
                     usuario_fila = self.procesar_usuario(mensaje, "Alquilador")  # Procesar la línea
                     self.matriz_Alquilador.append(usuario_fila)  # Añadir el usuario a la matriz
             
-            with open("server/Propietario.txt", "r") as file:  # Abrir el archivo en modo lectura
+            with open("server/Usuarios/Propietario.txt", "r") as file:  # Abrir el archivo en modo lectura
                 for line in file:
                     mensaje = line.strip()  # Limpiar espacios en blanco
                     usuario_fila = self.procesar_usuario(mensaje, "Propietario")  # Procesar la línea
                     self.matriz_Propietario.append(usuario_fila)  # Añadir el usuario a la matriz
 
-            with open("server/AmbasFunciones.txt", "r") as file:  # Abrir el archivo en modo lectura
+            with open("server/Usuarios/AmbasFunciones.txt", "r") as file:  # Abrir el archivo en modo lectura
                 for line in file:
                     mensaje = line.strip()  # Limpiar espacios en blanco
                     usuario_fila = self.procesar_usuario(mensaje, "AmbasFunciones")  # Procesar la línea
@@ -321,20 +327,20 @@ class ChatServer:
     def CambiosATxt(self, Tipo):
         if Tipo == "Propietario":
             mat = self.matriz_Propietario
-            with open("server/Propietario.txt", "w") as file:  # Abrir en modo append
+            with open("server/Usuarios/Propietario.txt", "w") as file:  # Abrir en modo append
                 for fila in mat:
                     message = "_".join(fila)  # Unir elementos de la fila con "_"
                     file.write(message + "\n")
         elif Tipo == "Alquilador":
             mat = self.matriz_Alquilador
-            with open("server/Alquilador.txt", "w") as file:  # Abrir en modo append
+            with open("server/Usuarios/Alquilador.txt", "w") as file:  # Abrir en modo append
                 for fila in mat:
                     message = "_".join(fila)  # Unir elementos de la fila con "_"
                     file.write(message + "\n")
 
         elif Tipo == "AmbasFunciones":
             mat = self.matriz_AmbasFunciones
-            with open("server/AmbasFunciones.txt", "w") as file:  # Abrir en modo append
+            with open("server/Usuarios/AmbasFunciones.txt", "w") as file:  # Abrir en modo append
                 for fila in mat:
                     message = "_".join(fila)  # Unir elementos de la fila con "_"
                     file.write(message + "\n")
@@ -346,6 +352,50 @@ class ChatServer:
         print(f"Nueva contraseña: {new_pass}")  # Imprimir la nueva contraseña
         usuario.send_password_reset_email(correo, new_pass)  # Enviar el correo
         self.cambiar_Contraseña(correo, new_pass, Tipo)  # Cambiar la contraseña en la matriz
+
+
+    #De aquí en adelante estará la lógica para guardar y acceder a InformacionDeUsuarios
+    def guardarInforDeUsuario(self, info_usuario,):
+        # Buscar el nombre de usuario en la cadena de entrada
+        username = None
+        ruta='server/InformacionDeUsuarios/'
+        for linea in info_usuario.splitlines():
+            if linea.startswith("Username:"):
+                username = linea.split(":", 1)[1].strip()
+                break
+            
+        # Crear la ruta si no existe
+        os.makedirs(ruta, exist_ok=True)
+        
+        # Definir el nombre del archivo usando el username extraído
+        nombre_archivo = f"{username}.txt"
+        ruta_archivo = os.path.join(ruta, nombre_archivo)
+        
+        # Guardar la información en el archivo
+        with open(ruta_archivo, 'w') as archivo:
+            archivo.write(info_usuario)
+
+
+    def leerInformacionDeUsuario(self, informacionRequerida, userName):
+        ruta_archivo = f'server/InformacionDeUsuarios/{userName}.txt'
+        
+        # Verificar si el archivo existe
+        if not os.path.exists(ruta_archivo):
+            print(f"El archivo {ruta_archivo} no existe.")
+            return None
+        
+        # Leer el archivo y buscar la información requerida
+        with open(ruta_archivo, 'r') as archivo:
+            for linea in archivo:
+                # Verificar si la línea contiene la información requerida
+                if linea.startswith(f"{informacionRequerida}:"):
+                    return linea.split(":", 1)[1].strip()
+        
+        # Si no se encuentra la información requerida, retornar None
+        print(f"No se encontró '{informacionRequerida}' en {ruta_archivo}.")
+        return None
+
+
 
 def generar_nueva_contraseña():
     print("entro")

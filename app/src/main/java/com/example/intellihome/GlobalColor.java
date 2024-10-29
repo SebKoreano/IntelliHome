@@ -3,7 +3,7 @@ package com.example.intellihome;
 import android.app.Application;
 
 public class GlobalColor extends Application {
-    private int currentColor = 0xFFFF0000;
+    private int currentColor = 0xFF57CDF5;
     private String userName;
     private String tipoUsuario;
 

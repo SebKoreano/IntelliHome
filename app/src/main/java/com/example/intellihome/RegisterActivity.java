@@ -533,6 +533,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             // Crear un StringBuilder para formar el contenido del archivo
             StringBuilder contenidoArchivo = new StringBuilder();
+            contenidoArchivo.append("InformacionDeUsuario_").append("\n");
 
             // Añadir líneas de ejemplo (puedes reemplazar con tus propios datos)
             contenidoArchivo.append("Nombre:").append(firstName).append("\n");
@@ -546,21 +547,7 @@ public class RegisterActivity extends AppCompatActivity {
             contenidoArchivo.append("Domicilio:").append(domicilio).append("\n");
             contenidoArchivo.append("FechaNacimiento:").append(birthDate).append("\n");
 
-
-            // Convertir el contenido a bytes
-            byte[] data = contenidoArchivo.toString().getBytes("UTF-8");
-
-            // Subir el archivo al Storage en la referencia dada
-            storageRef.putBytes(data)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        // Manejar el éxito de la subida
-                        System.out.println("Archivo subido exitosamente a: " + storageRef.getPath());
-                    })
-                    .addOnFailureListener(e -> {
-                        // Manejar errores en la subida
-                        System.err.println("Error al subir el archivo: " + e.getMessage());
-                    });
-
+            sendMessage(contenidoArchivo.toString()); // Enviar informacion de usuario.
         } catch (Exception e) {
             System.err.println("Error al crear o subir el archivo: " + e.getMessage());
         }

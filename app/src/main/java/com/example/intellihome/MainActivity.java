@@ -120,9 +120,6 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }).start();
-
-            // Short-Cut
-            moveToMainPage();
         });
 
         rememberMeCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
