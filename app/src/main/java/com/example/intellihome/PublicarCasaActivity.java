@@ -460,13 +460,6 @@ public class PublicarCasaActivity extends AppCompatActivity {
             contenidoArchivo.append("Longitud:").append(longitudHome).append("\n");
             contenidoArchivo.append("Latitud:").append(latitudHome).append("\n");
 
-            //int j = 0;
-            //for (String strg:
-            //   ) {
-            //       contenidoArchivo.append("Regla").append(j).append(":").append(strg).append("\n");
-            //       j++;
-            //}
-
             int i = 0;
             for (String strg: selectedAmenidades
             ) {

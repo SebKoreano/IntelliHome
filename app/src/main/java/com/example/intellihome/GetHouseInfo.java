@@ -1,166 +1,70 @@
 package com.example.intellihome;
 
 import android.app.Application;
-import android.content.Context;
-import android.support.annotation.NonNull;
+import android.net.Uri;
 import android.util.Log;
 
-import androidx.appcompat.app.AlertDialog;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 public class GetHouseInfo extends Application {
-    private String propietario;
-    private String houseName;
-    private String descripcion;
-    private String longitud;
-    private String latitud;
-    private String carro;
-    private String tipoCasa;
-    private List<String> Amenidades;
-    private List<String> Reglas;
+    private String nombreCasa;
+    private List<Uri> uriList;
 
-    public GetHouseInfo(String houseName) {
-        this.houseName = houseName;
-        this.Amenidades = new ArrayList<>(); // Inicializa la lista de amenidades
-        this.Reglas = new ArrayList<>(); // Inicializa la lista de reglas
-        SetAllInfo();
+    public GetHouseInfo(String house) {
+        this.nombreCasa = house;
+        this.uriList = new ArrayList<>();
     }
 
-    public void SetAllInfo() {
-        String ubicacion = "Viviendas Arrendadas/" + this.houseName;
-        procesarDatos(obtenerNombresDeElementos(ubicacion));
-    }
+    // Método para obtener todos los Uris de las imágenes de una casa
+    public Task<List<Uri>> getHouseImageUris() {
+        // Crear la referencia a la carpeta de imágenes de la casa
+        String direccionCarpeta = "Viviendas Arrendadas/" + nombreCasa;
+        StorageReference folderRef = FirebaseStorage.getInstance().getReference(direccionCarpeta);
 
-    public List<String> getReglas() {
-        return this.Reglas;
-    }
+        // Crear una tarea que recolecta todos los Uris
+        TaskCompletionSource<List<Uri>> taskCompletionSource = new TaskCompletionSource<>();
 
-    public List<String> getAmenidades() {
-        return this.Amenidades;
-    }
+        // Listar todos los archivos en la carpeta
+        folderRef.listAll()
+                .addOnSuccessListener(listResult -> {
+                    List<Task<Uri>> uriTasks = new ArrayList<>();
 
-    public String getPropietario() {
-        return this.propietario;
-    }
+                    // Para cada archivo en la lista, obtener el Uri de descarga
+                    for (StorageReference fileRef : listResult.getItems()) {
+                        Task<Uri> uriTask = fileRef.getDownloadUrl();
+                        uriTasks.add(uriTask);
+                    }
 
-    public String getHouseName() {
-        return this.houseName;
-    }
+                    // Cuando todos los Uris se hayan obtenido, almacenar en la lista uriList
+                    Tasks.whenAllSuccess(uriTasks)
+                            .addOnSuccessListener(results -> {
+                                List<Uri> uris = new ArrayList<>(); // Crear lista de Uri explícitamente
+                                for (Object result : results) {
+                                    if (result instanceof Uri) {
+                                        uris.add((Uri) result);
+                                    }
+                                }
+                                uriList.clear();
+                                uriList.addAll(uris);
+                                taskCompletionSource.setResult(uriList);
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e("GetHouseInfo", "Error al obtener los Uris: " + e.getMessage());
+                                taskCompletionSource.setException(e);
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("GetHouseInfo", "Error al listar archivos: " + e.getMessage());
+                    taskCompletionSource.setException(e);
+                });
 
-    public String getDescripcion() {
-        return this.descripcion;
-    }
-
-    public String getLongitud() {
-        return this.longitud;
-    }
-
-    public String getLatitud() {
-        return this.latitud;
-    }
-
-    public String getCarro() {
-        return this.carro;
-    }
-
-    public String getTipoCasa() {
-        return this.tipoCasa;
-    }
-
-    private List<String> obtenerNombresDeElementos(String carpetaBase) {
-        // Inicializa FirebaseStorage
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
-
-        // Referencia a la carpeta base pasada como parámetro
-        StorageReference carpetaRef = storageRef.child(carpetaBase);
-
-        // Lista para guardar los nombres de carpetas y archivos
-        List<String> listaElementos = new ArrayList<>();
-
-        // Llama a listAll() para obtener todos los items dentro de la carpeta especificada
-        carpetaRef.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
-            @Override
-            public void onSuccess(ListResult listResult) {
-                // Obtén los directorios dentro de la carpeta base (subcarpetas)
-                for (StorageReference prefix : listResult.getPrefixes()) {
-                    // Extrae el nombre de cada carpeta
-                    String folderName = prefix.getName();
-                    listaElementos.add("Carpeta: " + folderName.trim());
-                }
-
-                // Obtén los archivos dentro de la carpeta base
-                for (StorageReference item : listResult.getItems()) {
-                    // Extrae el nombre de cada archivo
-                    String fileName = item.getName();
-                    listaElementos.add("Archivo: " + fileName.trim());
-                }
-
-                // Opcional: Convierte la lista de nombres a un solo string para visualizar
-                StringBuilder elementosString = new StringBuilder();
-                for (String nombre : listaElementos) {
-                    elementosString.append(nombre).append("\n");
-                }
-            }
-        }).addOnFailureListener(e -> {
-            System.err.println("Error al obtener los elementos: " + e.getMessage());
-        });
-
-        return listaElementos;
-    }
-
-    public void procesarDatos(List<String> lineas) {
-        // Procesar cada línea y separarla en clave y valor
-        for (String linea : lineas) {
-            Log.d("GetHouseInfo", "Procesando línea: " + linea); // Agrega log para depuración
-            String[] partes = linea.split(":", 2);
-            if (partes.length == 2) {
-                String clave = partes[0].trim();
-                String valor = partes[1].trim();
-                Log.d("GetHouseInfo", "Clave: " + clave + ", Valor: " + valor); // Agrega log para depuración
-
-                // Asignar valores según la clave
-                switch (clave) {
-                    case "DuenoDeVivienda":
-                        this.propietario = valor;
-                        break;
-                    case "DescripcionGeneral":
-                        this.descripcion = valor;
-                        break;
-                    case "Longitud":
-                        this.longitud = valor;
-                        break;
-                    case "Latitud":
-                        this.latitud = valor;
-                        break;
-                    case "VehiculoPreferencia":
-                        this.carro = valor;
-                        break;
-                    case "TipoCasa":
-                        this.tipoCasa = valor;
-                        break;
-                    default:
-                        // Procesar amenidades y reglas
-                        if (clave.startsWith("Amenidad")) {
-                            this.Amenidades.add(valor);
-                        } else if (clave.startsWith("Regla")) {
-                            this.Reglas.add(valor);
-                        }
-                        break;
-                }
-            }
-        }
+        return taskCompletionSource.getTask();
     }
 }

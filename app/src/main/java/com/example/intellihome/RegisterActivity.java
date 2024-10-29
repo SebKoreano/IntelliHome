@@ -443,7 +443,7 @@ public class RegisterActivity extends AppCompatActivity {
             crearYSubirTxt(carpetaRef.child("info.txt")); // Aquí subimos el .txt dentro de la carpeta
 
             // Crear un nombre único para el archivo de imagen
-            String fileName = "ProfilePicture.png"; // o el tipo de imagen que sea
+            String fileName = "ProfilePicture"; // o el tipo de imagen que sea
             StorageReference fileReference = carpetaRef.child(fileName); // Asegúrate de que esté dentro de la misma carpeta
 
             // Subir la imagen
