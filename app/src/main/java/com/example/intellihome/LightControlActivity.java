@@ -53,6 +53,15 @@ public class LightControlActivity extends AppCompatActivity {
         btnBano.setOnClickListener(v -> sendMessage("N"));
         btnLavanderia.setOnClickListener(v -> sendMessage("M"));
 
+        // Configuración de listeners para cada botón con alternancia de iconos
+        setButtonToggleIcon(btnCuartoPrincipal);
+        setButtonToggleIcon(btnBanoCuartoPrincipal);
+        setButtonToggleIcon(btnCuarto1);
+        setButtonToggleIcon(btnCuarto2);
+        setButtonToggleIcon(btnSala);
+        setButtonToggleIcon(btnBano);
+        setButtonToggleIcon(btnLavanderia);
+
         // Hilo que establece la conexión con el servidor
         new Thread(() -> {
             try {
@@ -105,5 +114,17 @@ public class LightControlActivity extends AppCompatActivity {
     // Método para mostrar mensajes en forma de Toast (pequeños mensajes emergentes en la UI)
     private void mostrarMensaje(String mensaje) {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();  // Mostrar el mensaje en pantalla
+    }
+
+    private void setButtonToggleIcon(Button button) {
+        button.setTag(false);
+
+        button.setOnClickListener(v -> {
+            boolean isOn = (boolean) button.getTag();
+
+            isOn = !isOn;
+            button.setTag(isOn);
+            button.setCompoundDrawablesWithIntrinsicBounds(0, 0, isOn ? R.drawable.ic_lightbulb : R.drawable.ic_lightbulb_off, 0);
+        });
     }
 }

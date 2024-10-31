@@ -35,7 +35,7 @@ class Usuario:
             server.quit()
 
 class ChatServer:
-    def __init__(self, host="192.168.18.206", port=3535): #192.168.18.206
+    def __init__(self, host="192.168.18.5", port=3535): #192.168.18.206
         self.matriz_Alquilador = [] 
         self.matriz_Propietario = []
         self.matriz_AmbasFunciones = [] 
@@ -110,6 +110,7 @@ class ChatServer:
 
     #Envia mensaje a socket 
     def send_message_to_respond_request(self, client_socket, message):
+        """Enviar una respuesta al cliente con el estado del inicio de sesión."""
         threading.Thread(target=self.broadcast, args=(message +"\n", client_socket)).start()
 
     #Escriba cuenta creada en .txt
