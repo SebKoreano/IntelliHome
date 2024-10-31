@@ -161,13 +161,34 @@
     <string name="labelTitulo">Titulo de la residencia</string>
     <string name="inputTitulo">Ingrese un titulo para su residencia</string>
     <string name="errorTitulo">El titulo no puede estar vacío</string>
-    <string-array name="amenidades_array">
-        <item>WiFi</item>
+    <string-array name="amenities_array">
+        <item>Cocina Equipada</item>
+        <item>Calefacción</item>
+        <item>Aire Acondicionado</item>
+        <item>WiFi Gratuito</item>
+        <item>Televisión Por Cable</item>
+        <item>Lavadora y Secadora</item>
+        <item>Jardín</item>
         <item>Piscina</item>
+        <item>Zona BBQ</item>
+        <item>Seguridad</item>
         <item>Gimnasio</item>
-        <item>Estacionamiento</item>
-        <item>Restaurante</item>
-        <item>Spa</item>
+        <item>Terraza</item>
+        <item>Balcón</item>
+        <item>Habitación con Baño</item>
+        <item>Muebles de Exterior</item>
+        <item>Lavavajillas</item>
+        <item>Cafetera</item>
+        <item>Toallas incluidas</item>
+        <item>Acceso a Áreas Comunes</item>
+        <item>Sofá Cama</item>
+        <item>Servicio de limpieza Adicional</item>
+        <item>Transporte Público Cercano</item>
+        <item>Montaña Cercana</item>
+        <item>Área de Trabajo</item>
+        <item>Entretenimiento</item>
+        <item>Chimenea</item>
+        <item>WiFi de alta velocidad</item>
     </string-array>
     <string name="Propietario">Propietario</string>
     <string name="Rent">Alquilar</string>

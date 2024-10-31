@@ -100,7 +100,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
 
     private void showMultiSelectDialog() {
         // Opciones de tags para seleccionar
-        String[] tags = {"Wi-Fi", "Parking", "Pool", "Gym", "Laundry"};
+        String[] tags = getResources().getStringArray(R.array.amenities_array);;
         boolean[] checkedTags = new boolean[tags.length];
         List<String> selectedTags = new ArrayList<>();
 
@@ -130,21 +130,27 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     }
 
     private void searchByTags(List<String> selectedTags) {
-        List<PropertyModule> filteredProperties = new ArrayList<>();
+        if (selectedTags.isEmpty()) {
+            // Si no hay tags seleccionados, muestra todas las propiedades
+            elements.clear();
+            elements.addAll(originalElements);
+        } else {
+            List<PropertyModule> filteredProperties = new ArrayList<>();
 
-        // Filtrar las propiedades que tienen al menos un tag seleccionado
-        for (PropertyModule property : originalElements) {
-            for (String tag : selectedTags) {
-                if (property.getAmenities().contains(tag)) {
-                    filteredProperties.add(property);
-                    break;
+            // Filtra las propiedades que tienen al menos un tag seleccionado
+            for (PropertyModule property : originalElements) {
+                for (String tag : selectedTags) {
+                    if (property.getAmenities().contains(tag)) {
+                        filteredProperties.add(property);
+                        break;
+                    }
                 }
             }
-        }
 
-        // Actualizar la lista de propiedades en el RecyclerView
-        elements.clear();
-        elements.addAll(filteredProperties);
+            // Actualiza la lista de propiedades en el RecyclerView
+            elements.clear();
+            elements.addAll(filteredProperties);
+        }
         recyclerView.getAdapter().notifyDataSetChanged();
     }
 
@@ -226,7 +232,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     }
 
     public void filter(String strSearch) {
-        if (strSearch.length() == 0) {
+        if (strSearch.isEmpty()) {
             elements.clear();
             elements.addAll(originalElements);
         } else {

@@ -161,13 +161,34 @@
     <string name="labelTitulo">Rezidencia címe</string>
     <string name="inputTitulo">Adjon meg egy címet a rezidenciájához</string>
     <string name="errorTitulo">A cím nem lehet üres</string>
-    <string-array name="amenidades_array">
-        <item>WiFi</item>
+    <string-array name="amenities_array">
+        <item>Felszerelt Konyha</item>
+        <item>Fűtés</item>
+        <item>Légkondicionáló</item>
+        <item>Ingyenes Wi-Fi</item>
+        <item>Kábel TV</item>
+        <item>Mosógép és Szárító</item>
+        <item>Kert</item>
         <item>Medence</item>
-        <item>Tornaterem</item>
-        <item>Parkolóhely</item>
-        <item>Étterem</item>
-        <item>Gyógyfürdő</item>
+        <item>Grillező Terület</item>
+        <item>Biztonság</item>
+        <item>Edzőterem</item>
+        <item>Terasz</item>
+        <item>Erkély</item>
+        <item>Fürdőszobás Szoba</item>
+        <item>Kültéri Bútor</item>
+        <item>Mosogatógép</item>
+        <item>Kávéfőző</item>
+        <item>Törölközők Tartalmazva</item>
+        <item>Közös Terek Hozzáférése</item>
+        <item>Kanapéágy</item>
+        <item>Kiegészítő Takarítási Szolgáltatás</item>
+        <item>Közeli Tömegközlekedés</item>
+        <item>Közeli Hegy</item>
+        <item>Munkahely</item>
+        <item>Szórakozás</item>
+        <item>Kandalló</item>
+        <item>Nagysebességű Wi-Fi</item>
     </string-array>
     <string name="Propietario">Tulajdonos</string>
     <string name="Rent">Bérlés</string>

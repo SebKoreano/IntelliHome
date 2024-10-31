@@ -89,7 +89,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
         });
 
         // Lista de amenidades (opciones)
-        amenidadesArray = getResources().getStringArray(R.array.amenidades_array);  // Puedes definirlo en res/values/strings.xml
+        amenidadesArray = getResources().getStringArray(R.array.amenities_array);  // Puedes definirlo en res/values/strings.xml
         selectedItems = new boolean[amenidadesArray.length];
         selectedAmenidades = new ArrayList<>();
 
