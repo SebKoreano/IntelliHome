@@ -18,6 +18,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class PublicarCasaActivity extends AppCompatActivity {
@@ -48,6 +50,8 @@ public class PublicarCasaActivity extends AppCompatActivity {
     private int numeroReglas = 1, numeroAmenidad= 1, totalFotos = 0;;
     public static final int MAP_REQUEST_CODE = 1;
     private double latitudHome, longitudHome;
+    private View background;
+    private SeekBar seekBar;
     private PhotoManager photoManager;
     private LinearLayout linearLayout;
     private String[] amenidadesArray;  // Lista de opciones
@@ -75,6 +79,35 @@ public class PublicarCasaActivity extends AppCompatActivity {
         linearLayout = findViewById(R.id.linearLayout);
         btnPublicar = findViewById((R.id.btnPublish));
         inputTitulo = findViewById((R.id.inputTitulo));
+        background = findViewById(R.id.background);
+        seekBar = findViewById(R.id.seekbar);
+        Button btnElegirUbicacion = findViewById(R.id.btnElegirUbicacion);
+
+        GlobalColor globalColor = (GlobalColor) getApplication();
+        int currentColor = globalColor.getCurrentColor();
+
+        background.setBackgroundColor(currentColor);
+        btnAddReglas.setBackgroundColor(currentColor);
+        btnAddAmenidades.setBackgroundColor(currentColor);
+        btnPublicar.setBackgroundColor(currentColor);
+        btnElegirUbicacion.setBackgroundColor(currentColor);
+
+        // Configuración de SeekBar
+        seekBar.setMax(100);
+        seekBar.setProgress(10);
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                precioInput.setText(String.format(Locale.getDefault(), "₡%.2f", (float) progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
 
         // Configurar el NumberPicker
         numHabitacionesPicker.setMinValue(1);  // Valor mínimo
@@ -128,7 +161,6 @@ public class PublicarCasaActivity extends AppCompatActivity {
         selectVehiculo.setAdapter(vehiculoAdapter);
 
         // Configura el botón para abrir el mapa
-        Button btnElegirUbicacion = findViewById(R.id.btnElegirUbicacion);
         btnElegirUbicacion.setOnClickListener(v -> {
             // Lanzar la actividad de MapActivity
             Intent intent = new Intent(PublicarCasaActivity.this, MapActivity.class);
