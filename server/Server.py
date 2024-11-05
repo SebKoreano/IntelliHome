@@ -82,8 +82,7 @@ class ChatServer:
 
                     elif message.startswith("ObtenerInformacionVivienda_"):
                         message = message[len("ObtenerInformacionVivienda_"):]
-                        info = message.split("_")
-                        self.leerInformacionDeVivienda(info[0], info[1])
+                        self.leerInformacionDeVivienda(message, client_socket)
 
 
                     elif message.startswith("Login_"):
@@ -429,34 +428,33 @@ class ChatServer:
             archivo.write(info_usuario)
 
 
-    def leerInformacionDeVivienda(self, informacionRequerida, nombreVivienda):
+    def leerInformacionDeVivienda(self, nombreVivienda, socket):
         ruta_archivo = f'server/InformacionDeVivienda/{nombreVivienda}.txt'
         
         # Verificar si el archivo existe
         if not os.path.exists(ruta_archivo):
             print(f"El archivo {ruta_archivo} no existe.")
             return None
-        
-        # Lista para almacenar las coincidencias de la información requerida
-        resultados = []
-        
-        # Leer el archivo y buscar todas las ocurrencias de la información requerida
-        with open(ruta_archivo, 'r') as archivo:
-            for linea in archivo:
-                # Verificar si la línea comienza con la clave 'informacionRequerida:'
-                if linea.startswith(f"{informacionRequerida}:"):
-                    # Extraer el valor después de 'informacionRequerida:'
-                    resultado = linea.split(":", 1)[1].strip()
-                    resultados.append(resultado)
-        
-        # Unir todos los resultados encontrados con guiones bajos "_"
-        if resultados:
-            resultado_final = "_".join(resultados)
-            return resultado_final  # Devuelve la cadena unida
 
-        # Si no se encuentra la información requerida, retornar None
-        print(f"No se encontró '{informacionRequerida}' en {ruta_archivo}.")
-        return None
+        infoCasa = ""  # Inicializa la cadena que contendrá toda la información unida
+
+        with open(ruta_archivo, 'r') as archivo:
+            # Saltar la primera línea
+            archivo.readline()
+            
+            # Leer y agregar cada línea a infoCasa hasta alcanzar el final
+            while True:
+                linea = archivo.readline()
+                if not linea:  # Si la línea es nula, se ha llegado al final del archivo
+                    break
+                # Añadir la línea a infoCasa, con "_" entre líneas
+                infoCasa += linea.strip() + "_"
+        
+        # Quitar el último guion bajo extra si es necesario
+        if infoCasa.endswith("_"):
+            infoCasa = infoCasa[:-1]
+
+        return self.send_message_to_respond_request(infoCasa, socket)
 
 
 def generar_nueva_contraseña():
