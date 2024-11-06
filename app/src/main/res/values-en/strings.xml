@@ -109,6 +109,15 @@
     <string name="section12">12. Contact</string>
     <string name="section12_content">For any questions or concerns about these terms, please contact us at intellihome@gmail.com.</string>
     <string name="btn_continue">Continue</string>
+    <string name="signUp">Sign-Up</string>
+    <string name="configuraciones">Settings</string>
+    <string name="publicar_casa">Publish Home</string>
+    <string name="monitorear_viviendas">Monitor Homes</string>
+    <string name="perfil">Profile</string>
+    <string name="buscar">Search</string>
+    <string name="pagina_principal">Home</string>
+    <string name="open_nav_drawer">Open Menu</string>
+    <string name="close_nav_drawer">Close Menu</string>
     <string name="descripcionTitle">Description</string>
     <string name="descripcionHint">Enter a description...</string>
     <string name="numHabitacionesTitle">Num. Rooms</string>
@@ -132,15 +141,66 @@
     <string name="btnPhoto">Add Photo</string>
     <string name="ubicacion">Location</string>
     <string name="elegir_ubicaci_n">Select location</string>
-    <string name="hint_latitud">Width:</string>
-    <string name="hint_longitud">Length:</string>
+    <string name="hint_latitud">Width: </string>
+    <string name="hint_longitud">Length: </string>
     <string name="aceptar">Accept</string>
-    <string-array name="amenidades_array">
-        <item>WiFi</item>
-        <item>Medence</item>
-        <item>Tornaterem</item>
-        <item>Parkolóhely</item>
-        <item>Étterem</item>
-        <item>Gyógyfürdő</item>
+    <string name="maxFotoCasa">There is a maximum of 10 photos per house</string>
+    <string name="publicarCasa">Publishing the house...</string>
+    <string name="validarDescripcion">Description cannot be empty</string>
+    <string name="validarPrecio">Price cannot be empty</string>
+    <string name="validarUbicacion">You must choose a location</string>
+    <string name="validarFoto">You must add at least one photo</string>
+    <string name="validarReglas">You must add at least one usage rule</string>
+    <string name="validarAmenidades">You must select at least one amenity</string>
+    <string name="validarcheckInCheckOut">You must accept the check-in and check-out terms</string>
+    <string name="ok">Ok</string>
+    <string name="seleccionAmenidades">Select Amenities</string>
+    <string name="amenidadSeleccionadas">Selected amenities: </string>
+    <string name="amenidadesSeleccionadas">Selected: </string>
+    <string name="errorUbicacion">Location not obtained</string>
+    <string name="labelTitulo">Residence title</string>
+    <string name="inputTitulo">Enter a title for your residence</string>
+    <string name="errorTitulo">The title cannot be empty</string>
+    <string-array name="amenities_array">
+        <item>Equipped Kitchen</item>
+        <item>Heating</item>
+        <item>Air Conditioning</item>
+        <item>Free WiFi</item>
+        <item>Cable Television</item>
+        <item>Washer and Dryer</item>
+        <item>Garden</item>
+        <item>Pool</item>
+        <item>BBQ Area</item>
+        <item>Security</item>
+        <item>Gym</item>
+        <item>Terrace</item>
+        <item>Balcony</item>
+        <item>Room with Bathroom</item>
+        <item>Outdoor Furniture</item>
+        <item>Dishwasher</item>
+        <item>Coffee Maker</item>
+        <item>Towels Included</item>
+        <item>Access to Common Areas</item>
+        <item>Sofa Bed</item>
+        <item>Additional Cleaning Service</item>
+        <item>Nearby Public Transport</item>
+        <item>Nearby Mountain</item>
+        <item>Workspace</item>
+        <item>Entertainment</item>
+        <item>Fireplace</item>
+        <item>High-Speed WiFi</item>
     </string-array>
+    <string name="Propietario">Owner</string>
+    <string name="Rent">Rent</string>
+    <string name="FechaInicio">Start Date</string>
+    <string name="FechaFinal">End Date</string>
+
+    <string name="Monitoreo">Light Monitoring and Control</string>
+    <string name="Bano">Bathroom</string>
+    <string name="Fuego">Fire</string>
+    <string name="Sismos">Earthquakes</string>
+    <string name="Puerta">Door</string>
+    <string name="Humedad">Humidity</string>
+    <string name="Sala">Hall</string>
+    <string name="Pila">Sink</string>
 </resources>

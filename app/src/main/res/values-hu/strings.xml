@@ -109,6 +109,15 @@
     <string name="section12">12. Kapcsolat</string>
     <string name="section12_content">Bármilyen kérdés vagy észrevétel esetén kérjük, vegye fel velünk a kapcsolatot az intellihome@gmail.com címen.</string>
     <string name="btn_continue">Folytatás</string>
+    <string name="signUp">Nyilvántartás</string>
+    <string name="configuraciones">Beállítások elemre</string>
+    <string name="publicar_casa">Post Home</string>
+    <string name="monitorear_viviendas">Monitor Homes</string>
+    <string name="perfil">Profil</string>
+    <string name="buscar">Keres</string>
+    <string name="pagina_principal">Főoldal</string>
+    <string name="open_nav_drawer">Nyissa meg a menüt</string>
+    <string name="close_nav_drawer">Menü bezárása</string>
     <string name="descripcionTitle">Leírás</string>
     <string name="descripcionHint">Adjon meg egy leírást...</string>
     <string name="numHabitacionesTitle">Szobák száma</string>
@@ -132,15 +141,66 @@
     <string name="btnPhoto">Kép hozzáadása</string>
     <string name="ubicacion">Elhelyezkedés</string>
     <string name="elegir_ubicaci_n">Válasszon helyet</string>
-    <string name="hint_latitud">Szélesség:</string>
-    <string name="hint_longitud">Hossz:</string>
+    <string name="hint_latitud">Szélesség: </string>
+    <string name="hint_longitud">Hossz: </string>
     <string name="aceptar">Elfogadás</string>
-    <string-array name="amenidades_array">
-        <item>WiFi</item>
-        <item>Piscina</item>
-        <item>Gimnasio</item>
-        <item>Estacionamiento</item>
-        <item>Restaurante</item>
-        <item>Spa</item>
+    <string name="maxFotoCasa">Házonként maximum 10 fotó lehet</string>
+    <string name="publicarCasa">A ház kiadása...</string>
+    <string name="validarDescripcion">A leírás nem lehet üres</string>
+    <string name="validarPrecio">Az ár nem lehet üres</string>
+    <string name="validarUbicacion">Ki kell választani egy helyet</string>
+    <string name="validarFoto">Legalább egy fényképet hozzá kell adnia</string>
+    <string name="validarReglas">Legalább egy használati szabályt hozzá kell adnia</string>
+    <string name="validarAmenidades">Legalább egy kényelmi szolgáltatást ki kell választania</string>
+    <string name="validarcheckInCheckOut">El kell fogadnia a be- és kijelentkezés feltételeit</string>
+    <string name="ok">Rendben</string>
+    <string name="seleccionAmenidades">Válassza a Felszerelések lehetőséget</string>
+    <string name="amenidadSeleccionadas">Válogatott szolgáltatások</string>
+    <string name="amenidadesSeleccionadas">Kiválasztott</string>
+    <string name="errorUbicacion">A helyszín nem sikerült</string>
+    <string name="labelTitulo">Rezidencia címe</string>
+    <string name="inputTitulo">Adjon meg egy címet a rezidenciájához</string>
+    <string name="errorTitulo">A cím nem lehet üres</string>
+    <string-array name="amenities_array">
+        <item>Felszerelt Konyha</item>
+        <item>Fűtés</item>
+        <item>Légkondicionáló</item>
+        <item>Ingyenes Wi-Fi</item>
+        <item>Kábel TV</item>
+        <item>Mosógép és Szárító</item>
+        <item>Kert</item>
+        <item>Medence</item>
+        <item>Grillező Terület</item>
+        <item>Biztonság</item>
+        <item>Edzőterem</item>
+        <item>Terasz</item>
+        <item>Erkély</item>
+        <item>Fürdőszobás Szoba</item>
+        <item>Kültéri Bútor</item>
+        <item>Mosogatógép</item>
+        <item>Kávéfőző</item>
+        <item>Törölközők Tartalmazva</item>
+        <item>Közös Terek Hozzáférése</item>
+        <item>Kanapéágy</item>
+        <item>Kiegészítő Takarítási Szolgáltatás</item>
+        <item>Közeli Tömegközlekedés</item>
+        <item>Közeli Hegy</item>
+        <item>Munkahely</item>
+        <item>Szórakozás</item>
+        <item>Kandalló</item>
+        <item>Nagysebességű Wi-Fi</item>
     </string-array>
+    <string name="Propietario">Tulajdonos</string>
+    <string name="Rent">Bérlés</string>
+    <string name="FechaInicio">Kezdeti időpont</string>
+    <string name="FechaFinal">Végső időpont</string>
+
+    <string name="Monitoreo">Monitoring">Fényfigyelés és -vezérlés</string>
+    <string name="Bano">Fürdőszoba</string>
+    <string name="Fuego">Tűz</string>
+    <string name="Sismos">Földrengések</string>
+    <string name="Puerta">Ajtó</string>
+    <string name="Humedad">Páratartalom</string>
+    <string name="Sala">Salão</string>
+    <string name="Pila">Mosogatóban</string>
 </resources>

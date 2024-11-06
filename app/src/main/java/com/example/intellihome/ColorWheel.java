@@ -1,6 +1,8 @@
 package com.example.intellihome;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -8,18 +10,22 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
-import android.graphics.Bitmap;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast; // Importar Toast
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class ColorWheel extends AppCompatActivity {
     ImageView imgView;
     TextView mColorValues;
     View mColorViews;
-    Button btnSelectColor; // Agregamos el botón
+    Button btnSelectColor;
 
     Bitmap bitmap;
+
+    private static final String PREFS_NAME = "ColorPrefs";
+    private static final String COLOR_KEY = "selectedColor";
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -28,11 +34,9 @@ public class ColorWheel extends AppCompatActivity {
         imgView = findViewById(R.id.colorwheel);
         mColorValues = findViewById(R.id.displayValues);
         mColorViews = findViewById(R.id.displayColor);
-        btnSelectColor = findViewById(R.id.btnSelectColor); // Inicializamos el botón
+        btnSelectColor = findViewById(R.id.btnSelectColor);
 
-        GlobalColor globalVariables = (GlobalColor) getApplicationContext();
-        int currentColor = globalVariables.getCurrentColor();
-        btnSelectColor.setBackgroundColor(currentColor);
+        loadColor();
 
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.colorwheel);
 
@@ -60,20 +64,33 @@ public class ColorWheel extends AppCompatActivity {
         btnSelectColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Obtener el color de mColorViews
                 if (mColorViews.getBackground() instanceof ColorDrawable) {
                     int color = ((ColorDrawable) mColorViews.getBackground()).getColor();
+                    saveColor(color);
 
-                    // Cambiar el color global
                     GlobalColor globalColor = (GlobalColor) getApplication();
                     globalColor.setCurrentColor(color);
 
-                    // Regresar a MainActivity
                     Intent intent = new Intent(ColorWheel.this, MainActivity.class);
                     startActivity(intent);
                     finish();
                 }
             }
         });
+    }
+
+    private void saveColor(int color) {
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(COLOR_KEY, color);
+        editor.apply();
+
+        Toast.makeText(this, "Color guardado: " + color, Toast.LENGTH_SHORT).show();
+    }
+
+    private void loadColor() {
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        int savedColor = preferences.getInt(COLOR_KEY, Color.WHITE); // Color por defecto
+        btnSelectColor.setBackgroundColor(savedColor); // Cargar el color guardado
     }
 }

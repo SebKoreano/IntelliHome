@@ -109,6 +109,15 @@
     <string name="section12">12. Contato</string>
     <string name="section12_content">Para qualquer pergunta ou dúvida sobre estes termos, entre em contato conosco pelo e-mail intellihome@gmail.com.</string>
     <string name="btn_continue">Continuar</string>
+    <string name="signUp">Inscreva-se</string>
+    <string name="configuraciones">Configurações</string>
+    <string name="publicar_casa">Publicar Habitação</string>
+    <string name="monitorear_viviendas">Carcaça do monitor</string>
+    <string name="perfil">Perfil</string>
+    <string name="buscar">Procurar</string>
+    <string name="pagina_principal">Página Principal</string>
+    <string name="open_nav_drawer">Abrir Menu</string>
+    <string name="close_nav_drawer">Fechar Menu</string>
     <string name="descripcionTitle">Descrição</string>
     <string name="descripcionHint">Insira uma descrição...</string>
     <string name="numHabitacionesTitle">Núm. Quartos</string>
@@ -132,15 +141,66 @@
     <string name="btnPhoto">Adicionar Foto</string>
     <string name="ubicacion">Localização</string>
     <string name="elegir_ubicaci_n">Escolha o local</string>
-    <string name="hint_latitud">Largura:</string>
-    <string name="hint_longitud">Comprimento:</string>
+    <string name="hint_latitud">Largura: </string>
+    <string name="hint_longitud">Comprimento: </string>
     <string name="aceptar">Aceitar</string>
-    <string-array name="amenidades_array">
-        <item>WiFi</item>
+    <string name="maxFotoCasa">Há um máximo de 10 fotos por casa</string>
+    <string name="publicarCasa">Publicando a casa...</string>
+    <string name="validarDescripcion">A descrição não pode ficar vazia</string>
+    <string name="validarPrecio">O preço não pode estar vazio</string>
+    <string name="validarUbicacion">Você deve escolher um local</string>
+    <string name="validarFoto">Você deve adicionar pelo menos uma foto</string>
+    <string name="validarReglas">Você deve adicionar pelo menos uma regra de uso</string>
+    <string name="validarAmenidades">Você deve selecionar pelo menos uma comodidade</string>
+    <string name="validarcheckInCheckOut">Você deve aceitar os termos de check-in e check-out</string>
+    <string name="ok">Ok</string>
+    <string name="seleccionAmenidades">Selecione comodidades</string>
+    <string name="amenidadSeleccionadas">Comodidades selecionadas: </string>
+    <string name="amenidadesSeleccionadas">Selecionado</string>
+    <string name="errorUbicacion">A localização não foi obtida</string>
+    <string name="labelTitulo">Título da residência</string>
+    <string name="inputTitulo">Insira um título para sua residência</string>
+    <string name="errorTitulo">O título não pode estar vazio</string>
+    <string-array name="amenities_array">
+        <item>Cozinha Equipada</item>
+        <item>Aquecimento</item>
+        <item>Ar Condicionado</item>
+        <item>Wi-Fi Gratuito</item>
+        <item>Televisão a Cabo</item>
+        <item>Máquina de Lavar e Secar</item>
+        <item>Jardim</item>
         <item>Piscina</item>
+        <item>Área de Churrasco</item>
+        <item>Segurança</item>
         <item>Academia</item>
-        <item>Estacionamento</item>
-        <item>Restaurante</item>
-        <item>Spa</item>
+        <item>Terraço</item>
+        <item>Varanda</item>
+        <item>Quarto com Banheiro</item>
+        <item>Móveis para Exterior</item>
+        <item>Lava-louças</item>
+        <item>Cafeteira</item>
+        <item>Toalhas Incluídas</item>
+        <item>Acesso às Áreas Comuns</item>
+        <item>Sofá-Cama</item>
+        <item>Serviço de Limpeza Adicional</item>
+        <item>Transporte Público Próximo</item>
+        <item>Montanha Próxima</item>
+        <item>Espaço de Trabalho</item>
+        <item>Entretenimento</item>
+        <item>Lareira</item>
+        <item>Wi-Fi de Alta Velocidade</item>
     </string-array>
+    <string name="Propietario">Proprietário</string>
+    <string name="Rent">Aluguel</string>
+    <string name="FechaInicio">Data de Início</string>
+    <string name="FechaFinal">Data de Término</string>
+
+    <string name="Monitoreo">Monitoramento e Controle de Luz</string>
+    <string name="Bano">Banheiro</string>
+    <string name="Fuego">Fogo</string>
+    <string name="Sismos">Terremotos</string>
+    <string name="Puerta">Porta</string>
+    <string name="Humedad">Umidade</string>
+    <string name="Sala">Szoba</string>
+    <string name="Pila">Pia</string>
 </resources>

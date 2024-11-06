@@ -7,14 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -42,7 +38,7 @@ public class ConfigActivity extends AppCompatActivity {
         btnTheme.setBackgroundColor(currentColor);
 
         // Conexión al servidor
-        connectToServer("172.18.251.41", 3535);
+        connectToServer("192.168.18.206", 3535); //192.168.18.206
 
         // Configura los botones
         btnHelp.setOnClickListener(view -> showHelp());
@@ -99,7 +95,6 @@ public class ConfigActivity extends AppCompatActivity {
         // Mostrar el cuadro de diálogo
         builder.create().show();
     }
-
 
     private void changeTheme() {
         Intent intent = new Intent(ConfigActivity.this, ColorWheel.class);

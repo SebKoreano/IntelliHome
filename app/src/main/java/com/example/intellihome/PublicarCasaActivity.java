@@ -2,49 +2,78 @@ package com.example.intellihome;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.icu.util.Calendar;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.InputFilter;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import android.util.Log;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Scanner;
 
 public class PublicarCasaActivity extends AppCompatActivity {
 
-    private EditText descripcionInput, precioInput;
+    private EditText descripcionInput, precioInput, inputTitulo;
     private NumberPicker numHabitacionesPicker;
-    private Button btnAddReglas, btnAddAmenidades, btnPhoto, btnPublicar;
-    private int numeroReglas = 1, numeroAmenidad= 1;
+    private Button btnAddReglas, btnAddAmenidades, btnPhoto, btnPublicar, btnElegirUbicacion;
+    private int numeroReglas = 1, numeroAmenidad= 1, totalFotos = 0;;
     public static final int MAP_REQUEST_CODE = 1;
     private double latitudHome, longitudHome;
+    private View background;
+    private SeekBar seekBar;
     private PhotoManager photoManager;
     private LinearLayout linearLayout;
     private String[] amenidadesArray;  // Lista de opciones
     private boolean[] selectedItems;   // Lista que guarda qué opciones están seleccionadas
     private ArrayList<String> selectedAmenidades;  // Lista para almacenar las opciones seleccionadas
-
-
+    private List<Bitmap> listaDeFotos = new ArrayList<>();
+    private Socket socket; // Socket para la conexión
+    private PrintWriter out; // PrintWriter para enviar datos
+    private Scanner in;
+    private TextView dateStart, dateEnd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publicarcasa);
-
+        // Conectar al servidor
+        connectToServer("192.168.18.5", 3535); //192.168.18.206
         // Inicializar vistas
+
         descripcionInput = findViewById(R.id.inputDescripcion);
         precioInput = findViewById(R.id.inputPrecioPorNoche);
         numHabitacionesPicker = findViewById(R.id.numHabitacionesPicker);
@@ -53,6 +82,38 @@ public class PublicarCasaActivity extends AppCompatActivity {
         btnPhoto = findViewById(R.id.btnHousePhoto);
         linearLayout = findViewById(R.id.linearLayout);
         btnPublicar = findViewById((R.id.btnPublish));
+        inputTitulo = findViewById((R.id.inputTitulo));
+        background = findViewById(R.id.background);
+        seekBar = findViewById(R.id.seekbar);
+        btnElegirUbicacion = findViewById(R.id.btnElegirUbicacion);
+        dateStart = findViewById(R.id.btnDateStart);
+        dateEnd = findViewById(R.id.btnDateEnd);
+
+        GlobalColor globalColor = (GlobalColor) getApplication();
+        int currentColor = globalColor.getCurrentColor();
+
+        background.setBackgroundColor(currentColor);
+        btnAddReglas.setBackgroundColor(currentColor);
+        btnAddAmenidades.setBackgroundColor(currentColor);
+        btnPublicar.setBackgroundColor(currentColor);
+        btnElegirUbicacion.setBackgroundColor(currentColor);
+
+        // Configuración de SeekBar
+        seekBar.setMax(100);
+        seekBar.setProgress(10);
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                precioInput.setText(String.format(Locale.getDefault(), "₡%.2f", (float) progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
 
         // Configurar el NumberPicker
         numHabitacionesPicker.setMinValue(1);  // Valor mínimo
@@ -67,7 +128,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
         });
 
         // Lista de amenidades (opciones)
-        amenidadesArray = getResources().getStringArray(R.array.amenidades_array);  // Puedes definirlo en res/values/strings.xml
+        amenidadesArray = getResources().getStringArray(R.array.amenities_array);  // Puedes definirlo en res/values/strings.xml
         selectedItems = new boolean[amenidadesArray.length];
         selectedAmenidades = new ArrayList<>();
 
@@ -106,7 +167,6 @@ public class PublicarCasaActivity extends AppCompatActivity {
         selectVehiculo.setAdapter(vehiculoAdapter);
 
         // Configura el botón para abrir el mapa
-        Button btnElegirUbicacion = findViewById(R.id.btnElegirUbicacion);
         btnElegirUbicacion.setOnClickListener(v -> {
             // Lanzar la actividad de MapActivity
             Intent intent = new Intent(PublicarCasaActivity.this, MapActivity.class);
@@ -119,12 +179,19 @@ public class PublicarCasaActivity extends AppCompatActivity {
         // Configurar el botón para mostrar el diálogo
         btnPhoto.setOnClickListener(v -> {
             photoManager.showPhotoSelectionDialog((dialog, which) -> {
-                if (which == 0) {
-                    // Opción para tomar una foto
-                    photoManager.dispatchTakePictureIntent();
-                } else if (which == 1) {
-                    // Opción para seleccionar de la galería
-                    photoManager.openGallery();
+                if (totalFotos < 10) {
+                    if (which == 0) {
+                        // Opción para tomar una foto
+                        photoManager.dispatchTakePictureIntent();
+                    } else if (which == 1) {
+                        // Opción para seleccionar de la galería
+                        photoManager.openGallery();
+                    }
+                    totalFotos++;
+                }
+                else
+                {
+                    Toast.makeText(PublicarCasaActivity.this, getString(R.string.maxFotoCasa), Toast.LENGTH_SHORT).show();
                 }
             });
         });
@@ -135,11 +202,69 @@ public class PublicarCasaActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (validarCampos()) {
                     // Lógica para publicar la casa (si todo está correcto)
-                    Toast.makeText(PublicarCasaActivity.this, "Publicando la casa...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PublicarCasaActivity.this, getString(R.string.publicarCasa), Toast.LENGTH_SHORT).show();
+
+                    String carpetaVivienda = "Viviendas Arrendadas/" + inputTitulo.getText().toString() + "/";
+                    crearCarpeta(carpetaVivienda);
+
+                    StorageReference carpetaRef = FirebaseStorage.getInstance().getReference(carpetaVivienda );
+                    crearYSubirTxt(carpetaRef.child("info.txt"));
+
+                    for (int i = 0; i < listaDeFotos.size(); i++) {
+                        Bitmap bit = listaDeFotos.get(i);
+                        Uri imageUri = getUriFromBitmap(bit);
+                        uploadPictureToFirebase(imageUri, i);
+                    }
+
                 }
             }
         });
 
+        dateStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar calendar = Calendar.getInstance();
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        PublicarCasaActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                String formattedDate = ": " + dayOfMonth + "/" + (month + 1) + "/" + year;
+                                dateStart.setText(getString(R.string.FechaInicio) + formattedDate);
+                            }
+                        },
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)
+                );
+
+                datePickerDialog.show();
+            }
+        });
+
+        dateEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar calendar = Calendar.getInstance();
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        PublicarCasaActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                String formattedDate = ": " + dayOfMonth + "/" + (month + 1) + "/" + year;
+                                dateEnd.setText(getString(R.string.FechaFinal) + formattedDate);
+                            }
+                        },
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)
+                );
+
+                datePickerDialog.show();
+            }
+        });
     }
 
     @Override
@@ -159,46 +284,52 @@ public class PublicarCasaActivity extends AppCompatActivity {
 
     // Método para validar todos los campos antes de publicar
     private boolean validarCampos() {
+        // Verificar si la el titulo está vacío
+        if (inputTitulo.getText().toString().trim().isEmpty()) {
+            Toast.makeText(this, getString(R.string.errorTitulo), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         // Verificar si la descripción está vacía
         if (descripcionInput.getText().toString().trim().isEmpty()) {
-            Toast.makeText(this, "La descripción no puede estar vacía", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.validarDescripcion), Toast.LENGTH_SHORT).show();
             return false;
         }
 
         // Verificar si el precio está vacío
         if (precioInput.getText().toString().trim().isEmpty()) {
-            Toast.makeText(this, "El precio no puede estar vacío", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.validarPrecio), Toast.LENGTH_SHORT).show();
             return false;
         }
 
         // Verificar si la ubicación (latitud y longitud) ha sido seleccionada
         if (latitudHome == 0.0 || longitudHome == 0.0) {
-            Toast.makeText(this, "Debes elegir una ubicación", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.validarUbicacion), Toast.LENGTH_SHORT).show();
             return false;
         }
 
         // Verificar si hay al menos una foto
         if (photoManager.getPhotoCount() == 0) {
-            Toast.makeText(this, "Debes añadir al menos una foto", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.validarFoto), Toast.LENGTH_SHORT).show();
             return false;
         }
 
         // Verificar si hay al menos una regla de uso
         if (numeroReglas <= 1) {
-            Toast.makeText(this, "Debes añadir al menos una regla de uso", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.validarReglas), Toast.LENGTH_SHORT).show();
             return false;
         }
 
         // Verificar si hay al menos una amenidad seleccionada
         if (selectedAmenidades.isEmpty()) {
-            Toast.makeText(this, "Debes seleccionar al menos una amenidad", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.validarAmenidades), Toast.LENGTH_SHORT).show();
             return false;
         }
 
         // Verificar si el checkbox de check-in/check-out está seleccionado
         CheckBox checkInCheckOut = findViewById(R.id.checkInCheckOutCheckbox);
         if (!checkInCheckOut.isChecked()) {
-            Toast.makeText(this, "Debes aceptar los términos de check-in y check-out", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.validarcheckInCheckOut), Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -215,14 +346,14 @@ public class PublicarCasaActivity extends AppCompatActivity {
     // Método principal para mostrar el diálogo de selección múltiple
     private void showMultiSelectDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(PublicarCasaActivity.this);
-        builder.setTitle("Selecciona Amenidades");
+        builder.setTitle(getString(R.string.seleccionAmenidades));
 
         // Configurar las opciones del diálogo con selección múltiple
         builder.setMultiChoiceItems(amenidadesArray, selectedItems, getMultiChoiceClickListener());
 
         // Configurar botones de acción (OK y Cancelar)
-        builder.setPositiveButton("OK", getPositiveButtonClickListener());
-        builder.setNegativeButton("Cancelar", getNegativeButtonClickListener());
+        builder.setPositiveButton(getString(R.string.ok), getPositiveButtonClickListener());
+        builder.setNegativeButton(getString(R.string.msjabtActivity), getNegativeButtonClickListener());
 
         // Mostrar el diálogo
         builder.create().show();
@@ -243,7 +374,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
         return new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(PublicarCasaActivity.this, "Amenidades seleccionadas: " + selectedAmenidades, Toast.LENGTH_LONG).show();
+                Toast.makeText(PublicarCasaActivity.this, getString(R.string.amenidadSeleccionadas) + selectedAmenidades, Toast.LENGTH_LONG).show();
             }
         };
     }
@@ -264,7 +395,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
             // Añadir la opción seleccionada a la lista y mostrar un Toast
             if (!selectedAmenidades.contains(amenidadesArray[which])) {
                 selectedAmenidades.add(amenidadesArray[which]);
-                Toast.makeText(PublicarCasaActivity.this, "Seleccionado: " + amenidadesArray[which], Toast.LENGTH_SHORT).show();
+                Toast.makeText(PublicarCasaActivity.this, getString(R.string.amenidadesSeleccionadas) + amenidadesArray[which], Toast.LENGTH_SHORT).show();
             }
         } else {
             // Eliminar la opción si se deselecciona
@@ -284,10 +415,10 @@ public class PublicarCasaActivity extends AppCompatActivity {
                         longitudHome = data.getDoubleExtra("longitud", 0.0);
 
                         // Mostrar los valores en un Toast
-                        Toast.makeText(PublicarCasaActivity.this, "Latitud: " + latitudHome + ", Longitud: " + longitudHome, Toast.LENGTH_LONG).show();
+                        Toast.makeText(PublicarCasaActivity.this, getString(R.string.hint_latitud) + latitudHome + ", " + getString(R.string.hint_longitud) + longitudHome, Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(PublicarCasaActivity.this, "No se obtuvo la ubicación", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PublicarCasaActivity.this, getString(R.string.errorUbicacion), Toast.LENGTH_SHORT).show();
                 }
             }
     );
@@ -343,6 +474,163 @@ public class PublicarCasaActivity extends AppCompatActivity {
             numeroReglas++;
         } else if (tipoCampo.equals("amenidad")) {
             numeroAmenidad++;
+        }
+    }
+
+    // Método para agregar las imágenes a la lista
+    public void agregarImagenALaLista(Bitmap bitmap) {
+        listaDeFotos.add(bitmap);
+        // Mostrar el tamaño de la lista en los logs
+        Log.d("PublicarCasaActivity", "Total fotos en la lista: " + listaDeFotos.size());
+    }
+
+
+    private void crearCarpeta(String rutaCarpeta) {
+        try {
+
+            // Obtener el nombre del archivo del input (nombre del usuario)
+            String name = inputTitulo.getText().toString().trim(); // Eliminar espacios innecesarios
+            String archivoDummy = name + ".txt"; // Archivo vacío
+            String rutaCompleta = rutaCarpeta + archivoDummy; // Ruta completa combinada
+
+            // Obtener la referencia al Storage de Firebase
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReference();
+
+            // Crear una referencia a la ruta completa
+            StorageReference carpetaRef = storageRef.child(rutaCompleta);
+
+        } catch (Exception e) {
+            System.err.println("Error al crear la carpeta: " + e.getMessage());
+        }
+    }
+
+    private Uri getUriFromBitmap(Bitmap bitmap) {
+        // Guardar el bitmap en un archivo temporal
+        try {
+            File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_image.png");
+            FileOutputStream fos = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+
+            // Crear y retornar el Uri del archivo
+            return Uri.fromFile(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void crearYSubirTxt(StorageReference storageRef) {
+        try {
+            // Crear un StringBuilder para formar el contenido del archivo
+            StringBuilder contenidoArchivo = new StringBuilder();
+            Spinner vehiculo = findViewById(R.id.spinnerVehiculo);
+            Spinner casa = findViewById(R.id.spinnerTipoCasa);
+            String nombreCasa = inputTitulo.getText().toString();
+            String descripcionCasa = descripcionInput.getText().toString();
+            String precioPorNoche = precioInput.getText().toString();
+            GlobalColor globalVariable = (GlobalColor) getApplication();
+
+
+            // Añadir líneas de ejemplo (puedes reemplazar con tus propios datos)
+            contenidoArchivo.append("InformacionDeVivienda_").append("\n");
+            contenidoArchivo.append("DuenoDeVivienda:").append(globalVariable.getCurrentuserName()).append("\n");
+            contenidoArchivo.append("NombreDeVivienda:").append(nombreCasa).append("\n");
+            contenidoArchivo.append("DescripcionGeneral:").append(descripcionCasa).append("\n");
+            contenidoArchivo.append("NumeroHabitaciones:").append(numHabitacionesPicker.getValue()).append("\n");
+            contenidoArchivo.append("Precio:").append(precioPorNoche).append("\n");
+            contenidoArchivo.append("Longitud:").append(longitudHome).append("\n");
+            contenidoArchivo.append("Latitud:").append(latitudHome).append("\n");
+
+            int i = 0;
+            for (String strg: selectedAmenidades
+            ) {
+                contenidoArchivo.append("Amenidad").append(i).append(":").append(strg).append("\n");
+                i++;
+            }
+            contenidoArchivo.append("TipoCasa:").append(casa.getSelectedItem().toString()).append("\n");
+            contenidoArchivo.append("VehiculoPreferencia:").append(vehiculo.getSelectedItem().toString()).append("\n");
+
+            sendMessage(contenidoArchivo.toString());
+            // Convertir el contenido a bytes
+            byte[] data = contenidoArchivo.toString().getBytes("UTF-8");
+
+            // Subir el archivo al Storage en la referencia dada
+            storageRef.putBytes(data)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Manejar el éxito de la subida
+                        System.out.println("Archivo subido exitosamente a: " + storageRef.getPath());
+                    })
+                    .addOnFailureListener(e -> {
+                        // Manejar errores en la subida
+                        System.err.println("Error al subir el archivo: " + e.getMessage());
+                    });
+
+        } catch (Exception e) {
+            System.err.println("Error al crear o subir el archivo: " + e.getMessage());
+        }
+    }
+    private void connectToServer(String ip, int port) {
+        new Thread(() -> {
+            try {
+                socket = new Socket(ip, port);
+                out = new PrintWriter(socket.getOutputStream(), true);
+                in = new Scanner(socket.getInputStream());
+
+                while (true) {
+                    if (in.hasNextLine()) {
+                        String message = in.nextLine();
+                        runOnUiThread(() -> {
+                            Log.d("RegisterActivity", "Mensaje recibido: " + message);
+                        });
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void sendMessage(String message) {
+        new Thread(() -> {
+            try {
+                if (out != null) {
+                    out.println(message);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+
+    private void uploadPictureToFirebase(Uri imageUri, int numImagen) {
+        if (imageUri != null) {
+            // Crear una referencia a Firebase Storage
+            String nombreCasa = inputTitulo.getText().toString();
+            String direccionCreacionCarpeta = "Viviendas Arrendadas/" + nombreCasa + "/";
+            String nombre = "Imagen" + numImagen;
+
+            // Crear la referencia para la carpeta del usuario
+            StorageReference carpetaRef = FirebaseStorage.getInstance().getReference(direccionCreacionCarpeta + nombre + "/");
+
+            // Crear un nombre único para el archivo de imagen
+            String fileName = "Imagen" + numImagen;
+            StorageReference fileReference = carpetaRef; // Asegúrate de que esté dentro de la misma carpeta
+
+            // Subir la imagen
+            fileReference.putFile(imageUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Imagen subida con éxito
+                        Toast.makeText(PublicarCasaActivity.this, "Imagen subida exitosamente", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        // Manejo de errores
+                        Toast.makeText(PublicarCasaActivity.this, "Error al subir la imagen: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            Toast.makeText(this, "Por favor selecciona una imagen", Toast.LENGTH_SHORT).show();
         }
     }
 }
