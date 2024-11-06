@@ -132,11 +132,12 @@ class ChatServer:
         if (self.arduino != None):
             self.arduino.write(message.encode("uft-8"))
     
-
     def leerMensajeArduino(self):
         while True:
-            ino_message = self.arduino.read_until(b'\n').decode('uft-8')
-            self.broadcast(ino_message, self.server_socket)
+            ino_message = self.arduino.read_until(b'\n').decode('utf-8')
+            
+            for socket in self.clients:
+                self.send_message_to_respond_request(ino_message, socket)
 
     #Envia mensaje a socket 
     def send_message_to_respond_request(self, client_socket, message):
