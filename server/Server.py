@@ -108,6 +108,9 @@ class ChatServer:
                     elif message.startswith("Recuperacion_"):
                         print(message)
                         self.existe_correo(message[len("Recuperacion_"):], client_socket)
+
+                    elif message.startswith("SERVO_"): #Esto ya que solo se necesita enviar informacion al arduino para mover servo.
+                        self.envioMensajeArduino(message)
                     else:
                         print("No llegó mensaje relevante")
             except Exception as e:

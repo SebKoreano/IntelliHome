@@ -51,20 +51,22 @@ void setup() {
 }
 
 void loop() {
-  serverMessage = Serial.readStringUntil('\n'); // Leer strings del puerto serial hasta encontrar '\n'
+  serverMessage = Serial.readStringUntil('\n'); // Leer strings del puerto serial hasta encontrar '\n', esto solo es necesario para servo.
   flameSensor = digitalRead(SENSOR_FLAME_PIN) // Lee el valor de fuego.
   int switchState = digitalRead(MOVE_SENSOR_PIN);
 
   // Condiciones para ver fuego.
   if (flameSensor && !fire)
   {
-    Serial.write("Llama detectada!");
+    Serial.println("Llama detectada!")
+    Serial.write("F1"); //F1 indica fuego prendido
     fire = true;
   }
 
   if (!flameSensor && fire)
   {
-    Serial.write("No hay llama cerca.");
+    Serial.println("No hay llama cerca.");
+    Serial.write("F2"); //F2 indica fuego fue apagado
     fire = false;
   }
 
@@ -97,18 +99,18 @@ void loop() {
   }
 
   // Caso para analizar humedad
-  if (serverMessage.startsWith("Humedad_")){
-    // Lectura de sensor de humedad esto se mide en porcentaje en relacion con superficie de mdicion
-    float h = dht.readHumidity();
+  // Lectura de sensor de humedad esto se mide en porcentaje en relacion con superficie de mdicion
+  float h = dht.readHumidity();
 
-    if (isnan(h)) {
-      Serial.println("Error al leer el sensor.");
-
-    } else {
-      Serial.write(h); // enviarlo a servidor
-    }
-
+  if (isnan(h)) {
+    Serial.println("Error al leer el sensor.");
+  } else {
+    Serial.println(h);
+    String mensaje = "Humedad:" + String(h); 
+    Serial.write(mensaje.c_str()); // enviar valor de humedad
   }
+
+  
 
 
   // Caso para leer sensor de inclinacion
@@ -116,7 +118,7 @@ void loop() {
     Serial.println("No hay inclinación (LOW)");
   } else {
     Serial.println("Inclinación detectada (HIGH)");
-    Serial.writer('Temblor_')
+    Serial.writer('T') //Indicador de temblor
   }
 
   delay(2000)

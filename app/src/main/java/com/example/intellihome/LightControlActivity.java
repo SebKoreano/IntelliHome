@@ -18,7 +18,9 @@ public class LightControlActivity extends AppCompatActivity {
     private Socket socket;
     private PrintWriter out;
     private Scanner in;
-
+    private PrintWriter outArd;
+    private Scanner inArd;
+    private String humedad;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +55,7 @@ public class LightControlActivity extends AppCompatActivity {
         btnBano.setOnClickListener(v -> sendMessage("N"));
         btnLavanderia.setOnClickListener(v -> sendMessage("M"));
 
-        // Hilo que establece la conexión con el servidor
+        // Hilo que establece la conexión con el servidor de Rasb
         new Thread(() -> {
             try {
                 // Conectar a la dirección IP y puerto del servidor
@@ -69,6 +71,27 @@ public class LightControlActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }).start();  // Iniciar el hilo de conexión
+
+
+
+        // Iniciar el hilo para conectarse a Arduino por medio de Server.
+        new Thread(() -> {
+            try {
+                socket = new Socket("192.168.18.206", 3535); //192.168.18.206
+
+                outArd = new PrintWriter(socket.getOutputStream(), true);
+                inArd = new Scanner(socket.getInputStream());
+
+                while (true) {
+                    if (inArd.hasNextLine()) {
+                        String message = inArd.nextLine();
+                        sensorMessageProcesor(message);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     // Método para enviar un mensaje al servidor (en un hilo separado para evitar bloqueo en la UI)
@@ -106,4 +129,36 @@ public class LightControlActivity extends AppCompatActivity {
     private void mostrarMensaje(String mensaje) {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();  // Mostrar el mensaje en pantalla
     }
+
+    //Esta funcion debe llamarse con "SERVO_90" para girar 90 grados o "SERVO_0" para devolver a posicion inicial.
+    public void sendArduinoMessage(String message){
+        new Thread(() -> {
+            try {
+                if (outArd != null) {
+                    outArd.println(message);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    public void sensorMessageProcesor(String message){
+        if (message.startsWith("F1")){//Indica que el fuego se encendió
+
+        }
+
+        else if (message.startsWith("F2")) { //Indicador de que el fuego prendido ahora está apagado
+
+        }
+
+        else if (message.startsWith("T")) { //Indicador de que tembló
+
+        }
+
+        else if (message.startsWith("Humedad:")) { //Indicador de humedad
+            humedad = message.substring(8);
+        }
+    }
+
 }
