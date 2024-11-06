@@ -3,6 +3,7 @@ import threading
 import secrets
 import string
 import os
+import serial
 
 #Para envio de email.
 import smtplib
@@ -43,12 +44,27 @@ class ChatServer:
         self.server_socket.bind((host, port))
         self.server_socket.listen(5)
         self.clients = []
+        self.arduino = None
         self.agregar_usuario_a_matriz()
 
 
         # Hilo para manejar el servidor
         self.thread = threading.Thread(target=self.accept_connections)
         self.thread.start()
+
+        # Hilo para leer mensajes de arduino
+        self.arduino_Thread = threading.Thread(target= self.leerMensajeArduino)
+        self.arduino_Thread.start()
+
+        #Conectarse con arduino
+        serialPort = 'COM7'
+        try:
+            self.arduino = serial.Serial(serialPort, 9600)
+            print('Conectado a Arduino')
+        except serial.SerialException as e:
+            print(f'Error al abrir puerto serial:{e}')
+
+
     def accept_connections(self):
         while True:
             client_socket, addr = self.server_socket.accept()
@@ -106,6 +122,21 @@ class ChatServer:
         except:
             sender_socket.close()
             self.clients.remove(sender_socket)
+
+
+    #Se escriben los comandos para envio de mensajes:
+    # Servo para cerrar puerta: SERVO_0
+    # Servo para abrir puerta: SERVO_90
+
+    def envioMensajeArduino(self, message):
+        if (self.arduino != None):
+            self.arduino.write(message.encode("uft-8"))
+    
+
+    def leerMensajeArduino(self):
+        while True:
+            ino_message = self.arduino.read_until(b'\n').decode('uft-8')
+            self.broadcast(ino_message, self.server_socket)
 
     #Envia mensaje a socket 
     def send_message_to_respond_request(self, client_socket, message):
