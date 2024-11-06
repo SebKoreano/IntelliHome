@@ -194,4 +194,13 @@
     <string name="Rent">Bérlés</string>
     <string name="FechaInicio">Kezdeti időpont</string>
     <string name="FechaFinal">Végső időpont</string>
+
+    <string name="Monitoreo">Monitoring">Fényfigyelés és -vezérlés</string>
+    <string name="Bano">Fürdőszoba</string>
+    <string name="Fuego">Tűz</string>
+    <string name="Sismos">Földrengések</string>
+    <string name="Puerta">Ajtó</string>
+    <string name="Humedad">Páratartalom</string>
+    <string name="Sala">Salão</string>
+    <string name="Pila">Mosogatóban</string>
 </resources>

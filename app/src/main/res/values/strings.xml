@@ -194,4 +194,13 @@
     <string name="Rent">Alquilar</string>
     <string name="FechaInicio">Fecha Inicio</string>
     <string name="FechaFinal">Fecha Final</string>
+
+    <string name="Monitoreo">Monitoreo y Control de Luces</string>
+    <string name="Bano">Baño</string>
+    <string name="Fuego">Fuego</string>
+    <string name="Sismos">Sismos</string>
+    <string name="Puerta">Puerta</string>
+    <string name="Humedad">Humedad</string>
+    <string name="Sala">Sala</string>
+    <string name="Pila">Pila</string>
 </resources>

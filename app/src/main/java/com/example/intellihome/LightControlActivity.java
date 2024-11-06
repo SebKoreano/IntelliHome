@@ -18,6 +18,7 @@ public class LightControlActivity extends AppCompatActivity {
     private Socket socket;
     private PrintWriter out;
     private Scanner in;
+    private Button btnFuego, btnSismos, btnHumedad, btnPuerta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,10 @@ public class LightControlActivity extends AppCompatActivity {
         btnSala = findViewById(R.id.btnSala);
         btnBano = findViewById(R.id.btnBano);
         btnLavanderia = findViewById(R.id.btnLavanderia);
+        btnFuego = findViewById(R.id.Fuego);
+        btnHumedad = findViewById(R.id.Humedad);
+        btnPuerta = findViewById(R.id.Lock);
+        btnSismos = findViewById(R.id.Sismo);
 
         GlobalColor globalColor = (GlobalColor) getApplication();
         int currentColor =  globalColor.getCurrentColor();
@@ -43,6 +48,11 @@ public class LightControlActivity extends AppCompatActivity {
         btnSala.setBackgroundColor(currentColor);
         btnBano.setBackgroundColor(currentColor);
         btnLavanderia.setBackgroundColor(currentColor);
+
+        btnSismos.setBackgroundColor(currentColor);
+        btnHumedad.setBackgroundColor(currentColor);
+        btnPuerta.setBackgroundColor(currentColor);
+        btnFuego.setBackgroundColor(currentColor);
 
         // Configuración de listeners para cada botón
         btnCuartoPrincipal.setOnClickListener(v -> sendMessage("Z"));

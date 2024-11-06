@@ -194,4 +194,13 @@
     <string name="Rent">Rent</string>
     <string name="FechaInicio">Start Date</string>
     <string name="FechaFinal">End Date</string>
+
+    <string name="Monitoreo">Light Monitoring and Control</string>
+    <string name="Bano">Bathroom</string>
+    <string name="Fuego">Fire</string>
+    <string name="Sismos">Earthquakes</string>
+    <string name="Puerta">Door</string>
+    <string name="Humedad">Humidity</string>
+    <string name="Sala">Hall</string>
+    <string name="Pila">Sink</string>
 </resources>
