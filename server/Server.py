@@ -35,7 +35,7 @@ class Usuario:
             server.quit()
 
 class ChatServer:
-    def __init__(self, host="192.168.18.5", port=3535): #192.168.18.206
+    def __init__(self, host="172.18.77.74", port=3535): #192.168.18.206
         self.matriz_Alquilador = [] 
         self.matriz_Propietario = []
         self.matriz_AmbasFunciones = [] 
@@ -62,7 +62,7 @@ class ChatServer:
                 if message:
                     message = message.strip()
 
-                    print("Llegó: "+message)
+                    print("Llegó: " + message)
 
                     # Verificar el prefijo del mensaje
                     if message.startswith("CrearCuenta_"):  # Nuevo usuario
@@ -76,19 +76,21 @@ class ChatServer:
                         info = message.split("_")
                         self.leerInformacionDeUsuario(info[0], info[1])
 
-
                     elif message.startswith("InformacionDeVivienda_"):
                         self.guardarInforDeVivienda(message[len("InformacionDeVivienda_"):])
 
                     elif message.startswith("ObtenerInformacionVivienda_"):
                         message = message[len("ObtenerInformacionVivienda_"):]
-                        info = message.split("_")
-                        self.leerInformacionDeVivienda(info[0], info[1])
-
+                        self.leerInformacionDeVivienda(message, client_socket)
 
                     elif message.startswith("Login_"):
                         print(message)
                         self.buscar_login(message[len("Login_"):], client_socket)
+
+                    elif message.startswith("WhatsApp/"):
+                        print(message)
+                        data = message.split("/")
+                        self.WhatsAppMessage(data[1], data[2])
 
                     elif message.startswith("Recuperacion_"):
                         print(message)
@@ -160,7 +162,6 @@ class ChatServer:
             CardCVV = datos_usuario[6]
             CardHolder = datos_usuario[7]
             usuario_fila = [usuario, telefono, email, contrasena, Iban, CardNum, CardCVV, CardHolder]
-
 
         print(usuario_fila)
 
@@ -363,8 +364,6 @@ class ChatServer:
         usuario.send_password_reset_email(correo, new_pass)  # Enviar el correo
         self.cambiar_Contraseña(correo, new_pass, Tipo)  # Cambiar la contraseña en la matriz
 
-
-
     #De aquí en adelante estará la lógica para guardar y acceder a InformacionDeUsuarios
     def guardarInforDeUsuario(self, info_usuario,):
         # Buscar el nombre de usuario en la cadena de entrada
@@ -405,11 +404,8 @@ class ChatServer:
         print(f"No se encontró '{informacionRequerida}' en {ruta_archivo}.")
         return None
 
-
-
-
-    #Aqiuí estarán las funciones para guardar y acceder a InformacionDeViviendas
-    def guardarInforDeVivienda(self, info_usuario,):
+    #Aquí estarán las funciones para guardar y acceder a InformacionDeViviendas
+    def guardarInforDeVivienda(self, info_usuario):
         # Buscar el nombre de usuario en la cadena de entrada
         username = None
         ruta='server/InformacionDeVivienda/'
@@ -430,7 +426,7 @@ class ChatServer:
             archivo.write(info_usuario)
 
 
-    def leerInformacionDeVivienda(self, informacionRequerida, nombreVivienda):
+    def leerInformacionDeVivienda(self, nombreVivienda, socket):
         ruta_archivo = f'server/InformacionDeVivienda/{nombreVivienda}.txt'
         
         # Verificar si el archivo existe
@@ -444,21 +440,20 @@ class ChatServer:
         # Leer el archivo y buscar todas las ocurrencias de la información requerida
         with open(ruta_archivo, 'r') as archivo:
             for linea in archivo:
-                # Verificar si la línea comienza con la clave 'informacionRequerida:'
-                if linea.startswith(f"{informacionRequerida}:"):
-                    # Extraer el valor después de 'informacionRequerida:'
-                    resultado = linea.split(":", 1)[1].strip()
-                    resultados.append(resultado)
+                resultados.append(linea)
         
         # Unir todos los resultados encontrados con guiones bajos "_"
         if resultados:
             resultado_final = "_".join(resultados)
-            return resultado_final  # Devuelve la cadena unida
+            return self.send_message_to_respond_request(resultado_final, socket)  # Devuelve la cadena unida
 
         # Si no se encuentra la información requerida, retornar None
-        print(f"No se encontró '{informacionRequerida}' en {ruta_archivo}.")
+        print(f"No se encontró información de {ruta_archivo}.")
         return None
-
+    
+    # Function to send WhatsApp Messages
+    def WhatsAppMessage(self, phoneNumber, message):
+        print(f"PhoneNumber({phoneNumber}) Message: {message}")
 
 def generar_nueva_contraseña():
     print("entro")

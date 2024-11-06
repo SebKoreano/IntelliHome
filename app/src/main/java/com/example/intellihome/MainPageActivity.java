@@ -222,6 +222,9 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
             }
         }
 
+        GetHouseInfo house = new GetHouseInfo("House 14");
+        elements.add(new PropertyModule("House 14", "Apartament", "4X4", house.getDescripcionGeneral(), house.getNumeroHabitaciones(), house.getPrecio(), house.getDuenoDeVivienda(), house.getLatitud(), house.getLongitud(), rules1, house.getAmenidades(), null));
+
         PropertyModule property1 = new PropertyModule("House 1", "Apartment", "No parking", "Beautiful apartment with 2 rooms", "2", "1000", "John Doe", "12.34", "56.78", rules1, amenities1, null);
         PropertyModule property2 = new PropertyModule("House 2", "House", "Garage", "Spacious house with a garden", "3", "1500", "Jane Smith", "23.45", "67.89", rules2, amenities2, null);
         PropertyModule property3 = new PropertyModule("House 3", "Condo", "Street parking", "Modern condo with pool access", "1", "1200", "Bob Johnson", "34.56", "78.90", rules3, amenities3, null);
