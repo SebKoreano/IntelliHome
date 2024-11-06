@@ -192,4 +192,6 @@
     </string-array>
     <string name="Propietario">Tulajdonos</string>
     <string name="Rent">Bérlés</string>
+    <string name="FechaInicio">Kezdeti időpont</string>
+    <string name="FechaFinal">Végső időpont</string>
 </resources>

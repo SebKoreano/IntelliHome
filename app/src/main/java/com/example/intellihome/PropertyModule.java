@@ -1,5 +1,7 @@
 package com.example.intellihome;
 
+import android.net.Uri;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,8 +9,9 @@ import java.util.List;
 public class PropertyModule implements Serializable {
     private String title, type, vehicle, description, rooms, money, owner, x_coords, y_coords;
     private List<String> rules, amenities;
+    private List<Uri> imageUris;
 
-    public PropertyModule(String title, String type, String vehicle, String description, String rooms, String money, String owner, String x_coords, String y_coords, List<String> rules, List<String> amenities) {
+    public PropertyModule(String title, String type, String vehicle, String description, String rooms, String money, String owner, String x_coords, String y_coords, List<String> rules, List<String> amenities, List<Uri> imageUris) {
         this.title = title;
         this.type = type;
         this.vehicle = vehicle;
@@ -20,6 +23,7 @@ public class PropertyModule implements Serializable {
         this.y_coords = y_coords;
         this.rules = rules;
         this.amenities = amenities;
+        this.imageUris = imageUris != null ? imageUris : new ArrayList<>();
     }
 
     public String getX_coords() {
@@ -108,5 +112,13 @@ public class PropertyModule implements Serializable {
 
     public List<String> getAmenities() {
         return amenities;
+    }
+
+    public List<Uri> getImageUris() {
+        return imageUris;
+    }
+
+    public void setImageUris(List<Uri> imageUris) {
+        this.imageUris = imageUris;
     }
 }

@@ -2,11 +2,13 @@ package com.example.intellihome;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
@@ -46,7 +49,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
 
     private EditText descripcionInput, precioInput, inputTitulo;
     private NumberPicker numHabitacionesPicker;
-    private Button btnAddReglas, btnAddAmenidades, btnPhoto, btnPublicar;
+    private Button btnAddReglas, btnAddAmenidades, btnPhoto, btnPublicar, btnElegirUbicacion;
     private int numeroReglas = 1, numeroAmenidad= 1, totalFotos = 0;;
     public static final int MAP_REQUEST_CODE = 1;
     private double latitudHome, longitudHome;
@@ -61,13 +64,14 @@ public class PublicarCasaActivity extends AppCompatActivity {
     private Socket socket; // Socket para la conexión
     private PrintWriter out; // PrintWriter para enviar datos
     private Scanner in;
+    private TextView dateStart, dateEnd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publicarcasa);
         // Conectar al servidor
-        connectToServer("192.168.18.206", 3535); //192.168.18.206
+        connectToServer("192.168.18.5", 3535); //192.168.18.206
         // Inicializar vistas
 
         descripcionInput = findViewById(R.id.inputDescripcion);
@@ -81,7 +85,9 @@ public class PublicarCasaActivity extends AppCompatActivity {
         inputTitulo = findViewById((R.id.inputTitulo));
         background = findViewById(R.id.background);
         seekBar = findViewById(R.id.seekbar);
-        Button btnElegirUbicacion = findViewById(R.id.btnElegirUbicacion);
+        btnElegirUbicacion = findViewById(R.id.btnElegirUbicacion);
+        dateStart = findViewById(R.id.btnDateStart);
+        dateEnd = findViewById(R.id.btnDateEnd);
 
         GlobalColor globalColor = (GlobalColor) getApplication();
         int currentColor = globalColor.getCurrentColor();
@@ -214,6 +220,51 @@ public class PublicarCasaActivity extends AppCompatActivity {
             }
         });
 
+        dateStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar calendar = Calendar.getInstance();
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        PublicarCasaActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                String formattedDate = ": " + dayOfMonth + "/" + (month + 1) + "/" + year;
+                                dateStart.setText(getString(R.string.FechaInicio) + formattedDate);
+                            }
+                        },
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)
+                );
+
+                datePickerDialog.show();
+            }
+        });
+
+        dateEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar calendar = Calendar.getInstance();
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        PublicarCasaActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                String formattedDate = ": " + dayOfMonth + "/" + (month + 1) + "/" + year;
+                                dateEnd.setText(getString(R.string.FechaFinal) + formattedDate);
+                            }
+                        },
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)
+                );
+
+                datePickerDialog.show();
+            }
+        });
     }
 
     @Override

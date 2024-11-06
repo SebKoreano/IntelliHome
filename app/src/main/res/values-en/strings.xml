@@ -192,4 +192,6 @@
     </string-array>
     <string name="Propietario">Owner</string>
     <string name="Rent">Rent</string>
+    <string name="FechaInicio">Start Date</string>
+    <string name="FechaFinal">End Date</string>
 </resources>
