@@ -162,6 +162,7 @@ public class LightControlActivity extends AppCompatActivity {
         });
     }
 
+    //Aqui se valida que el dispositivo tenga biometria
     public void validarDispositivo() {
         BiometricManager biometricManager = BiometricManager.from(this);
         switch (biometricManager.canAuthenticate()) {
@@ -170,22 +171,24 @@ public class LightControlActivity extends AppCompatActivity {
         }
     }
 
+    //Este metodo se encarga de ejecutar la biometria
     public void ejecutarBiometria(){
         Executor executor = ContextCompat.getMainExecutor(this);
 
         biometricPrompt = new BiometricPrompt(this, new BiometricPrompt.AuthenticationCallback() {
+            //Este es el caso de fallo
             @Override
             public void onAuthenticationFailed() {
                 super.onAuthenticationFailed();
                 Toast.makeText(getApplicationContext(), getString(R.string.biometric_invalid_fingerprint), Toast.LENGTH_SHORT).show();
             }
-
+            //Este es el caso de exito
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
                 Toast.makeText(getApplicationContext(), getString(R.string.biometric_valid_fingerprint), Toast.LENGTH_SHORT).show();
             }
-
+            //Este es el caso de error
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
