@@ -88,6 +88,8 @@ public class LightControlActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }).start();  // Iniciar el hilo de conexión
+
+
     }
 
     // Método para enviar un mensaje al servidor (en un hilo separado para evitar bloqueo en la UI)
