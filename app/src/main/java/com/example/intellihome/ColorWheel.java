@@ -71,7 +71,7 @@ public class ColorWheel extends AppCompatActivity {
                     GlobalColor globalColor = (GlobalColor) getApplication();
                     globalColor.setCurrentColor(color);
 
-                    Intent intent = new Intent(ColorWheel.this, MainActivity.class);
+                    Intent intent = new Intent(ColorWheel.this, MainPageActivity.class);
                     startActivity(intent);
                     finish();
                 }

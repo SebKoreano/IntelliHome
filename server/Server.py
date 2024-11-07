@@ -4,10 +4,6 @@ import secrets
 import string
 import os
 
-# WhatsApp notifications
-import pywhatkit
-from datetime import datetime, timedelta
-
 #Para envio de email.
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -39,7 +35,7 @@ class Usuario:
             server.quit()
 
 class ChatServer:
-    def __init__(self, host="172.18.77.88", port=3535): #192.168.18.206
+    def __init__(self, host="172.18.96.103", port=3535): #192.168.18.206
         self.matriz_Alquilador = [] 
         self.matriz_Propietario = []
         self.matriz_AmbasFunciones = [] 
@@ -457,20 +453,7 @@ class ChatServer:
     
     # Function to send WhatsApp Messages
     def WhatsAppMessage(self, phoneNumber, message):
-        
-        # Obtener la hora actual
-        now = datetime.now()
-        hora = now.hour
-        minuto = now.minute + 1  # Sumar un minuto a la hora actual
-
-        # Si el minuto es 60, reajustar la hora
-        if minuto == 60:
-            minuto = 0
-            hora += 1
-
-        # Enviar el mensaje
-        pywhatkit.sendwhatmsg("+50685400752", "This is INTELLIHOME", hora, minuto)
-        
+            
         print(f"PhoneNumber({phoneNumber}) Message: {message}")
 
 def generar_nueva_contraseña():

@@ -6,6 +6,7 @@ public class GlobalColor extends Application {
     private int currentColor = 0xFF57CDF5;
     private String userName;
     private String tipoUsuario;
+    private String ip = "172.18.96.103";
 
     public int getCurrentColor() {
         return currentColor;
@@ -23,4 +24,7 @@ public class GlobalColor extends Application {
 
     public void setCurrenttipoUsuario(String newUserType){this.tipoUsuario = newUserType;}
 
+    public String getIp() {
+        return ip;
+    }
 }

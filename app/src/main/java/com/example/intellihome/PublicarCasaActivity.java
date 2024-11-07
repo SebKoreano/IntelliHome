@@ -70,8 +70,12 @@ public class PublicarCasaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publicarcasa);
+
+        GlobalColor globalColor = (GlobalColor) getApplication();
+        int currentColor = globalColor.getCurrentColor();
+
         // Conectar al servidor
-        connectToServer("192.168.18.5", 3535); //192.168.18.206
+        connectToServer(globalColor.getIp(), 3535); //192.168.18.206
         // Inicializar vistas
 
         descripcionInput = findViewById(R.id.inputDescripcion);
@@ -88,9 +92,6 @@ public class PublicarCasaActivity extends AppCompatActivity {
         btnElegirUbicacion = findViewById(R.id.btnElegirUbicacion);
         dateStart = findViewById(R.id.btnDateStart);
         dateEnd = findViewById(R.id.btnDateEnd);
-
-        GlobalColor globalColor = (GlobalColor) getApplication();
-        int currentColor = globalColor.getCurrentColor();
 
         background.setBackgroundColor(currentColor);
         btnAddReglas.setBackgroundColor(currentColor);

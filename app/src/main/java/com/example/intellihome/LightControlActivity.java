@@ -76,7 +76,7 @@ public class LightControlActivity extends AppCompatActivity {
         new Thread(() -> {
             try {
                 // Conectar a la dirección IP y puerto del servidor
-                socket = new Socket("192.168.0.107", 6969);
+                socket = new Socket(globalColor.getIp(), 6969);
                 // Inicializar el PrintWriter para enviar datos al servidor
                 out = new PrintWriter(socket.getOutputStream(), true);
                 // Inicializar el Scanner para recibir datos del servidor (actualmente no se usa)
