@@ -194,7 +194,13 @@
     <string name="Rent">Aluguel</string>
     <string name="FechaInicio">Data de Início</string>
     <string name="FechaFinal">Data de Término</string>
-
+    <string name="biometric_prompt_title">Autenticação</string>
+    <string name="biometric_prompt_subtitle">Use sua impressão digital para entrar</string>
+    <string name="biometric_prompt_cancel">Cancelar</string>
+    <string name="biometric_no_hardware">Dispositivo não compatível com biometria</string>
+    <string name="biometric_invalid_fingerprint">Impressão digital inválida</string>
+    <string name="biometric_valid_fingerprint">Impressão digital válida</string>
+    <string name="biometric_authentication_error">Erro de autenticação</string>
     <string name="Monitoreo">Monitoramento e Controle de Luz</string>
     <string name="Bano">Banheiro</string>
     <string name="Fuego">Fogo</string>
