@@ -20,11 +20,13 @@
         android:layout_marginTop="24dp" />
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="500dp"
         android:layout_marginTop="32dp"
         android:background="@drawable/croquis"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitulo">
+        app:layout_constraintTop_toBottomOf="@+id/tvTitulo"
+        tools:layout_editor_absoluteX="0dp">
 
         <LinearLayout
             android:id="@+id/leftButtonGroup"
@@ -97,9 +99,9 @@
             android:id="@+id/rightButtonGroup"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="32dp">
+            android:layout_marginEnd="32dp"
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/btnBanoCuartoPrincipal"
@@ -153,4 +155,41 @@
         </LinearLayout>
 
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/Humedadstring"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/humedad"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.474"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.89" />
+
+    <ImageView
+        android:id="@+id/humedadimagen"
+        android:layout_width="76dp"
+        android:layout_height="71dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.264"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.924"
+        app:srcCompat="@drawable/humedad" />
+
+    <TextView
+        android:id="@+id/Humedadvariable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 g/m^2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.673"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.889" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

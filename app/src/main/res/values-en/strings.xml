@@ -171,4 +171,5 @@
     </string-array>
     <string name="Propietario">Owner</string>
     <string name="Rent">Rent</string>
+    <string name="humedad">Humidity:</string>
 </resources>

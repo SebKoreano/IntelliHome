@@ -21,10 +21,15 @@ public class LightControlActivity extends AppCompatActivity {
     private PrintWriter outArd;
     private Scanner inArd;
     private String humedad;
+    private TextView humedadTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_light_control);
+
+        // Inicialización de TextView para mostrar humedad
+        humedadTextView = findViewById(R.id.Humedadvariable);
 
         // Inicialización de los botones de la interfaz
         btnCuartoPrincipal = findViewById(R.id.btnCuartoPrincipal);
@@ -158,6 +163,7 @@ public class LightControlActivity extends AppCompatActivity {
 
         else if (message.startsWith("Humedad:")) { //Indicador de humedad
             humedad = message.substring(8);
+            runOnUiThread(() -> humedadTextView.setText(humedad + "g/m^2"));
         }
     }
 
