@@ -4,6 +4,9 @@ import secrets
 import string
 import os
 
+# WhatsApp notifications
+from datetime import datetime, timedelta
+
 #Para envio de email.
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -406,6 +409,8 @@ class ChatServer:
 
     #Aquí estarán las funciones para guardar y acceder a InformacionDeViviendas
     def guardarInforDeVivienda(self, info_usuario):
+        print("AQUIIIIIIII")
+        print(info_usuario)
         # Buscar el nombre de usuario en la cadena de entrada
         username = None
         ruta='server/InformacionDeVivienda/'
@@ -413,19 +418,19 @@ class ChatServer:
             if linea.startswith("NombreDeVivienda:"):
                 username = linea.split(":", 1)[1].strip()
                 break
-            
+        print(info_usuario)
         # Crear la ruta si no existe
         os.makedirs(ruta, exist_ok=True)
         
         # Definir el nombre del archivo usando el username extraído
         nombre_archivo = f"{username}.txt"
-        ruta_archivo = os.path.join(ruta, nombre_archivo)
         
         # Guardar la información en el archivo
-        with open(ruta_archivo, 'w') as archivo:
-            archivo.write(info_usuario)
+        self.guardar_texto(ruta + nombre_archivo, info_usuario)
 
-
+    def guardar_texto(self, direccion, texto):
+        with open(direccion, 'w') as archivo:
+            archivo.write(texto)
     def leerInformacionDeVivienda(self, nombreVivienda, socket):
         ruta_archivo = f'server/InformacionDeVivienda/{nombreVivienda}.txt'
         
@@ -452,8 +457,7 @@ class ChatServer:
         return None
     
     # Function to send WhatsApp Messages
-    def WhatsAppMessage(self, phoneNumber, message):
-            
+    def WhatsAppMessage(self, phoneNumber, message):        
         print(f"PhoneNumber({phoneNumber}) Message: {message}")
 
 def generar_nueva_contraseña():
