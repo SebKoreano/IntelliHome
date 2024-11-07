@@ -1,6 +1,8 @@
 package com.example.intellihome;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +12,11 @@ import android.widget.Button;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.Executor;
+import androidx.annotation.NonNull;
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 
 public class LightControlActivity extends AppCompatActivity {
 
@@ -19,6 +26,8 @@ public class LightControlActivity extends AppCompatActivity {
     private PrintWriter out;
     private Scanner in;
     private Button btnFuego, btnSismos, btnHumedad, btnPuerta;
+    BiometricPrompt biometricPrompt;
+    BiometricPrompt.PromptInfo promptInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +71,19 @@ public class LightControlActivity extends AppCompatActivity {
         btnSala.setOnClickListener(v -> sendMessage("B"));
         btnBano.setOnClickListener(v -> sendMessage("N"));
         btnLavanderia.setOnClickListener(v -> sendMessage("M"));
+
+        btnPuerta.setOnClickListener(v -> {
+            validarDispositivo();
+            ejecutarBiometria();
+            
+            promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                    .setTitle("Autenticación")
+                    .setSubtitle("Usa tu huella para ingresar")
+                    .setNegativeButtonText("Cancelar")
+                    .build();
+
+            biometricPrompt.authenticate(promptInfo);
+        });
 
         // Configuración de listeners para cada botón con alternancia de iconos
         setButtonToggleIcon(btnCuartoPrincipal);
@@ -137,6 +159,38 @@ public class LightControlActivity extends AppCompatActivity {
             isOn = !isOn;
             button.setTag(isOn);
             button.setCompoundDrawablesWithIntrinsicBounds(0, 0, isOn ? R.drawable.ic_lightbulb : R.drawable.ic_lightbulb_off, 0);
+        });
+    }
+
+    public void validarDispositivo() {
+        BiometricManager biometricManager = BiometricManager.from(this);
+        switch (biometricManager.canAuthenticate()) {
+            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
+                Toast.makeText(this, "Dispositivo no compatible con biometría", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void ejecutarBiometria(){
+        Executor executor = ContextCompat.getMainExecutor(this);
+
+        biometricPrompt = new BiometricPrompt(this, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                Toast.makeText(getApplicationContext(), "Huella invalida", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                Toast.makeText(getApplicationContext(), "Huella valida", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                Toast.makeText(getApplicationContext(), "Error en la autenticación", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }
