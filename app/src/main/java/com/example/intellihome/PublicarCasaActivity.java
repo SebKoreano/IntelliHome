@@ -2,11 +2,13 @@ package com.example.intellihome;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,9 +17,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,16 +42,19 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class PublicarCasaActivity extends AppCompatActivity {
 
     private EditText descripcionInput, precioInput, inputTitulo;
     private NumberPicker numHabitacionesPicker;
-    private Button btnAddReglas, btnAddAmenidades, btnPhoto, btnPublicar;
+    private Button btnAddReglas, btnAddAmenidades, btnPhoto, btnPublicar, btnElegirUbicacion;
     private int numeroReglas = 1, numeroAmenidad= 1, totalFotos = 0;;
     public static final int MAP_REQUEST_CODE = 1;
     private double latitudHome, longitudHome;
+    private View background;
+    private SeekBar seekBar;
     private PhotoManager photoManager;
     private LinearLayout linearLayout;
     private String[] amenidadesArray;  // Lista de opciones
@@ -57,13 +64,14 @@ public class PublicarCasaActivity extends AppCompatActivity {
     private Socket socket; // Socket para la conexión
     private PrintWriter out; // PrintWriter para enviar datos
     private Scanner in;
+    private TextView dateStart, dateEnd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publicarcasa);
         // Conectar al servidor
-        connectToServer("192.168.18.206", 3535); //192.168.18.206
+        connectToServer("192.168.18.5", 3535); //192.168.18.206
         // Inicializar vistas
 
         descripcionInput = findViewById(R.id.inputDescripcion);
@@ -75,6 +83,37 @@ public class PublicarCasaActivity extends AppCompatActivity {
         linearLayout = findViewById(R.id.linearLayout);
         btnPublicar = findViewById((R.id.btnPublish));
         inputTitulo = findViewById((R.id.inputTitulo));
+        background = findViewById(R.id.background);
+        seekBar = findViewById(R.id.seekbar);
+        btnElegirUbicacion = findViewById(R.id.btnElegirUbicacion);
+        dateStart = findViewById(R.id.btnDateStart);
+        dateEnd = findViewById(R.id.btnDateEnd);
+
+        GlobalColor globalColor = (GlobalColor) getApplication();
+        int currentColor = globalColor.getCurrentColor();
+
+        background.setBackgroundColor(currentColor);
+        btnAddReglas.setBackgroundColor(currentColor);
+        btnAddAmenidades.setBackgroundColor(currentColor);
+        btnPublicar.setBackgroundColor(currentColor);
+        btnElegirUbicacion.setBackgroundColor(currentColor);
+
+        // Configuración de SeekBar
+        seekBar.setMax(100);
+        seekBar.setProgress(10);
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                precioInput.setText(String.format(Locale.getDefault(), "₡%.2f", (float) progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
 
         // Configurar el NumberPicker
         numHabitacionesPicker.setMinValue(1);  // Valor mínimo
@@ -89,7 +128,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
         });
 
         // Lista de amenidades (opciones)
-        amenidadesArray = getResources().getStringArray(R.array.amenidades_array);  // Puedes definirlo en res/values/strings.xml
+        amenidadesArray = getResources().getStringArray(R.array.amenities_array);  // Puedes definirlo en res/values/strings.xml
         selectedItems = new boolean[amenidadesArray.length];
         selectedAmenidades = new ArrayList<>();
 
@@ -128,7 +167,6 @@ public class PublicarCasaActivity extends AppCompatActivity {
         selectVehiculo.setAdapter(vehiculoAdapter);
 
         // Configura el botón para abrir el mapa
-        Button btnElegirUbicacion = findViewById(R.id.btnElegirUbicacion);
         btnElegirUbicacion.setOnClickListener(v -> {
             // Lanzar la actividad de MapActivity
             Intent intent = new Intent(PublicarCasaActivity.this, MapActivity.class);
@@ -182,6 +220,51 @@ public class PublicarCasaActivity extends AppCompatActivity {
             }
         });
 
+        dateStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar calendar = Calendar.getInstance();
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        PublicarCasaActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                String formattedDate = ": " + dayOfMonth + "/" + (month + 1) + "/" + year;
+                                dateStart.setText(getString(R.string.FechaInicio) + formattedDate);
+                            }
+                        },
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)
+                );
+
+                datePickerDialog.show();
+            }
+        });
+
+        dateEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar calendar = Calendar.getInstance();
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        PublicarCasaActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                String formattedDate = ": " + dayOfMonth + "/" + (month + 1) + "/" + year;
+                                dateEnd.setText(getString(R.string.FechaFinal) + formattedDate);
+                            }
+                        },
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)
+                );
+
+                datePickerDialog.show();
+            }
+        });
     }
 
     @Override

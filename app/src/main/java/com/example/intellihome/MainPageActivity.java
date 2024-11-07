@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -29,6 +30,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,7 +103,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
 
     private void showMultiSelectDialog() {
         // Opciones de tags para seleccionar
-        String[] tags = {"Wi-Fi", "Parking", "Pool", "Gym", "Laundry"};
+        String[] tags = getResources().getStringArray(R.array.amenities_array);;
         boolean[] checkedTags = new boolean[tags.length];
         List<String> selectedTags = new ArrayList<>();
 
@@ -130,21 +133,27 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     }
 
     private void searchByTags(List<String> selectedTags) {
-        List<PropertyModule> filteredProperties = new ArrayList<>();
+        if (selectedTags.isEmpty()) {
+            // Si no hay tags seleccionados, muestra todas las propiedades
+            elements.clear();
+            elements.addAll(originalElements);
+        } else {
+            List<PropertyModule> filteredProperties = new ArrayList<>();
 
-        // Filtrar las propiedades que tienen al menos un tag seleccionado
-        for (PropertyModule property : originalElements) {
-            for (String tag : selectedTags) {
-                if (property.getAmenities().contains(tag)) {
-                    filteredProperties.add(property);
-                    break;
+            // Filtra las propiedades que tienen al menos un tag seleccionado
+            for (PropertyModule property : originalElements) {
+                for (String tag : selectedTags) {
+                    if (property.getAmenities().contains(tag)) {
+                        filteredProperties.add(property);
+                        break;
+                    }
                 }
             }
-        }
 
-        // Actualizar la lista de propiedades en el RecyclerView
-        elements.clear();
-        elements.addAll(filteredProperties);
+            // Actualiza la lista de propiedades en el RecyclerView
+            elements.clear();
+            elements.addAll(filteredProperties);
+        }
         recyclerView.getAdapter().notifyDataSetChanged();
     }
 
@@ -200,17 +209,39 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         amenities5.add("Wi-Fi");
         amenities5.add("Pool");
 
-        PropertyModule property1 = new PropertyModule("House 1", "Apartment", "No parking", "Beautiful apartment with 2 rooms", "2", "1000", "John Doe", "12.34", "56.78", rules1, amenities1);
-        PropertyModule property2 = new PropertyModule("House 2", "House", "Garage", "Spacious house with a garden", "3", "1500", "Jane Smith", "23.45", "67.89", rules2, amenities2);
-        PropertyModule property3 = new PropertyModule("House 3", "Condo", "Street parking", "Modern condo with pool access", "1", "1200", "Bob Johnson", "34.56", "78.90", rules3, amenities3);
-        PropertyModule property4 = new PropertyModule("House 4", "Villa", "Garage", "Luxury villa near the beach", "5", "3000", "Alice Brown", "45.67", "89.01", rules4, amenities4);
-        PropertyModule property5 = new PropertyModule("House 5", "Cabin", "No parking", "Cozy cabin in the mountains", "2", "800", "Charlie Davis", "56.78", "90.12", rules5, amenities5);
+        GetHouseInfo houseInfo;
+        for (String name : listaCasas) {
+            try {
+                houseInfo = new GetHouseInfo(name);
+                elements.add(new PropertyModule(name, "Apartament", "4X4", houseInfo.getDescripcionGeneral(), houseInfo.getNumeroHabitaciones(), houseInfo.getPrecio(), houseInfo.getDuenoDeVivienda(), houseInfo.getLatitud(), houseInfo.getLongitud(), rules1, houseInfo.getAmenidades(), null));
+
+                Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
+            } catch (Exception e){
+                Log.e("HouseError", "Error al cargar la casa: " + e.getMessage());
+                Toast.makeText(this, "!Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
+
+        GetHouseInfo house = new GetHouseInfo("House 14");
+        elements.add(new PropertyModule("House 14", "Apartament", "4X4", house.getDescripcionGeneral(), house.getNumeroHabitaciones(), house.getPrecio(), house.getDuenoDeVivienda(), house.getLatitud(), house.getLongitud(), rules1, house.getAmenidades(), null));
+
+        PropertyModule property1 = new PropertyModule("House 1", "Apartment", "No parking", "Beautiful apartment with 2 rooms", "2", "1000", "John Doe", "12.34", "56.78", rules1, amenities1, null);
+        PropertyModule property2 = new PropertyModule("House 2", "House", "Garage", "Spacious house with a garden", "3", "1500", "Jane Smith", "23.45", "67.89", rules2, amenities2, null);
+        PropertyModule property3 = new PropertyModule("House 3", "Condo", "Street parking", "Modern condo with pool access", "1", "1200", "Bob Johnson", "34.56", "78.90", rules3, amenities3, null);
+        PropertyModule property4 = new PropertyModule("House 4", "Villa", "Garage", "Luxury villa near the beach", "5", "3000", "Alice Brown", "45.67", "89.01", rules4, amenities4, null);
+        PropertyModule property5 = new PropertyModule("House 5", "Cabin", "No parking", "Cozy cabin in the mountains", "2", "800", "Charlie Davis", "56.78", "90.12", rules5, amenities5, null);
+        PropertyModule property6 = new PropertyModule("House 6", "Condo", "Street parking", "Modern condo with pool access", "1", "1200", "Bob Johnson", "34.56", "78.90", rules3, amenities3, null);
+        PropertyModule property7 = new PropertyModule("House 7", "Villa", "Garage", "Luxury villa near the beach", "5", "3000", "Alice Brown", "45.67", "89.01", rules4, amenities4, null);
+        PropertyModule property8 = new PropertyModule("House 8", "Cabin", "No parking", "Cozy cabin in the mountains", "2", "800", "Charlie Davis", "56.78", "90.12", rules5, amenities5, null);
 
         elements.add(property1);
         elements.add(property2);
         elements.add(property3);
         elements.add(property4);
         elements.add(property5);
+        elements.add(property6);
+        elements.add(property7);
+        elements.add(property8);
 
         originalElements.addAll(elements);
 
@@ -226,14 +257,14 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     }
 
     public void filter(String strSearch) {
-        if (strSearch.length() == 0) {
+        if (strSearch.isEmpty()) {
             elements.clear();
             elements.addAll(originalElements);
         } else {
             List<PropertyModule> filterElements = new ArrayList<>();
 
             for (PropertyModule property : originalElements) {
-                if (property.getTitle().toLowerCase().contains(strSearch)) {
+                if (property.getTitle().toLowerCase().contains(strSearch) || property.getMoney().contains(strSearch)) {
                     filterElements.add(property);
                 }
             }
@@ -272,6 +303,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         return true;
     }
 
+    List<String> listaCasas = obtenerNombresDeCarpetas("Viviendas Arrendadas");
     private List<String> obtenerNombresDeCarpetas(String carpetaBase) {
         // Inicializa FirebaseStorage
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -312,7 +344,6 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         return listaCarpetas;
     }
 
-    List<String> listaCasas = obtenerNombresDeCarpetas("Viviendas Arrendadas");
     public void moveToHouseRental(PropertyModule item) {
         Intent intent = new Intent(this, HouseRental.class);
         intent.putExtra("property", item);
@@ -331,5 +362,4 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         recyclerView.getAdapter().notifyDataSetChanged();
         return true;
     }
-
 }

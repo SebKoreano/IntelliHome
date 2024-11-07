@@ -1,6 +1,8 @@
 package com.example.intellihome;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +12,11 @@ import android.widget.Button;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.Executor;
+import androidx.annotation.NonNull;
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 
 public class LightControlActivity extends AppCompatActivity {
 
@@ -21,6 +28,11 @@ public class LightControlActivity extends AppCompatActivity {
     private PrintWriter outArd;
     private Scanner inArd;
     private String humedad;
+
+    private Button btnFuego, btnSismos, btnHumedad, btnPuerta;
+    BiometricPrompt biometricPrompt;
+    BiometricPrompt.PromptInfo promptInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +46,10 @@ public class LightControlActivity extends AppCompatActivity {
         btnSala = findViewById(R.id.btnSala);
         btnBano = findViewById(R.id.btnBano);
         btnLavanderia = findViewById(R.id.btnLavanderia);
+        btnFuego = findViewById(R.id.Fuego);
+        btnHumedad = findViewById(R.id.Humedad);
+        btnPuerta = findViewById(R.id.Lock);
+        btnSismos = findViewById(R.id.Sismo);
 
         GlobalColor globalColor = (GlobalColor) getApplication();
         int currentColor =  globalColor.getCurrentColor();
@@ -46,6 +62,11 @@ public class LightControlActivity extends AppCompatActivity {
         btnBano.setBackgroundColor(currentColor);
         btnLavanderia.setBackgroundColor(currentColor);
 
+        btnSismos.setBackgroundColor(currentColor);
+        btnHumedad.setBackgroundColor(currentColor);
+        btnPuerta.setBackgroundColor(currentColor);
+        btnFuego.setBackgroundColor(currentColor);
+
         // Configuración de listeners para cada botón
         btnCuartoPrincipal.setOnClickListener(v -> sendMessage("Z"));
         btnBanoCuartoPrincipal.setOnClickListener(v -> sendMessage("X"));
@@ -54,8 +75,30 @@ public class LightControlActivity extends AppCompatActivity {
         btnSala.setOnClickListener(v -> sendMessage("B"));
         btnBano.setOnClickListener(v -> sendMessage("N"));
         btnLavanderia.setOnClickListener(v -> sendMessage("M"));
+        btnPuerta.setOnClickListener(v -> {
+            validarDispositivo();
+            ejecutarBiometria();
+
+            promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                    .setTitle(getString(R.string.biometric_prompt_title))
+                    .setSubtitle(getString(R.string.biometric_prompt_subtitle))
+                    .setNegativeButtonText(getString(R.string.biometric_prompt_cancel))
+                    .build();
+
+            biometricPrompt.authenticate(promptInfo);
+        });
+
+        // Configuración de listeners para cada botón con alternancia de iconos
+        setButtonToggleIcon(btnCuartoPrincipal);
+        setButtonToggleIcon(btnBanoCuartoPrincipal);
+        setButtonToggleIcon(btnCuarto1);
+        setButtonToggleIcon(btnCuarto2);
+        setButtonToggleIcon(btnSala);
+        setButtonToggleIcon(btnBano);
+        setButtonToggleIcon(btnLavanderia);
 
         // Hilo que establece la conexión con el servidor de Rasb
+
         new Thread(() -> {
             try {
                 // Conectar a la dirección IP y puerto del servidor
@@ -71,8 +114,6 @@ public class LightControlActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }).start();  // Iniciar el hilo de conexión
-
-
 
         // Iniciar el hilo para conectarse a Arduino por medio de Server.
         new Thread(() -> {
@@ -160,5 +201,50 @@ public class LightControlActivity extends AppCompatActivity {
             humedad = message.substring(8);
         }
     }
+    private void setButtonToggleIcon(Button button) {
+        button.setTag(false);
 
+        button.setOnClickListener(v -> {
+            boolean isOn = (boolean) button.getTag();
+
+            isOn = !isOn;
+            button.setTag(isOn);
+            button.setCompoundDrawablesWithIntrinsicBounds(0, 0, isOn ? R.drawable.ic_lightbulb : R.drawable.ic_lightbulb_off, 0);
+        });
+    }
+
+    //Aqui se valida que el dispositivo tenga biometria
+    public void validarDispositivo() {
+        BiometricManager biometricManager = BiometricManager.from(this);
+        switch (biometricManager.canAuthenticate()) {
+            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
+                Toast.makeText(this, getString(R.string.biometric_no_hardware), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    //Este metodo se encarga de ejecutar la biometria
+    public void ejecutarBiometria(){
+        Executor executor = ContextCompat.getMainExecutor(this);
+
+        biometricPrompt = new BiometricPrompt(this, new BiometricPrompt.AuthenticationCallback() {
+            //Este es el caso de fallo
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                Toast.makeText(getApplicationContext(), getString(R.string.biometric_invalid_fingerprint), Toast.LENGTH_SHORT).show();
+            }
+            //Este es el caso de exito
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                Toast.makeText(getApplicationContext(), getString(R.string.biometric_valid_fingerprint), Toast.LENGTH_SHORT).show();
+            }
+            //Este es el caso de error
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                Toast.makeText(getApplicationContext(), getString(R.string.biometric_authentication_error), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

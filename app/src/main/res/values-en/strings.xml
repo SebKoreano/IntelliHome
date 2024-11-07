@@ -161,14 +161,52 @@
     <string name="labelTitulo">Residence title</string>
     <string name="inputTitulo">Enter a title for your residence</string>
     <string name="errorTitulo">The title cannot be empty</string>
-    <string-array name="amenidades_array">
-        <item>WiFi</item>
+    <string-array name="amenities_array">
+        <item>Equipped Kitchen</item>
+        <item>Heating</item>
+        <item>Air Conditioning</item>
+        <item>Free WiFi</item>
+        <item>Cable Television</item>
+        <item>Washer and Dryer</item>
+        <item>Garden</item>
         <item>Pool</item>
+        <item>BBQ Area</item>
+        <item>Security</item>
         <item>Gym</item>
-        <item>Parking</item>
-        <item>Restaurant</item>
-        <item>Spa</item>
+        <item>Terrace</item>
+        <item>Balcony</item>
+        <item>Room with Bathroom</item>
+        <item>Outdoor Furniture</item>
+        <item>Dishwasher</item>
+        <item>Coffee Maker</item>
+        <item>Towels Included</item>
+        <item>Access to Common Areas</item>
+        <item>Sofa Bed</item>
+        <item>Additional Cleaning Service</item>
+        <item>Nearby Public Transport</item>
+        <item>Nearby Mountain</item>
+        <item>Workspace</item>
+        <item>Entertainment</item>
+        <item>Fireplace</item>
+        <item>High-Speed WiFi</item>
     </string-array>
     <string name="Propietario">Owner</string>
     <string name="Rent">Rent</string>
+    <string name="FechaInicio">Start Date</string>
+    <string name="FechaFinal">End Date</string>
+    <string name="biometric_prompt_title">Authentication</string>
+    <string name="biometric_prompt_subtitle">Use your fingerprint to log in</string>
+    <string name="biometric_prompt_cancel">Cancel</string>
+    <string name="biometric_no_hardware">Device not compatible with biometrics</string>
+    <string name="biometric_invalid_fingerprint">Invalid fingerprint</string>
+    <string name="biometric_valid_fingerprint">Valid fingerprint</string>
+    <string name="biometric_authentication_error">Authentication error</string>
+    <string name="Monitoreo">Light Monitoring and Control</string>
+    <string name="Bano">Bathroom</string>
+    <string name="Fuego">Fire</string>
+    <string name="Sismos">Earthquakes</string>
+    <string name="Puerta">Door</string>
+    <string name="Humedad">Humidity</string>
+    <string name="Sala">Hall</string>
+    <string name="Pila">Sink</string>
 </resources>

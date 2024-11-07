@@ -209,7 +209,7 @@ public class RegisterActivity extends AppCompatActivity {
                         validator.mostrarMensaje(getString(R.string.cuentcreexRegisterActivity));
                         imageUri = getImageUriFromButton(btnProfilePhoto);
                         uploadInfoToFirebase(imageUri, "Propietario");
-                        regresarAConfig();
+                        regresarALogIn();
                     }
                     if (isAlquilar && !isPropietario) {
                         obtenerDatos();
@@ -218,7 +218,7 @@ public class RegisterActivity extends AppCompatActivity {
                         validator.mostrarMensaje(getString(R.string.cuentcreexRegisterActivity));
                         imageUri = getImageUriFromButton(btnProfilePhoto);
                         uploadInfoToFirebase(imageUri, "Alquilador");
-                        regresarAConfig();
+                        regresarALogIn();
                     }
                     if (isAlquilar && isPropietario) {
                         obtenerDatos();
@@ -227,7 +227,7 @@ public class RegisterActivity extends AppCompatActivity {
                         validator.mostrarMensaje(getString(R.string.cuentcreexRegisterActivity));
                         imageUri = getImageUriFromButton(btnProfilePhoto);
                         uploadInfoToFirebase(imageUri, "AmbasFunciones");
-                        regresarAConfig();
+                        regresarALogIn();
                     }
 
                 }
@@ -351,9 +351,9 @@ public class RegisterActivity extends AppCompatActivity {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
     }
 
-    //Pasar al ConfigActivity
-    private void regresarAConfig() {
-        Intent intent = new Intent(RegisterActivity.this, ConfigActivity.class);
+    //Pasar a Log-in
+    private void regresarALogIn() {
+        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
         startActivity(intent);
     }
 
