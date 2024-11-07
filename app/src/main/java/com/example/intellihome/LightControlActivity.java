@@ -32,6 +32,7 @@ public class LightControlActivity extends AppCompatActivity {
     private Button btnFuego, btnSismos, btnHumedad, btnPuerta;
     BiometricPrompt biometricPrompt;
     BiometricPrompt.PromptInfo promptInfo;
+    private boolean puerta = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -237,6 +238,7 @@ public class LightControlActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
+                manejarPuerta();
                 Toast.makeText(getApplicationContext(), getString(R.string.biometric_valid_fingerprint), Toast.LENGTH_SHORT).show();
             }
             //Este es el caso de error
@@ -246,5 +248,17 @@ public class LightControlActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), getString(R.string.biometric_authentication_error), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    //Este metodo se encarga de manejar el envio de señales al arduino para el control de la puerta
+    public void manejarPuerta(){
+        if (!puerta){
+            sendArduinoMessage("SERVO_90");
+            puerta = true;
+        }
+        else{
+            puerta = false;
+            sendArduinoMessage("SERVO_0");
+        }
     }
 }
