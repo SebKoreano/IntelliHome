@@ -75,11 +75,11 @@ public class LightControlActivity extends AppCompatActivity {
         btnPuerta.setOnClickListener(v -> {
             validarDispositivo();
             ejecutarBiometria();
-            
+
             promptInfo = new BiometricPrompt.PromptInfo.Builder()
-                    .setTitle("Autenticación")
-                    .setSubtitle("Usa tu huella para ingresar")
-                    .setNegativeButtonText("Cancelar")
+                    .setTitle(getString(R.string.biometric_prompt_title))
+                    .setSubtitle(getString(R.string.biometric_prompt_subtitle))
+                    .setNegativeButtonText(getString(R.string.biometric_prompt_cancel))
                     .build();
 
             biometricPrompt.authenticate(promptInfo);
@@ -166,7 +166,7 @@ public class LightControlActivity extends AppCompatActivity {
         BiometricManager biometricManager = BiometricManager.from(this);
         switch (biometricManager.canAuthenticate()) {
             case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
-                Toast.makeText(this, "Dispositivo no compatible con biometría", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.biometric_no_hardware), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -177,19 +177,19 @@ public class LightControlActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationFailed() {
                 super.onAuthenticationFailed();
-                Toast.makeText(getApplicationContext(), "Huella invalida", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.biometric_invalid_fingerprint), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                Toast.makeText(getApplicationContext(), "Huella valida", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.biometric_valid_fingerprint), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
-                Toast.makeText(getApplicationContext(), "Error en la autenticación", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.biometric_authentication_error), Toast.LENGTH_SHORT).show();
             }
         });
     }

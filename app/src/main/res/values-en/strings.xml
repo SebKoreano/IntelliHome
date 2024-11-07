@@ -194,7 +194,13 @@
     <string name="Rent">Rent</string>
     <string name="FechaInicio">Start Date</string>
     <string name="FechaFinal">End Date</string>
-
+    <string name="biometric_prompt_title">Authentication</string>
+    <string name="biometric_prompt_subtitle">Use your fingerprint to log in</string>
+    <string name="biometric_prompt_cancel">Cancel</string>
+    <string name="biometric_no_hardware">Device not compatible with biometrics</string>
+    <string name="biometric_invalid_fingerprint">Invalid fingerprint</string>
+    <string name="biometric_valid_fingerprint">Valid fingerprint</string>
+    <string name="biometric_authentication_error">Authentication error</string>
     <string name="Monitoreo">Light Monitoring and Control</string>
     <string name="Bano">Bathroom</string>
     <string name="Fuego">Fire</string>
