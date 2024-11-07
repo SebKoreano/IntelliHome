@@ -3,6 +3,7 @@ import threading
 import secrets
 import string
 import os
+import serial
 
 # WhatsApp notifications
 import pywhatkit
@@ -47,12 +48,27 @@ class ChatServer:
         self.server_socket.bind((host, port))
         self.server_socket.listen(5)
         self.clients = []
+        self.arduino = None
         self.agregar_usuario_a_matriz()
 
 
         # Hilo para manejar el servidor
         self.thread = threading.Thread(target=self.accept_connections)
         self.thread.start()
+
+        # Hilo para leer mensajes de arduino
+        self.arduino_Thread = threading.Thread(target= self.leerMensajeArduino)
+        self.arduino_Thread.start()
+
+        #Conectarse con arduino
+        serialPort = 'COM7'
+        try:
+            self.arduino = serial.Serial(serialPort, 9600)
+            print('Conectado a Arduino')
+        except serial.SerialException as e:
+            print(f'Error al abrir puerto serial:{e}')
+
+
     def accept_connections(self):
         while True:
             client_socket, addr = self.server_socket.accept()
@@ -99,6 +115,9 @@ class ChatServer:
                     elif message.startswith("Recuperacion_"):
                         print(message)
                         self.existe_correo(message[len("Recuperacion_"):], client_socket)
+
+                    elif message.startswith("SERVO_"): #Esto ya que solo se necesita enviar informacion al arduino para mover servo.
+                        self.envioMensajeArduino(message)
                     else:
                         print("No llegó mensaje relevante")
             except Exception as e:
@@ -113,6 +132,22 @@ class ChatServer:
         except:
             sender_socket.close()
             self.clients.remove(sender_socket)
+
+
+    #Se escriben los comandos para envio de mensajes:
+    # Servo para cerrar puerta: SERVO_0
+    # Servo para abrir puerta: SERVO_90
+
+    def envioMensajeArduino(self, message):
+        if (self.arduino != None):
+            self.arduino.write(message.encode("uft-8"))
+    
+    def leerMensajeArduino(self):
+        while True:
+            ino_message = self.arduino.read_until(b'\n').decode('utf-8')
+            
+            for socket in self.clients:
+                self.send_message_to_respond_request(ino_message, socket)
 
     #Envia mensaje a socket 
     def send_message_to_respond_request(self, client_socket, message):
@@ -437,11 +472,9 @@ class ChatServer:
         if not os.path.exists(ruta_archivo):
             print(f"El archivo {ruta_archivo} no existe.")
             return None
-        
-        # Lista para almacenar las coincidencias de la información requerida
-        resultados = []
-        
-        # Leer el archivo y buscar todas las ocurrencias de la información requerida
+
+        infoCasa = ""  # Inicializa la cadena que contendrá toda la información unida
+
         with open(ruta_archivo, 'r') as archivo:
             for linea in archivo:
                 resultados.append(linea)

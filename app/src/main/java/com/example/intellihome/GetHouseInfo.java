@@ -82,13 +82,12 @@ public class GetHouseInfo extends Application {
 
         return taskCompletionSource.getTask();
     }
-
     public void iniciarInfo()
     {
         // Iniciar el hilo para conectarse al servidor y recibir mensajes
         new Thread(() -> {
             try {
-                socket = new Socket("192.168.18.5", 3535); //192.168.18.206
+                socket = new Socket("192.168.18.206", 3535); //192.168.18.206
 
                 out = new PrintWriter(socket.getOutputStream(), true);
                 in = new Scanner(socket.getInputStream());
@@ -116,7 +115,6 @@ public class GetHouseInfo extends Application {
         }).start();
 
     }
-
     public void handleServerResponse(String messageWithHouseInfo) {
         String[] datos = messageWithHouseInfo.split("_");
 
