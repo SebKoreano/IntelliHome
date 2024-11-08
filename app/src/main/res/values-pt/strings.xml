@@ -213,4 +213,29 @@
     <string name="Sala">Szoba</string>
     <string name="Pila">Pia</string>
 
+    <string name="FireAlert_Message">
+        *ALERTA DE FOGO*\n\n
+        Níveis elevados de fogo foram detectados na residência. Por favor, siga os seguintes passos imediatamente:\n\n
+        1. Certifique-se de que todos os ocupantes evacuem o local.\n
+        2. Chame os serviços de emergência pelo _911_.\n
+        3. Se for seguro, tente apagar o fogo usando um extintor.\n
+        4. Aguarde a chegada dos serviços de emergência no local.\n\n
+        _A segurança vem em primeiro lugar! Não tente controlar o fogo sem o equipamento adequado._\n\n
+        Esta mensagem foi enviada automaticamente pelo sistema de monitoramento _*IntelliHome*_.
+    </string>
+
+    <string name="EarthquakeAlert_Message">
+        *ALERTA DE TERREMOTO*\n\n
+        Foi detectada atividade sísmica na área. Por favor, siga estas etapas de segurança:\n\n
+        1. Mantenha a calma e procure um local seguro.\n
+        2. Afaste-se de janelas, espelhos e objetos que possam cair.\n
+        3. Se estiver dentro de casa, fique debaixo de uma mesa resistente ou ao lado de uma parede estrutural.\n
+        4. Se estiver ao ar livre, afaste-se de edifícios, árvores e fios elétricos.\n\n
+        *Lembre-se:* Espere até que o tremor pare antes de evacuar o prédio e evite usar elevadores.\n\n
+        Esta mensagem foi enviada automaticamente pelo sistema de monitoramento _*IntelliHome*_.
+    </string>
+
+    <string name="FireAlert_Title">ALERTA DE INCÊNDIO</string>
+    <string name="EarthquakeAlert_Title">ALERTA DE TERREMOTO</string>
+
 </resources>

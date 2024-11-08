@@ -213,4 +213,29 @@
     <string name="Sala">Hall</string>
     <string name="Pila">Sink</string>
 
+    <string name="FireAlert_Message">
+        *FIRE ALERT*\n\n
+        High levels of fire have been detected in the home. Please follow these steps immediately:\n\n
+        1. Ensure all occupants evacuate the building.\n
+        2. Call emergency services at *911*.\n
+        3. If safe, attempt to extinguish the fire using a fire extinguisher.\n
+        4. Wait for emergency services to arrive at the location.\n\n
+        _Safety comes first! Do not attempt to control the fire without proper equipment._\n\n
+        This message was sent automatically by the _*IntelliHome*_ monitoring system.
+    </string>
+
+    <string name="EarthquakeAlert_Message">
+        *EARTHQUAKE ALERT*\n\n
+        Seismic activity has been detected in the area. Please follow these safety steps:\n\n
+        1. Stay calm and find a safe location.\n
+        2. Stay away from windows, mirrors, and objects that could fall.\n
+        3. If indoors, get under a sturdy table or next to a structural wall.\n
+        4. If outdoors, move away from buildings, trees, and power lines.\n\n
+        *Remember:* Wait until the shaking stops before evacuating the building and avoid using elevators.\n\n
+        This message was sent automatically by the _*IntelliHome*_ monitoring system.
+    </string>
+
+    <string name="FireAlert_Title">FIRE ALERT</string>
+    <string name="EarthquakeAlert_Title">EARTHQUAKE ALERT</string>
+
 </resources>

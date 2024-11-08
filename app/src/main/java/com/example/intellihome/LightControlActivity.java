@@ -30,6 +30,7 @@ public class LightControlActivity extends AppCompatActivity {
     private String humedad;
     private TextView humedadTextView;
 
+    private String phoneNumber = "+50685400752";
 
     private Button btnFuego, btnSismos, btnHumedad, btnPuerta;
     BiometricPrompt biometricPrompt;
@@ -60,6 +61,11 @@ public class LightControlActivity extends AppCompatActivity {
         GlobalColor globalColor = (GlobalColor) getApplication();
         int currentColor =  globalColor.getCurrentColor();
 
+        String fireAlertMessage = getString(R.string.EarthquakeAlert_Message);
+        WhatsAppNotificationHelper.sendWhatsAppMessageViaServer(globalColor.getIp(),
+                3535, phoneNumber, fireAlertMessage);
+        NotificationHelper.sendNotification(this, getString(R.string.EarthquakeAlert_Title), R.drawable.ic_earthquake);
+
         btnCuartoPrincipal.setBackgroundColor(currentColor);
         btnBanoCuartoPrincipal.setBackgroundColor(currentColor);
         btnCuarto1.setBackgroundColor(currentColor);
@@ -84,8 +90,6 @@ public class LightControlActivity extends AppCompatActivity {
         btnPuerta.setOnClickListener(v -> {
             validarDispositivo();
             ejecutarBiometria();
-
-            // if - para toggloear el icono de la puerta dependiando si es puerta(bool) es true o false.
 
             promptInfo = new BiometricPrompt.PromptInfo.Builder()
                     .setTitle(getString(R.string.biometric_prompt_title))
@@ -126,7 +130,7 @@ public class LightControlActivity extends AppCompatActivity {
         // Iniciar el hilo para conectarse a Arduino por medio de Server.
         new Thread(() -> {
             try {
-                socket = new Socket("192.168.18.134", 3535); //192.168.18.206
+                socket = new Socket(globalColor.getIp(), 3535); //192.168.18.206
 
                 outArd = new PrintWriter(socket.getOutputStream(), true);
                 inArd = new Scanner(socket.getInputStream());
@@ -134,7 +138,7 @@ public class LightControlActivity extends AppCompatActivity {
                 while (true) {
                     if (inArd.hasNextLine()) {
                         String message = inArd.nextLine();
-                        sensorMessageProcesor(message);
+                        sensorMessageProcesor(message, globalColor.getIp());
                     }
                 }
             } catch (Exception e) {
@@ -192,18 +196,31 @@ public class LightControlActivity extends AppCompatActivity {
         }).start();
     }
 
-    public void sensorMessageProcesor(String message){
+    public void sensorMessageProcesor(String message, String ip){
         if (message.startsWith("F1")){//Indica que el fuego se encendió
 
+            btnFuego.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_fire, 0);
+
+            String alertMessage = getString(R.string.FireAlert_Message);
+            WhatsAppNotificationHelper.sendWhatsAppMessageViaServer(ip,
+                    3535, phoneNumber, alertMessage);
+            NotificationHelper.sendNotification(this, getString(R.string.FireAlert_Title), R.drawable.ic_fire);
         }
 
         else if (message.startsWith("F2")) { //Indicador de que el fuego prendido ahora está apagado
 
+            btnFuego.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_circle, 0);
         }
 
         else if (message.startsWith("T")) { //Indicador de que tembló
             runOnUiThread(() -> Toast.makeText(this, "¡Alerta de temblor detectada!", Toast.LENGTH_SHORT).show());
 
+            btnSismos.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_earthquake, 0);
+
+            String alertMessage = getString(R.string.EarthquakeAlert_Message);
+            WhatsAppNotificationHelper.sendWhatsAppMessageViaServer(ip,
+                    3535, phoneNumber, alertMessage);
+            NotificationHelper.sendNotification(this, getString(R.string.EarthquakeAlert_Title), R.drawable.ic_earthquake);
         }
 
         else if (message.startsWith("Humedad:")) { //Indicador de humedad
@@ -211,6 +228,7 @@ public class LightControlActivity extends AppCompatActivity {
             runOnUiThread(() -> humedadTextView.setText(humedad + "g/m^2"));
         }
     }
+
     private void setButtonToggleIcon(Button button) {
         button.setTag(false);
 
