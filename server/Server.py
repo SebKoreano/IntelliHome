@@ -6,9 +6,8 @@ import os
 import serial
 import time
 
-# WhatsApp notifications
-import pywhatkit
-from datetime import datetime, timedelta
+# Twilio Connection Extensions
+from twilio.rest import Client
 
 # Para envio de email.
 import smtplib
@@ -41,7 +40,7 @@ class Usuario:
             server.quit()
 
 class ChatServer:
-    def __init__(self, host="0.0.0.0", port=3535): #192.168.18.206
+    def __init__(self, host="192.168.18.5", port=3535): #192.168.18.206
         self.matriz_Alquilador = [] 
         self.matriz_Propietario = []
         self.matriz_AmbasFunciones = [] 
@@ -442,6 +441,8 @@ class ChatServer:
 
     #Aquí estarán las funciones para guardar y acceder a InformacionDeViviendas
     def guardarInforDeVivienda(self, info_usuario):
+        print("AQUIIIIIIII")
+        print(info_usuario)
         # Buscar el nombre de usuario en la cadena de entrada
         username = None
         ruta='server/InformacionDeVivienda/'
@@ -449,19 +450,19 @@ class ChatServer:
             if linea.startswith("NombreDeVivienda:"):
                 username = linea.split(":", 1)[1].strip()
                 break
-            
+        print(info_usuario)
         # Crear la ruta si no existe
         os.makedirs(ruta, exist_ok=True)
         
         # Definir el nombre del archivo usando el username extraído
         nombre_archivo = f"{username}.txt"
-        ruta_archivo = os.path.join(ruta, nombre_archivo)
         
         # Guardar la información en el archivo
-        with open(ruta_archivo, 'w') as archivo:
-            archivo.write(info_usuario)
+        self.guardar_texto(ruta + nombre_archivo, info_usuario)
 
-
+    def guardar_texto(self, direccion, texto):
+        with open(direccion, 'w') as archivo:
+            archivo.write(texto)
     def leerInformacionDeVivienda(self, nombreVivienda, socket):
         ruta_archivo = f'server/InformacionDeVivienda/{nombreVivienda}.txt'
         
@@ -486,22 +487,23 @@ class ChatServer:
         return None
     
     # Function to send WhatsApp Messages
-    def WhatsAppMessage(self, phoneNumber, message):
-        
-        # Obtener la hora actual
-        now = datetime.now()
-        hora = now.hour
-        minuto = now.minute + 1  # Sumar un minuto a la hora actual
+    def WhatsAppMessage(self, phoneNumber, message):        
 
-        # Si el minuto es 60, reajustar la hora
-        if minuto == 60:
-            minuto = 0
-            hora += 1
+        account_sid =  '[ Twilio Account Sid ]'
+        auth_token = '[ Token of Authorization ]'
+        client = Client(account_sid, auth_token)
 
-        # Enviar el mensaje
-        pywhatkit.sendwhatmsg("+50685400752", "This is INTELLIHOME", hora, minuto)
-        
-        print(f"PhoneNumber({phoneNumber}) Message: {message}")
+        message_body = message
+        message_from = 'whatsapp:+14155238886'
+        message_to = f'whatsapp:{phoneNumber}' 
+
+        whastapp_message = client.messages.create(
+            body=message_body,
+            from_=message_from,
+            to=message_to
+        )
+
+        print(whastapp_message.sid)
 
 def generar_nueva_contraseña():
     print("entro")

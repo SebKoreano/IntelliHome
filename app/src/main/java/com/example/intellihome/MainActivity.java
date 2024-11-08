@@ -76,11 +76,10 @@ public class MainActivity extends AppCompatActivity {
             inputPassword.setSelection(inputPassword.length()); // Mantener el cursor al final del texto
         });
 
-
         // Iniciar el hilo para conectarse al servidor y recibir mensajes
         new Thread(() -> {
             try {
-                socket = new Socket("192.168.18.134", 3535); //192.168.18.206
+                socket = new Socket(globalColor.getIp(), 3535); //192.168.18.206
 
                 out = new PrintWriter(socket.getOutputStream(), true);
                 in = new Scanner(socket.getInputStream());
@@ -120,16 +119,6 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }).start();
-
-            new Thread(() -> {
-                try {
-                    if (out != null) {
-                        out.println("WhatsApp/123456789/Hola, esta es una notificación de prueba");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();
         });
 
         rememberMeCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -144,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnRecoverPassword.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, LightControlActivity.class);
+            Intent intent = new Intent(MainActivity.this, RecuperationActivity.class);
             startActivity(intent);
         });
     }
@@ -180,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
                 builder.setPositiveButton("OK", null);
                 builder.show();
             });
+            
         }
         else {
             String[] parts = response.split("_");
