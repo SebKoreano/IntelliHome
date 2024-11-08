@@ -4,17 +4,18 @@ import secrets
 import string
 import os
 import serial
+import time
 
 # WhatsApp notifications
 import pywhatkit
 from datetime import datetime, timedelta
 
-#Para envio de email.
+# Para envio de email.
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-#Clase para manejo de usuario para recuperación de contraseña
+# Clase para manejo de usuario para recuperación de contraseña
 class Usuario:
     def send_password_reset_email(self, recipient_email, new_password):
         sender_email = 'intellihome.non.response@gmail.com'
@@ -51,23 +52,22 @@ class ChatServer:
         self.arduino = None
         self.agregar_usuario_a_matriz()
 
+        # Conectarse con Arduino
+        serialPort = 'COM3'  # Cambia 'COM3' al puerto correcto
+        try:
+            self.arduino = serial.Serial(serialPort, 9600)
+            time.sleep(2)  # Espera a que el puerto serial se inicie
+            print('Conectado al Arduino en', serialPort)
+        except serial.SerialException as e:
+            print(f'Error al abrir puerto serial: {e}')
 
         # Hilo para manejar el servidor
         self.thread = threading.Thread(target=self.accept_connections)
         self.thread.start()
 
-        # Hilo para leer mensajes de arduino
-        self.arduino_Thread = threading.Thread(target= self.leerMensajeArduino)
-        self.arduino_Thread.start()
-
-        #Conectarse con arduino
-        serialPort = 'COM3'
-        try:
-            self.arduino = serial.Serial(serialPort, 9600)
-            print('Conectado a Arduino')
-        except serial.SerialException as e:
-            print(f'Error al abrir puerto serial:{e}')
-
+        # Hilo para leer mensajes de Arduino
+        self.arduino_thread = threading.Thread(target=self.leerMensajeArduino)
+        self.arduino_thread.start()
 
     def accept_connections(self):
         while True:
@@ -81,7 +81,6 @@ class ChatServer:
                 message = client_socket.recv(1024).decode('utf-8')
                 if message:
                     message = message.strip()
-
                     print("Llegó: " + message)
 
                     # Verificar el prefijo del mensaje
@@ -90,38 +89,33 @@ class ChatServer:
 
                     elif message.startswith("InformacionDeUsuario_"):
                         self.guardarInforDeUsuario(message[len("InformacionDeUsuario_"):])
-                        
+
                     elif message.startswith("ObtenerInformacionUsuario_"):
-                        message = message[len("ObtenerInformacionUsuario_"):]
-                        info = message.split("_")
+                        info = message[len("ObtenerInformacionUsuario_"):].split("_")
                         self.leerInformacionDeUsuario(info[0], info[1])
 
                     elif message.startswith("InformacionDeVivienda_"):
                         self.guardarInforDeVivienda(message[len("InformacionDeVivienda_"):])
 
                     elif message.startswith("ObtenerInformacionVivienda_"):
-                        message = message[len("ObtenerInformacionVivienda_"):]
-                        self.leerInformacionDeVivienda(message, client_socket)
+                        self.leerInformacionDeVivienda(message[len("ObtenerInformacionVivienda_"):], client_socket)
 
                     elif message.startswith("Login_"):
-                        print(message)
                         self.buscar_login(message[len("Login_"):], client_socket)
 
                     elif message.startswith("WhatsApp/"):
-                        print(message)
                         data = message.split("/")
                         self.WhatsAppMessage(data[1], data[2])
 
                     elif message.startswith("Recuperacion_"):
-                        print(message)
                         self.existe_correo(message[len("Recuperacion_"):], client_socket)
 
-                    elif message.startswith("SERVO_"): #Esto ya que solo se necesita enviar informacion al arduino para mover servo.
+                    elif message.startswith("SERVO_"):  # Enviar comando al Arduino
                         self.envioMensajeArduino(message)
                     else:
                         print("No llegó mensaje relevante")
             except Exception as e:
-                print("error")
+                print("Error:", e)
                 break
         client_socket.close()
         self.clients.remove(client_socket)
@@ -133,46 +127,49 @@ class ChatServer:
             sender_socket.close()
             self.clients.remove(sender_socket)
 
-
-    #Se escriben los comandos para envio de mensajes:
-    # Servo para cerrar puerta: SERVO_0
-    # Servo para abrir puerta: SERVO_90
-
     def envioMensajeArduino(self, message):
-        if (self.arduino != None):
-            self.arduino.write(message.encode("uft-8"))
-    
+        """Enviar un mensaje al Arduino para mover el servo u otra acción."""
+        if self.arduino is not None:
+            try:
+                self.arduino.write(message.encode("utf-8"))
+            except serial.SerialException as e:
+                print(f"Error al enviar mensaje al Arduino: {e}")
+
     def leerMensajeArduino(self):
+        """Leer mensajes entrantes del Arduino y enviarlos a los clientes conectados."""
         while True:
-            ino_message = self.arduino.read_until(b'\n').decode('utf-8')
-            
-            for socket in self.clients:
-                self.send_message_to_respond_request(ino_message, socket)
+            if self.arduino is not None:
+                try:
+                    if self.arduino.in_waiting > 0:
+                        ino_message = self.arduino.readline().decode('utf-8').strip()
+                        print("Arduino dice:", ino_message)
+                        for socket in self.clients:
+                            self.send_message_to_respond_request(socket, ino_message)
+                except serial.SerialException as e:
+                    print(f"Error al leer mensaje del Arduino: {e}")
+                    break
+            else:
+                print("Arduino no está conectado.")
+                break
 
-    #Envia mensaje a socket 
     def send_message_to_respond_request(self, client_socket, message):
-        """Enviar una respuesta al cliente con el estado del inicio de sesión."""
-        threading.Thread(target=self.broadcast, args=(message +"\n", client_socket)).start()
+        """Enviar una respuesta al cliente con el mensaje recibido del Arduino."""
+        threading.Thread(target=self.broadcast, args=(message + "\n", client_socket)).start()
 
-    #Escriba cuenta creada en .txt
     def write_message_to_file(self, message):
         """Escribir un mensaje en el archivo .txt indicado"""
         if message.startswith("Propietario_"):
-            print(message)
-            with open("server/Usuarios/Propietario.txt", "a") as file:  # Abrir en modo append
-                file.write((message[len("Propietario_"):]) + "\n") 
-                
+            with open("server/Usuarios/Propietario.txt", "a") as file:
+                file.write(message[len("Propietario_"):] + "\n")
 
         elif message.startswith("Alquilador_"):
-            print(message)
-            with open("server/Usuarios/Alquilador.txt", "a") as file:  # Abrir en modo append
-                file.write((message[len("Alquilador_"):]) + "\n") 
-
+            with open("server/Usuarios/Alquilador.txt", "a") as file:
+                file.write(message[len("Alquilador_"):] + "\n")
 
         elif message.startswith("AmbasFunciones_"):
-            print(message)
-            with open("server/Usuarios/AmbasFunciones.txt", "a") as file:  # Abrir en modo append
-                file.write((message[len("AmbasFunciones_"):]) + "\n") 
+            with open("server/Usuarios/AmbasFunciones.txt", "a") as file:
+                file.write(message[len("AmbasFunciones_"):] + "\n")
+
 
 
     def procesar_usuario(self, mensaje, Tipo):
