@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -60,11 +62,6 @@ public class LightControlActivity extends AppCompatActivity {
 
         GlobalColor globalColor = (GlobalColor) getApplication();
         int currentColor =  globalColor.getCurrentColor();
-
-        String fireAlertMessage = getString(R.string.EarthquakeAlert_Message);
-        WhatsAppNotificationHelper.sendWhatsAppMessageViaServer(globalColor.getIp(),
-                3535, phoneNumber, fireAlertMessage);
-        NotificationHelper.sendNotification(this, getString(R.string.EarthquakeAlert_Title), R.drawable.ic_earthquake);
 
         btnCuartoPrincipal.setBackgroundColor(currentColor);
         btnBanoCuartoPrincipal.setBackgroundColor(currentColor);
@@ -205,6 +202,10 @@ public class LightControlActivity extends AppCompatActivity {
             WhatsAppNotificationHelper.sendWhatsAppMessageViaServer(ip,
                     3535, phoneNumber, alertMessage);
             NotificationHelper.sendNotification(this, getString(R.string.FireAlert_Title), R.drawable.ic_fire);
+
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                btnFuego.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_circle, 0);
+            }, 5000);
         }
 
         else if (message.startsWith("F2")) { //Indicador de que el fuego prendido ahora está apagado
@@ -221,6 +222,10 @@ public class LightControlActivity extends AppCompatActivity {
             WhatsAppNotificationHelper.sendWhatsAppMessageViaServer(ip,
                     3535, phoneNumber, alertMessage);
             NotificationHelper.sendNotification(this, getString(R.string.EarthquakeAlert_Title), R.drawable.ic_earthquake);
+
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                btnSismos.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_circle, 0);
+            }, 5000);
         }
 
         else if (message.startsWith("Humedad:")) { //Indicador de humedad
