@@ -4,8 +4,8 @@ import secrets
 import string
 import os
 
-# WhatsApp notifications
-from datetime import datetime, timedelta
+# Twilio Connection Extensions
+from twilio.rest import Client
 
 #Para envio de email.
 import smtplib
@@ -38,7 +38,7 @@ class Usuario:
             server.quit()
 
 class ChatServer:
-    def __init__(self, host="172.18.96.103", port=3535): #192.168.18.206
+    def __init__(self, host="192.168.18.5", port=3535): #192.168.18.206
         self.matriz_Alquilador = [] 
         self.matriz_Propietario = []
         self.matriz_AmbasFunciones = [] 
@@ -458,7 +458,22 @@ class ChatServer:
     
     # Function to send WhatsApp Messages
     def WhatsAppMessage(self, phoneNumber, message):        
-        print(f"PhoneNumber({phoneNumber}) Message: {message}")
+
+        account_sid =  '[ Twilio Account Sid ]'
+        auth_token = '[ Token of Authorization ]'
+        client = Client(account_sid, auth_token)
+
+        message_body = message
+        message_from = 'whatsapp:+14155238886'
+        message_to = f'whatsapp:{phoneNumber}'
+
+        whastapp_message = client.messages.create(
+            body=message_body,
+            from_=message_from,
+            to=message_to
+        )
+
+        print(whastapp_message.sid)
 
 def generar_nueva_contraseña():
     print("entro")

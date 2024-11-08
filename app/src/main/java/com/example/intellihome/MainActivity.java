@@ -119,16 +119,6 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }).start();
-
-            new Thread(() -> {
-                try {
-                    if (out != null) {
-                        out.println("WhatsApp/123456789/Hola, esta es una notificación de prueba");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();
         });
 
         rememberMeCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {

@@ -55,5 +55,7 @@
                     e.printStackTrace();
                 }
             }).start();
+
+            // (usage e.g.) <WhatsAppNotificationHelper.sendWhatsAppMessageViaServer(host, port, phoneNumber, message);>
         }
     }
