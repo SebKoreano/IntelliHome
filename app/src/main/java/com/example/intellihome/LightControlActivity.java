@@ -85,6 +85,8 @@ public class LightControlActivity extends AppCompatActivity {
             validarDispositivo();
             ejecutarBiometria();
 
+            // if - para toggloear el icono de la puerta dependiando si es puerta(bool) es true o false.
+
             promptInfo = new BiometricPrompt.PromptInfo.Builder()
                     .setTitle(getString(R.string.biometric_prompt_title))
                     .setSubtitle(getString(R.string.biometric_prompt_subtitle))
@@ -261,10 +263,12 @@ public class LightControlActivity extends AppCompatActivity {
     public void manejarPuerta(){
         if (!puerta){
             sendArduinoMessage("SERVO_90");
+            btnPuerta.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_lock_open, 0);
             puerta = true;
         }
         else{
             puerta = false;
+            btnPuerta.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_lock, 0);
             sendArduinoMessage("SERVO_0");
         }
     }
