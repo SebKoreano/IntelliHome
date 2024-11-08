@@ -192,6 +192,9 @@
     </string-array>
     <string name="Propietario">Tulajdonos</string>
     <string name="Rent">Bérlés</string>
+
+    <string name="humedad">Nedvesség:</string>
+
     <string name="FechaInicio">Kezdeti időpont</string>
     <string name="FechaFinal">Végső időpont</string>
     <string name="biometric_prompt_title">Hitelesítés</string>
@@ -209,4 +212,5 @@
     <string name="Humedad">Páratartalom</string>
     <string name="Sala">Salão</string>
     <string name="Pila">Mosogatóban</string>
+
 </resources>

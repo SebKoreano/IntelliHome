@@ -1,125 +1,93 @@
-#include <Servo.h> // Para servo
-#include <DHT.h> // Para sensor de humedad
+#include <Servo.h> // Para el servo
+#include <DHT.h>   // Para el sensor de humedad
 
 #define SERVO_PIN 9
 #define SENSOR_FLAME_PIN 12
 #define MOVE_SENSOR_PIN 3
 
-//Definicion de pin y creacion deobjeto DHT para poder leer humedad.
+// Definición de pin y creación del objeto DHT para poder leer humedad.
 #define DHTPIN 4    
 #define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE);
 
-
-// Para servo
-//Controlador de servo
+// Controlador del servo
 Servo myServo;
-//Posicion servo
-int servoPos = 0;
+int servoPos = 0; // Posición inicial del servo
+
 // Declaración de la variable del mensaje recibido
 String serverMessage;
-// Clave
-String key;
-// Valor
-String value;
-// Delimitador
+String key, value;
 char delimiter = '_';
-// Posición del delimitador
 int delimiterIndex;
 
-// Para detector de llama
-// booleans para identificar fuego
-bool flameSensor;
-bool fire;
-
+// Variables para el sensor de llama y movimiento
+bool flameSensor, fire;
 
 void setup() {
   Serial.begin(9600); // Iniciar puerto serial a 9600 baud
 
-  // Inicio servo
+  // Inicializar el servo
   myServo.attach(SERVO_PIN);
   myServo.write(servoPos);
 
-  // Sensor humedad modo salida
+  // Configurar los pines del sensor de llama y movimiento
   pinMode(SENSOR_FLAME_PIN, INPUT);
-
-  // Inicia modo lectura de datos de humedad
-  dht.begin();
-
-  // Sensor de movimiento en modo salida
   pinMode(MOVE_SENSOR_PIN, INPUT);
+
+  // Iniciar el sensor de humedad
+  dht.begin();
 }
 
 void loop() {
-  serverMessage = Serial.readStringUntil('\n'); // Leer strings del puerto serial hasta encontrar '\n', esto solo es necesario para servo.
-  flameSensor = digitalRead(SENSOR_FLAME_PIN) // Lee el valor de fuego.
-  int switchState = digitalRead(MOVE_SENSOR_PIN);
-
-  // Condiciones para ver fuego.
-  if (flameSensor && !fire)
-  {
-    Serial.println("Llama detectada!")
-    Serial.write("F1"); //F1 indica fuego prendido
-    fire = true;
-  }
-
-  if (!flameSensor && fire)
-  {
-    Serial.println("No hay llama cerca.");
-    Serial.write("F2"); //F2 indica fuego fue apagado
-    fire = false;
-  }
-
-
-  //Esto verifica si llego un mensaje con indicaciones para mover servo
+  // Leer mensaje desde el servidor para el control del servo
+  serverMessage = Serial.readStringUntil('\n'); 
   if (serverMessage.startsWith("SERVO_")) {
-    // Descomponer el mensaje en las partes que me interesan 
-    delimiterIndex = serverMessage.indexOf(delimiter); // Obtener la posición del delimitador
-    key = serverMessage.substring(0, delimiterIndex); // Obtener la clave
-    value = serverMessage.substring(delimiterIndex + 1); // Obtener el valor
+    delimiterIndex = serverMessage.indexOf(delimiter);
+    key = serverMessage.substring(0, delimiterIndex);
+    value = serverMessage.substring(delimiterIndex + 1);
 
-    // Procesamiento del mensaje 
-    if (key == "SERVO") { // Mover el servo a una posición entre 0 y 180 grados
-      if (180 >= value.toInt() && value.toInt() >= 0) { // Límite para las posiciones que puede tomar el servo
-        if (value.toInt() < servoPos) {
-          while (servoPos > value.toInt()) {
-            servoPos--;
-            myServo.write(servoPos);
-            delay(15);
-          }
-        } else if (value.toInt() > servoPos) {
-          while (servoPos < value.toInt()) {
-            servoPos++;
-            myServo.write(servoPos);
-            delay(15);
-          }
+    if (key == "SERVO") {
+      int targetPos = value.toInt();
+      if (targetPos >= 0 && targetPos <= 180) {
+        while (servoPos != targetPos) {
+          servoPos += (targetPos > servoPos) ? 1 : -1;
+          myServo.write(servoPos);
+          delay(15);
         }
       }
     }
   }
 
-  // Caso para analizar humedad
-  // Lectura de sensor de humedad esto se mide en porcentaje en relacion con superficie de mdicion
-  float h = dht.readHumidity();
-
-  if (isnan(h)) {
-    Serial.println("Error al leer el sensor.");
-  } else {
-    Serial.println(h);
-    String mensaje = "Humedad:" + String(h); 
-    Serial.write(mensaje.c_str()); // enviar valor de humedad
+  // Verificar sensor de llama
+  flameSensor = digitalRead(SENSOR_FLAME_PIN);
+  if (flameSensor && !fire) {
+    Serial.println("Llama detectada!");
+    Serial.println("F1"); // F1 indica fuego detectado
+    fire = true;
+  } else if (!flameSensor && fire) {
+    Serial.println("No hay llama cerca.");
+    Serial.println("F2"); // F2 indica que ya no hay fuego
+    fire = false;
   }
 
-  
+  // Leer y enviar humedad
+  float humedad = dht.readHumidity();
+  if (!isnan(humedad)) {
+    Serial.print("Humedad:");
+    Serial.println(humedad, 2); // Enviar con dos decimales
+  } else {
+    Serial.println("Error al leer el sensor de humedad.");
+  }
 
-
-  // Caso para leer sensor de inclinacion
+  // Verificar inclinación (sensor de movimiento)
+  int switchState = digitalRead(MOVE_SENSOR_PIN);
   if (switchState == HIGH) {
-    Serial.println("No hay inclinación (LOW)");
+    Serial.println("Inclinación:No detectada");
   } else {
-    Serial.println("Inclinación detectada (HIGH)");
-    Serial.writer('T') //Indicador de temblor
+   
+    Serial.println("T"); // T indica inclinación detectada
   }
 
-  delay(2000)
+  // Pequeño retraso entre cada envío de datos
+  delay(2000);
 }

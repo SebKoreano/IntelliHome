@@ -192,6 +192,9 @@
     </string-array>
     <string name="Propietario">Proprietário</string>
     <string name="Rent">Aluguel</string>
+
+    <string name="humedad">Umidade:</string>
+
     <string name="FechaInicio">Data de Início</string>
     <string name="FechaFinal">Data de Término</string>
     <string name="biometric_prompt_title">Autenticação</string>
@@ -209,4 +212,5 @@
     <string name="Humedad">Umidade</string>
     <string name="Sala">Szoba</string>
     <string name="Pila">Pia</string>
+
 </resources>

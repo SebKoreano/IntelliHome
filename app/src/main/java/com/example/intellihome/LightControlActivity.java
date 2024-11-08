@@ -28,6 +28,8 @@ public class LightControlActivity extends AppCompatActivity {
     private PrintWriter outArd;
     private Scanner inArd;
     private String humedad;
+    private TextView humedadTextView;
+
 
     private Button btnFuego, btnSismos, btnHumedad, btnPuerta;
     BiometricPrompt biometricPrompt;
@@ -37,6 +39,9 @@ public class LightControlActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_light_control);
+
+        // Inicialización de TextView para mostrar humedad
+        humedadTextView = findViewById(R.id.Humedadvariable);
 
         // Inicialización de los botones de la interfaz
         btnCuartoPrincipal = findViewById(R.id.btnCuartoPrincipal);
@@ -102,7 +107,7 @@ public class LightControlActivity extends AppCompatActivity {
         new Thread(() -> {
             try {
                 // Conectar a la dirección IP y puerto del servidor
-                socket = new Socket("192.168.0.107", 6969);
+                socket = new Socket("192.168.18.134", 6969);
                 // Inicializar el PrintWriter para enviar datos al servidor
                 out = new PrintWriter(socket.getOutputStream(), true);
                 // Inicializar el Scanner para recibir datos del servidor (actualmente no se usa)
@@ -118,7 +123,7 @@ public class LightControlActivity extends AppCompatActivity {
         // Iniciar el hilo para conectarse a Arduino por medio de Server.
         new Thread(() -> {
             try {
-                socket = new Socket("192.168.18.206", 3535); //192.168.18.206
+                socket = new Socket("192.168.18.134", 3535); //192.168.18.206
 
                 outArd = new PrintWriter(socket.getOutputStream(), true);
                 inArd = new Scanner(socket.getInputStream());
@@ -194,11 +199,13 @@ public class LightControlActivity extends AppCompatActivity {
         }
 
         else if (message.startsWith("T")) { //Indicador de que tembló
+            runOnUiThread(() -> Toast.makeText(this, "¡Alerta de temblor detectada!", Toast.LENGTH_SHORT).show());
 
         }
 
         else if (message.startsWith("Humedad:")) { //Indicador de humedad
             humedad = message.substring(8);
+            runOnUiThread(() -> humedadTextView.setText(humedad + "g/m^2"));
         }
     }
     private void setButtonToggleIcon(Button button) {

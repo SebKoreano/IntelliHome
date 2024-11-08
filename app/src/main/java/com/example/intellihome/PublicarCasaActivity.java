@@ -71,7 +71,7 @@ public class PublicarCasaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publicarcasa);
         // Conectar al servidor
-        connectToServer("192.168.18.5", 3535); //192.168.18.206
+        connectToServer("192.168.18.134", 3535); //192.168.18.206
         // Inicializar vistas
 
         descripcionInput = findViewById(R.id.inputDescripcion);
