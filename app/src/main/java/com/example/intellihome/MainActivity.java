@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         // Iniciar el hilo para conectarse al servidor y recibir mensajes
         new Thread(() -> {
             try {
-                socket = new Socket("192.168.18.206", 3535); //192.168.18.206
+                socket = new Socket("172.18.77.88", 3535); //192.168.18.206
 
                 out = new PrintWriter(socket.getOutputStream(), true);
                 in = new Scanner(socket.getInputStream());
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Lógica para el botón de Login
         btnLogin.setOnClickListener(v -> {
-            // Acciones para el botón de Login
+            // Acciones para el botón de Log-In
             String email = inputEmail.getText().toString();
             String password = inputPassword.getText().toString();
             StringBuilder sb = new StringBuilder();
@@ -115,6 +115,16 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     if (out != null) {
                         out.println(message);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
+
+            new Thread(() -> {
+                try {
+                    if (out != null) {
+                        out.println("WhatsApp/123456789/Hola, esta es una notificación de prueba");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

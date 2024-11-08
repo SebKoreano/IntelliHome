@@ -1,0 +1,16 @@
+InformacionDeVivienda_  
+DuenoDeVivienda:Eudus123       
+NombreDeVivienda:House 14      
+DescripcionGeneral:Object 14...
+NumeroHabitaciones:5
+Precio:₡47.00
+Longitud:-104.0074386075139    
+Latitud:44.40333056251919      
+Amenidad0:Equipped Kitchen     
+Amenidad1:Security
+Amenidad2:Balcony
+Amenidad3:Workspace
+Amenidad4:Nearby Mountain      
+Amenidad5:High-Speed WiFi      
+TipoCasa:Beach House
+VehiculoPreferencia:PickUp

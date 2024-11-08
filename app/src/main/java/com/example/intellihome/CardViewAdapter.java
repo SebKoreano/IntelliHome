@@ -1,6 +1,7 @@
 package com.example.intellihome;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +67,12 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ViewHo
             label.setText(item.getTitle());
             tags.setText(item.getType());
             money.setText(item.getMoney());
+
+            List<Uri> imageUris = item.getImageUris();
+            if (imageUris != null && !imageUris.isEmpty()) {
+                Uri firstImageUri = imageUris.get(0);
+                photo.setImageURI(firstImageUri);
+            }
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

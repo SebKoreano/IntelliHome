@@ -5,6 +5,10 @@ import string
 import os
 import serial
 
+# WhatsApp notifications
+import pywhatkit
+from datetime import datetime, timedelta
+
 #Para envio de email.
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -36,7 +40,7 @@ class Usuario:
             server.quit()
 
 class ChatServer:
-    def __init__(self, host="192.168.18.206", port=3535): #192.168.18.206
+    def __init__(self, host="172.18.77.88", port=3535): #192.168.18.206
         self.matriz_Alquilador = [] 
         self.matriz_Propietario = []
         self.matriz_AmbasFunciones = [] 
@@ -78,7 +82,7 @@ class ChatServer:
                 if message:
                     message = message.strip()
 
-                    print("Llegó: "+message)
+                    print("Llegó: " + message)
 
                     # Verificar el prefijo del mensaje
                     if message.startswith("CrearCuenta_"):  # Nuevo usuario
@@ -92,7 +96,6 @@ class ChatServer:
                         info = message.split("_")
                         self.leerInformacionDeUsuario(info[0], info[1])
 
-
                     elif message.startswith("InformacionDeVivienda_"):
                         self.guardarInforDeVivienda(message[len("InformacionDeVivienda_"):])
 
@@ -100,10 +103,14 @@ class ChatServer:
                         message = message[len("ObtenerInformacionVivienda_"):]
                         self.leerInformacionDeVivienda(message, client_socket)
 
-
                     elif message.startswith("Login_"):
                         print(message)
                         self.buscar_login(message[len("Login_"):], client_socket)
+
+                    elif message.startswith("WhatsApp/"):
+                        print(message)
+                        data = message.split("/")
+                        self.WhatsAppMessage(data[1], data[2])
 
                     elif message.startswith("Recuperacion_"):
                         print(message)
@@ -144,6 +151,7 @@ class ChatServer:
 
     #Envia mensaje a socket 
     def send_message_to_respond_request(self, client_socket, message):
+        """Enviar una respuesta al cliente con el estado del inicio de sesión."""
         threading.Thread(target=self.broadcast, args=(message +"\n", client_socket)).start()
 
     #Escriba cuenta creada en .txt
@@ -193,7 +201,6 @@ class ChatServer:
             CardCVV = datos_usuario[6]
             CardHolder = datos_usuario[7]
             usuario_fila = [usuario, telefono, email, contrasena, Iban, CardNum, CardCVV, CardHolder]
-
 
         print(usuario_fila)
 
@@ -396,8 +403,6 @@ class ChatServer:
         usuario.send_password_reset_email(correo, new_pass)  # Enviar el correo
         self.cambiar_Contraseña(correo, new_pass, Tipo)  # Cambiar la contraseña en la matriz
 
-
-
     #De aquí en adelante estará la lógica para guardar y acceder a InformacionDeUsuarios
     def guardarInforDeUsuario(self, info_usuario,):
         # Buscar el nombre de usuario en la cadena de entrada
@@ -438,11 +443,8 @@ class ChatServer:
         print(f"No se encontró '{informacionRequerida}' en {ruta_archivo}.")
         return None
 
-
-
-
-    #Aqiuí estarán las funciones para guardar y acceder a InformacionDeViviendas
-    def guardarInforDeVivienda(self, info_usuario,):
+    #Aquí estarán las funciones para guardar y acceder a InformacionDeViviendas
+    def guardarInforDeVivienda(self, info_usuario):
         # Buscar el nombre de usuario en la cadena de entrada
         username = None
         ruta='server/InformacionDeVivienda/'
@@ -474,23 +476,35 @@ class ChatServer:
         infoCasa = ""  # Inicializa la cadena que contendrá toda la información unida
 
         with open(ruta_archivo, 'r') as archivo:
-            # Saltar la primera línea
-            archivo.readline()
-            
-            # Leer y agregar cada línea a infoCasa hasta alcanzar el final
-            while True:
-                linea = archivo.readline()
-                if not linea:  # Si la línea es nula, se ha llegado al final del archivo
-                    break
-                # Añadir la línea a infoCasa, con "_" entre líneas
-                infoCasa += linea.strip() + "_"
+            for linea in archivo:
+                resultados.append(linea)
         
-        # Quitar el último guion bajo extra si es necesario
-        if infoCasa.endswith("_"):
-            infoCasa = infoCasa[:-1]
+        # Unir todos los resultados encontrados con guiones bajos "_"
+        if resultados:
+            resultado_final = "_".join(resultados)
+            return self.send_message_to_respond_request(resultado_final, socket)  # Devuelve la cadena unida
 
-        return self.send_message_to_respond_request(infoCasa, socket)
+        # Si no se encuentra la información requerida, retornar None
+        print(f"No se encontró información de {ruta_archivo}.")
+        return None
+    
+    # Function to send WhatsApp Messages
+    def WhatsAppMessage(self, phoneNumber, message):
+        
+        # Obtener la hora actual
+        now = datetime.now()
+        hora = now.hour
+        minuto = now.minute + 1  # Sumar un minuto a la hora actual
 
+        # Si el minuto es 60, reajustar la hora
+        if minuto == 60:
+            minuto = 0
+            hora += 1
+
+        # Enviar el mensaje
+        pywhatkit.sendwhatmsg("+50685400752", "This is INTELLIHOME", hora, minuto)
+        
+        print(f"PhoneNumber({phoneNumber}) Message: {message}")
 
 def generar_nueva_contraseña():
     print("entro")
