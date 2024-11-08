@@ -213,4 +213,29 @@
     <string name="Sala">Salão</string>
     <string name="Pila">Mosogatóban</string>
 
+    <string name="FireAlert_Message">
+        *TŰZRIADÓ*\n\n
+        Magas tűzszintet észleltek az otthonban. Kérjük, az alábbi lépéseket azonnal kövesse:\n\n
+        1. Győződjön meg róla, hogy minden lakó elhagyja az épületet.\n
+        2. Hívja a sürgősségi szolgálatokat a _911_ számot.\n
+        3. Ha biztonságos, próbálja eloltani a tüzet tűzoltó készülék segítségével.\n
+        4. Várjon, amíg a sürgősségi szolgáltatások megérkeznek.\n\n
+        _A biztonság az első! Ne próbálja meg eloltani a tüzet megfelelő felszerelés nélkül._\n\n
+        Ezt az üzenetet automatikusan küldte a _*IntelliHome*_ megfigyelőrendszer.
+    </string>
+
+    <string name="EarthquakeAlert_Message">
+        *FÖLDRENGÉS RIASZTÁS*\n\n
+        Szeizmikus aktivitást észleltek a területen. Kérjük, kövesse az alábbi biztonsági lépéseket:\n\n
+        1. Maradjon nyugodt és keressen biztonságos helyet.\n
+        2. Tartózkodjon az ablakoktól, tükröktől és olyan tárgyaktól, amelyek leeshetnek.\n
+        3. Ha bent van, húzódjon be egy erős asztal alá, vagy egy teherhordó fal mellé.\n
+        4. Ha kívül van, távolodjon el az épületektől, fáktól és elektromos vezetékektől.\n\n
+        *Ne feledje:* Várja meg, amíg a rengés véget ér, mielőtt elhagyná az épületet, és kerülje a lift használatát.\n\n
+        Ezt az üzenetet automatikusan küldte a _*IntelliHome*_ megfigyelőrendszer.
+    </string>
+
+    <string name="FireAlert_Title">TŰZRIADÓ</string>
+    <string name="EarthquakeAlert_Title">FÖLDRENGÉS RIADÓ</string>
+
 </resources>

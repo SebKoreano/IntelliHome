@@ -42,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentStart="true"
-                    android:layout_marginStart="58dp"
+                    android:layout_marginStart="40dp"
                     android:orientation="vertical">
 
                     <View
@@ -108,8 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="32dp">
+                    android:layout_alignParentEnd="true">
 
                     <View
                         android:layout_width="match_parent"
@@ -148,7 +147,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/Fuego"
                         android:clickable="false"
-                        android:drawableEnd="@drawable/ic_fire"/>
+                        android:drawableEnd="@drawable/ic_check_circle"/>
 
                     <View
                         android:layout_width="match_parent"
@@ -184,7 +183,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/Sismos"
                         android:clickable="false"
-                        android:drawableTop="@drawable/ic_earthquake"/>
+                        android:drawableTop="@drawable/ic_check_circle"/>
 
                     <View
                         android:layout_width="match_parent"
@@ -212,7 +211,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Humedad"
-                android:drawableEnd="@drawable/ic_cloud"/>
+                android:drawableEnd="@drawable/ic_water_drop"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"

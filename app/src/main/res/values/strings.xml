@@ -213,4 +213,29 @@
     <string name="Sala">Sala</string>
     <string name="Pila">Pila</string>
 
+    <string name="FireAlert_Message">
+        *ALERTA DE INCENDIO*\n\n
+        Se han detectado niveles altos de fuego en la vivienda. Por favor, siga los siguientes pasos inmediatamente:\n\n
+        1. Asegúrese de que todos los ocupantes evacuen el lugar.\n
+        2. Llame a los servicios de emergencia al _911_.\n
+        3. Si es seguro hacerlo, intente apagar el fuego utilizando un extintor.\n
+        4. Espere a que los servicios de emergencia lleguen al lugar.\n\n
+        _¡La seguridad es lo primero! No intente controlar el incendio sin el equipo adecuado._\n\n
+        Este mensaje ha sido enviado automáticamente por el sistema de monitoreo _*IntelliHome*_.
+    </string>
+
+    <string name="EarthquakeAlert_Message">
+        *ALERTA DE SISMO*\n\n
+        Se ha detectado actividad sísmica en la zona. Por favor, siga estos pasos de seguridad:\n\n
+        1. Mantenga la calma y busque un lugar seguro.\n
+        2. Aléjese de ventanas, espejos y objetos que puedan caer.\n
+        3. Si está en el interior, colóquese debajo de una mesa resistente o al lado de una pared estructural.\n
+        4. Si está en el exterior, aléjese de edificios, árboles y cables de electricidad.\n\n
+        *Recuerde:* Espere a que el temblor termine antes de evacuar el edificio y evite usar ascensores.\n\n
+        Este mensaje ha sido enviado automáticamente por el sistema de monitoreo _*IntelliHome*_.
+    </string>
+
+    <string name="FireAlert_Title">ALERTA DE FUEGO</string>
+    <string name="EarthquakeAlert_Title">ALERTA DE SISMO</string>
+
 </resources>
