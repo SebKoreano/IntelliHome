@@ -52,13 +52,13 @@ void setup() {
 
 void loop() {
   serverMessage = Serial.readStringUntil('\n'); // Leer strings del puerto serial hasta encontrar '\n', esto solo es necesario para servo.
-  flameSensor = digitalRead(SENSOR_FLAME_PIN) // Lee el valor de fuego.
+  flameSensor = digitalRead(SENSOR_FLAME_PIN); // Lee el valor de fuego.
   int switchState = digitalRead(MOVE_SENSOR_PIN);
 
   // Condiciones para ver fuego.
   if (flameSensor && !fire)
   {
-    Serial.println("Llama detectada!")
+    Serial.println("Llama detectada!");
     Serial.write("F1"); //F1 indica fuego prendido
     fire = true;
   }
@@ -118,8 +118,8 @@ void loop() {
     Serial.println("No hay inclinación (LOW)");
   } else {
     Serial.println("Inclinación detectada (HIGH)");
-    Serial.writer('T') //Indicador de temblor
+    Serial.write('T'); //Indicador de temblor
   }
 
-  delay(2000)
+  delay(2000);
 }

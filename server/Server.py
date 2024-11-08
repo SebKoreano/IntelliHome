@@ -40,7 +40,7 @@ class Usuario:
             server.quit()
 
 class ChatServer:
-    def __init__(self, host="172.18.77.88", port=3535): #192.168.18.206
+    def __init__(self, host="0.0.0.0", port=3535): #192.168.18.206
         self.matriz_Alquilador = [] 
         self.matriz_Propietario = []
         self.matriz_AmbasFunciones = [] 
@@ -61,7 +61,7 @@ class ChatServer:
         self.arduino_Thread.start()
 
         #Conectarse con arduino
-        serialPort = 'COM7'
+        serialPort = 'COM3'
         try:
             self.arduino = serial.Serial(serialPort, 9600)
             print('Conectado a Arduino')
@@ -473,7 +473,7 @@ class ChatServer:
             print(f"El archivo {ruta_archivo} no existe.")
             return None
 
-        infoCasa = ""  # Inicializa la cadena que contendrá toda la información unida
+        resultados = []  # Inicializa la cadena que contendrá toda la información unida
 
         with open(ruta_archivo, 'r') as archivo:
             for linea in archivo:
