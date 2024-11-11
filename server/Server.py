@@ -479,7 +479,8 @@ class ChatServer:
             print(f"Error al guardar el archivo: {e}")
 
 
-    def leerInformacionDeVivienda(self, nombreVivienda, socket):
+    def leerInformacionDeVivienda(self, nombreVivienda, socket): #Ahora se escribe de primero nombre de casa para poder 
+        #indentificar más facil el mensaeje.
         ruta_archivo = f'server/InformacionDeVivienda/{nombreVivienda}.txt'
         
         # Verificar si el archivo existe
@@ -489,18 +490,29 @@ class ChatServer:
         
         message = ""
 
-        with open(ruta_archivo, 'r') as archivo:
-            for linea in archivo:
-                if linea:
-                    message = linea
+        # Leer todo el contenido del archivo
+        with open(ruta_archivo, 'r', encoding='utf-8') as archivo:
+            message = archivo.read()  # Lee todo el contenido sin eliminar espacios
 
-        if message:
-            print("Se envia informacion de casa!!!!!")
-            return self.send_message_to_respond_request(message, socket)  # Devuelve la cadena unida
+        # Extraer el valor de NombreDeVivienda dividiendo por "_"
+        nombre_vivienda_extraido = None
+        partes = message.split('_')
+        for parte in partes:
+            if parte.startswith("NombreDeVivienda:"):
+                nombre_vivienda_extraido = parte.split(":", 1)[1]
+                break
+        
+        # Verificar si se extrajo el nombre de la vivienda
+        if nombre_vivienda_extraido:
+            # Agregar el nombre de la vivienda extraído al inicio de la cadena
+            message = f"{nombre_vivienda_extraido}:{message}"
+            print("Se envía información de casa!!!!!")
+            return self.send_message_to_respond_request(message, socket)  # Enviar la cadena modificada
 
         # Si no se encuentra la información requerida, retornar None
-        print(f"No se encontró información de {ruta_archivo}.")
+        print(f"No se encontró la información de NombreDeVivienda en {ruta_archivo}.")
         return None
+
     
     # Function to send WhatsApp Messages
     def WhatsAppMessage(self, phoneNumber, message):        
