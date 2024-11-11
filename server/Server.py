@@ -3,11 +3,12 @@ import threading
 import secrets
 import string
 import os
+import re
 import serial
 import time
 
 # Twilio Connection Extensions
-from twilio.rest import Client
+#from twilio.rest import Client
 
 # Para envio de email.
 import smtplib
@@ -52,13 +53,13 @@ class ChatServer:
         self.agregar_usuario_a_matriz()
 
         # Conectarse con Arduino
-        serialPort = 'COM3'  # Cambia 'COM3' al puerto correcto
-        try:
-            self.arduino = serial.Serial(serialPort, 9600)
-            time.sleep(2)  # Espera a que el puerto serial se inicie
-            print('Conectado al Arduino en', serialPort)
-        except serial.SerialException as e:
-            print(f'Error al abrir puerto serial: {e}')
+       # serialPort = 'COM3'  # Cambia 'COM3' al puerto correcto
+     #   try:
+       #     self.arduino = serial.Serial(serialPort, 9600)
+         #   time.sleep(2)  # Espera a que el puerto serial se inicie
+     #       print('Conectado al Arduino en', serialPort)
+       # except serial.SerialException as e:
+      #      print(f'Error al abrir puerto serial: {e}')
 
         # Hilo para manejar el servidor
         self.thread = threading.Thread(target=self.accept_connections)
@@ -438,31 +439,46 @@ class ChatServer:
         # Si no se encuentra la información requerida, retornar None
         print(f"No se encontró '{informacionRequerida}' en {ruta_archivo}.")
         return None
+    
 
-    #Aquí estarán las funciones para guardar y acceder a InformacionDeViviendas
     def guardarInforDeVivienda(self, info_usuario):
-        print("AQUIIIIIIII")
-        print(info_usuario)
-        # Buscar el nombre de usuario en la cadena de entrada
+        # Remover el símbolo '₡' y convertir precios a números (ejemplo: "₡1000" a "1000")
+        info_usuario = re.sub(r'₡(\d+(\.\d+)?)', r'\1', info_usuario)
+        
+        # Extraer el nombre de la vivienda (NombreDeVivienda) desde el nuevo formato
         username = None
-        ruta='server/InformacionDeVivienda/'
-        for linea in info_usuario.splitlines():
-            if linea.startswith("NombreDeVivienda:"):
-                username = linea.split(":", 1)[1].strip()
+        ruta = 'server/InformacionDeVivienda/'
+        
+        # Dividir la cadena en partes por el separador '_'
+        partes = info_usuario.split('_')
+        for parte in partes:
+            if parte.startswith("NombreDeVivienda:"):
+                username = parte.split(":", 1)[1].strip()
                 break
-        print(info_usuario)
+        
+        # Verificar que se encontró el nombre de la vivienda
+        if username is None:
+            print("No se encontró el campo NombreDeVivienda en la información proporcionada.")
+            return
+        
         # Crear la ruta si no existe
         os.makedirs(ruta, exist_ok=True)
         
         # Definir el nombre del archivo usando el username extraído
         nombre_archivo = f"{username}.txt"
         
-        # Guardar la información en el archivo
+        # Guardar toda la información en el archivo
         self.guardar_texto(ruta + nombre_archivo, info_usuario)
 
     def guardar_texto(self, direccion, texto):
-        with open(direccion, 'w') as archivo:
-            archivo.write(texto)
+        try:
+            with open(direccion, 'w', encoding='utf-8') as archivo:
+                archivo.write(texto)
+            print(f"Archivo guardado exitosamente en {direccion}")
+        except Exception as e:
+            print(f"Error al guardar el archivo: {e}")
+
+
     def leerInformacionDeVivienda(self, nombreVivienda, socket):
         ruta_archivo = f'server/InformacionDeVivienda/{nombreVivienda}.txt'
         
@@ -470,17 +486,17 @@ class ChatServer:
         if not os.path.exists(ruta_archivo):
             print(f"El archivo {ruta_archivo} no existe.")
             return None
-
-        resultados = []  # Inicializa la cadena que contendrá toda la información unida
+        
+        message = ""
 
         with open(ruta_archivo, 'r') as archivo:
             for linea in archivo:
-                resultados.append(linea)
-        
-        # Unir todos los resultados encontrados con guiones bajos "_"
-        if resultados:
-            resultado_final = "_".join(resultados)
-            return self.send_message_to_respond_request(resultado_final, socket)  # Devuelve la cadena unida
+                if linea:
+                    message = linea
+
+        if message:
+            print("Se envia informacion de casa!!!!!")
+            return self.send_message_to_respond_request(message, socket)  # Devuelve la cadena unida
 
         # Si no se encuentra la información requerida, retornar None
         print(f"No se encontró información de {ruta_archivo}.")

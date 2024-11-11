@@ -535,38 +535,26 @@ public class PublicarCasaActivity extends AppCompatActivity {
 
 
             // Añadir líneas de ejemplo (puedes reemplazar con tus propios datos)
-            contenidoArchivo.append("InformacionDeVivienda_").append("\n");
-            contenidoArchivo.append("DuenoDeVivienda:").append(globalVariable.getCurrentuserName()).append("\n");
-            contenidoArchivo.append("NombreDeVivienda:").append(nombreCasa).append("\n");
-            contenidoArchivo.append("DescripcionGeneral:").append(descripcionCasa).append("\n");
-            contenidoArchivo.append("NumeroHabitaciones:").append(numHabitacionesPicker.getValue()).append("\n");
-            contenidoArchivo.append("Precio:").append(precioPorNoche).append("\n");
-            contenidoArchivo.append("Longitud:").append(longitudHome).append("\n");
-            contenidoArchivo.append("Latitud:").append(latitudHome).append("\n");
+            contenidoArchivo.append("InformacionDeVivienda_");
+            contenidoArchivo.append("DuenoDeVivienda:").append(globalVariable.getCurrentuserName()).append("_");
+            contenidoArchivo.append("NombreDeVivienda:").append(nombreCasa).append("_");
+            contenidoArchivo.append("DescripcionGeneral:").append(descripcionCasa).append("_");
+            contenidoArchivo.append("NumeroHabitaciones:").append(numHabitacionesPicker.getValue()).append("_");
+            contenidoArchivo.append("Precio:").append(precioPorNoche).append("_");
+            contenidoArchivo.append("Longitud:").append(longitudHome).append("_");
+            contenidoArchivo.append("Latitud:").append(latitudHome).append("_");
 
             int i = 0;
             for (String strg: selectedAmenidades
             ) {
-                contenidoArchivo.append("Amenidad").append(i).append(":").append(strg).append("\n");
+                contenidoArchivo.append("Amenidad").append(i).append(":").append(strg).append("_");
                 i++;
             }
-            contenidoArchivo.append("TipoCasa:").append(casa.getSelectedItem().toString()).append("\n");
-            contenidoArchivo.append("VehiculoPreferencia:").append(vehiculo.getSelectedItem().toString()).append("\n");
+            contenidoArchivo.append("TipoCasa:").append(casa.getSelectedItem().toString()).append("_");
+            contenidoArchivo.append("VehiculoPreferencia:").append(vehiculo.getSelectedItem().toString()).append("_");
 
             sendMessage(contenidoArchivo.toString());
-            // Convertir el contenido a bytes
-            byte[] data = contenidoArchivo.toString().getBytes("UTF-8");
 
-            // Subir el archivo al Storage en la referencia dada
-            storageRef.putBytes(data)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        // Manejar el éxito de la subida
-                        System.out.println("Archivo subido exitosamente a: " + storageRef.getPath());
-                    })
-                    .addOnFailureListener(e -> {
-                        // Manejar errores en la subida
-                        System.err.println("Error al subir el archivo: " + e.getMessage());
-                    });
 
         } catch (Exception e) {
             System.err.println("Error al crear o subir el archivo: " + e.getMessage());
