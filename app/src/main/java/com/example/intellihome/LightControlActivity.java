@@ -2,15 +2,14 @@ package com.example.intellihome;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.View;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Button;
+
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -135,7 +134,7 @@ public class LightControlActivity extends AppCompatActivity {
                 while (true) {
                     if (inArd.hasNextLine()) {
                         String message = inArd.nextLine();
-                        sensorMessageProcesor(message, globalColor.getIp());
+                        sensorMessageProcessor(message, globalColor.getIp());
                     }
                 }
             } catch (Exception e) {
@@ -193,46 +192,53 @@ public class LightControlActivity extends AppCompatActivity {
         }).start();
     }
 
-    public void sensorMessageProcesor(String message, String ip){
-        if (message.startsWith("F1")){//Indica que el fuego se encendió
-
-            btnFuego.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_fire, 0);
-
-            String alertMessage = getString(R.string.FireAlert_Message);
-            WhatsAppNotificationHelper.sendWhatsAppMessageViaServer(ip,
-                    3535, phoneNumber, alertMessage);
-            NotificationHelper.sendNotification(this, getString(R.string.FireAlert_Title), R.drawable.ic_fire);
-
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                btnFuego.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_circle, 0);
-            }, 5000);
-        }
-
-        else if (message.startsWith("F2")) { //Indicador de que el fuego prendido ahora está apagado
-
-            btnFuego.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_circle, 0);
-        }
-
-        else if (message.startsWith("T")) { //Indicador de que tembló
-            runOnUiThread(() -> Toast.makeText(this, "¡Alerta de temblor detectada!", Toast.LENGTH_SHORT).show());
-
-            btnSismos.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_earthquake, 0);
-
-            String alertMessage = getString(R.string.EarthquakeAlert_Message);
-            WhatsAppNotificationHelper.sendWhatsAppMessageViaServer(ip,
-                    3535, phoneNumber, alertMessage);
-            NotificationHelper.sendNotification(this, getString(R.string.EarthquakeAlert_Title), R.drawable.ic_earthquake);
-
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                btnSismos.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_circle, 0);
-            }, 5000);
-        }
-
-        else if (message.startsWith("Humedad:")) { //Indicador de humedad
-            humedad = message.substring(8);
-            runOnUiThread(() -> humedadTextView.setText(humedad + "g/m^2"));
+    public void sensorMessageProcessor(String message, String ip) {
+        try {
+            if (message.startsWith("F1")) {
+                SensorFuegoPrendido(ip);
+            } else if (message.startsWith("F2")) {
+                SensorFuegoApagado();
+            } else if (message.startsWith("T")) {
+                SensorSismos(ip);
+            } else if (message.startsWith("Humedad:")) {
+                SensorHumedad(message);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+    private void SensorFuegoPrendido(String ip) {
+        runOnUiThread(() -> {
+            Toast.makeText(this, "¡SE QUEMA LA CASAAA!", Toast.LENGTH_SHORT).show();
+        });
+        btnFuego.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_fire, 0);
+        String firealertMessage = getString(R.string.FireAlert_Message);
+        WhatsAppNotificationHelper.sendWhatsAppMessageViaServer(ip, 3535, phoneNumber, firealertMessage);
+        NotificationHelper.sendNotification(this, getString(R.string.FireAlert_Title), R.drawable.ic_fire);
+    }
+
+    private void SensorFuegoApagado() {
+        btnFuego.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_circle, 0);
+    }
+
+    private void SensorSismos(String ip) {
+        runOnUiThread(() -> Toast.makeText(this, "¡Alerta de temblor detectada!", Toast.LENGTH_SHORT).show());
+        btnSismos.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_earthquake, 0);
+
+        String sismoalertMessage = getString(R.string.EarthquakeAlert_Message);
+        WhatsAppNotificationHelper.sendWhatsAppMessageViaServer(ip, 3535, phoneNumber, sismoalertMessage);
+        NotificationHelper.sendNotification(this, getString(R.string.EarthquakeAlert_Title), R.drawable.ic_earthquake);
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            btnSismos.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_circle, 0);
+        }, 5000);
+    }
+
+    private void SensorHumedad(String message) {
+        String humedad = message.substring(8);
+        runOnUiThread(() -> humedadTextView.setText(humedad + " g/m²"));
+    }
+
 
     private void setButtonToggleIcon(Button button) {
         button.setTag(false);

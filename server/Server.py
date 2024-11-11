@@ -40,7 +40,7 @@ class Usuario:
             server.quit()
 
 class ChatServer:
-    def __init__(self, host="192.168.18.5", port=3535): #192.168.18.206
+    def __init__(self, host="0.0.0.0", port=3535): #192.168.18.206
         self.matriz_Alquilador = [] 
         self.matriz_Propietario = []
         self.matriz_AmbasFunciones = [] 
@@ -141,7 +141,7 @@ class ChatServer:
                 try:
                     if self.arduino.in_waiting > 0:
                         ino_message = self.arduino.readline().decode('utf-8').strip()
-                        print("Arduino dice:", ino_message)
+                        #print("Arduino dice:", ino_message)
                         for socket in self.clients:
                             self.send_message_to_respond_request(socket, ino_message)
                 except serial.SerialException as e:
@@ -490,7 +490,11 @@ class ChatServer:
     def WhatsAppMessage(self, phoneNumber, message):        
 
         account_sid =  '[ Twilio Account Sid ]'
+
         auth_token = '[ Token of Authorization ]'
+
+        #:D
+
         client = Client(account_sid, auth_token)
 
         message_body = message
