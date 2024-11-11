@@ -135,7 +135,7 @@ public class LightControlActivity extends AppCompatActivity {
                 while (true) {
                     if (inArd.hasNextLine()) {
                         String message = inArd.nextLine();
-                        sensorMessageProcesor(message, globalColor.getIp());
+                        sensorMessageProcessor(message, globalColor.getIp());
                     }
                 }
             } catch (Exception e) {
@@ -193,46 +193,42 @@ public class LightControlActivity extends AppCompatActivity {
         }).start();
     }
 
-    public void sensorMessageProcesor(String message, String ip){
-        if (message.startsWith("F1")){//Indica que el fuego se encendió
+    public void sensorMessageProcessor(String message, String ip) {
+        try {
+            if (message.startsWith("F1")) { // Indica que el fuego se encendió
+                runOnUiThread(() -> Toast.makeText(this, "¡SE QUEMA LA CASAAA!", Toast.LENGTH_SHORT).show());
+                btnFuego.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_fire, 0);
 
-            btnFuego.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_fire, 0);
+                String alertMessage = getString(R.string.FireAlert_Message);
+                WhatsAppNotificationHelper.sendWhatsAppMessageViaServer(ip, 3535, phoneNumber, alertMessage);
+                NotificationHelper.sendNotification(this, getString(R.string.FireAlert_Title), R.drawable.ic_fire);
 
-            String alertMessage = getString(R.string.FireAlert_Message);
-            WhatsAppNotificationHelper.sendWhatsAppMessageViaServer(ip,
-                    3535, phoneNumber, alertMessage);
-            NotificationHelper.sendNotification(this, getString(R.string.FireAlert_Title), R.drawable.ic_fire);
 
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            } else if (message.startsWith("F2")) { // Indicador de que el fuego está apagado
                 btnFuego.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_circle, 0);
-            }, 5000);
-        }
 
-        else if (message.startsWith("F2")) { //Indicador de que el fuego prendido ahora está apagado
+            } else if (message.startsWith("T")) { // Indicador de temblor
+                runOnUiThread(() -> Toast.makeText(this, "¡Alerta de temblor detectada!", Toast.LENGTH_SHORT).show());
 
-            btnFuego.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_circle, 0);
-        }
+                btnSismos.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_earthquake, 0);
 
-        else if (message.startsWith("T")) { //Indicador de que tembló
-            runOnUiThread(() -> Toast.makeText(this, "¡Alerta de temblor detectada!", Toast.LENGTH_SHORT).show());
+                String alertMessage = getString(R.string.EarthquakeAlert_Message);
+                WhatsAppNotificationHelper.sendWhatsAppMessageViaServer(ip, 3535, phoneNumber, alertMessage);
+                NotificationHelper.sendNotification(this, getString(R.string.EarthquakeAlert_Title), R.drawable.ic_earthquake);
 
-            btnSismos.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_earthquake, 0);
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    btnSismos.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_circle, 0);
+                }, 5000);
 
-            String alertMessage = getString(R.string.EarthquakeAlert_Message);
-            WhatsAppNotificationHelper.sendWhatsAppMessageViaServer(ip,
-                    3535, phoneNumber, alertMessage);
-            NotificationHelper.sendNotification(this, getString(R.string.EarthquakeAlert_Title), R.drawable.ic_earthquake);
-
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                btnSismos.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_circle, 0);
-            }, 5000);
-        }
-
-        else if (message.startsWith("Humedad:")) { //Indicador de humedad
-            humedad = message.substring(8);
-            runOnUiThread(() -> humedadTextView.setText(humedad + "g/m^2"));
+            } else if (message.startsWith("Humedad:")) { // Indicador de humedad
+                humedad = message.substring(8);
+                runOnUiThread(() -> humedadTextView.setText(humedad + " g/m²"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
 
     private void setButtonToggleIcon(Button button) {
         button.setTag(false);

@@ -12,7 +12,7 @@ DHT dht(DHTPIN, DHTTYPE);
 
 // Controlador del servo
 Servo myServo;
-int servoPos = 0; // Posición inicial del servo
+int servoPos = 90; // Posición inicial del servo
 
 // Declaración de la variable del mensaje recibido
 String serverMessage;
