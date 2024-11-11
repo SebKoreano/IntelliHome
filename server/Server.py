@@ -489,6 +489,12 @@ class ChatServer:
     # Function to send WhatsApp Messages
     def WhatsAppMessage(self, phoneNumber, message):        
 
+        account_sid =  '[ Twilio Account Sid ]'
+
+        auth_token = '[ Token of Authorization ]'
+
+        #:D
+
         client = Client(account_sid, auth_token)
 
         message_body = message
