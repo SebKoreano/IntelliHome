@@ -32,10 +32,9 @@ public class GetHouseInfo extends Application {
     private Scanner in;
     private GlobalColor globalVaribles;
 
-    public GetHouseInfo(String house) {
-        this.nombreCasa = house;
+    public GetHouseInfo(String informacionDeCasa) {
         this.uriList = new ArrayList<>();
-        iniciarInfo();
+        asignarAtributo(informacionDeCasa);
     }
 
     public Task<List<Uri>> getHouseImageUris() {
@@ -77,45 +76,7 @@ public class GetHouseInfo extends Application {
         return taskCompletionSource.getTask();
     }
 
-    public void iniciarInfo() {
-        new Thread(() -> {
-            try {
-                socket = new Socket(globalVaribles.getIp(), 3535);
-                out = new PrintWriter(socket.getOutputStream(), true);
-                in = new Scanner(socket.getInputStream());
-
-                // Enviar mensaje de solicitud después de establecer conexión
-                out.println("ObtenerInformacionVivienda_" + this.nombreCasa);
-                out.flush();
-
-                // Esperar y recibir respuesta del servidor
-                if (in.hasNextLine()) {
-                    String message = in.nextLine();
-                    if (message.startsWith(nombreCasa + ":"))
-                    {
-                        handleServerResponse(message);
-                        closeConnection();
-                    }
-
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
-
-    private void closeConnection() {
-        try {
-            in.close();
-            out.close();
-            socket.close();
-            Log.d("GetHouseInfo", "Conexión cerrada correctamente.");
-        } catch (Exception e) {
-            Log.e("GetHouseInfo", "Error al cerrar la conexión: " + e.getMessage());
-        }
-    }
-
-    public void handleServerResponse(String messageWithHouseInfo) {
+    public void asignarAtributo(String messageWithHouseInfo) {
         String[] datos = messageWithHouseInfo.split("_");
 
         for (String dato : datos) {

@@ -31,12 +31,15 @@ import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class MainPageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
 
@@ -48,6 +51,14 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     private RecyclerView recyclerView;
     private List<PropertyModule> elements, originalElements;
     private ImageButton tagsbtn;
+    private List<GetHouseInfo> houseList;
+
+    GlobalColor globalColor = (GlobalColor) getApplication();
+
+    //Conexión con servidor
+    private Socket socket;
+    private PrintWriter out;
+    private Scanner in;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +72,8 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         bottomNavigationView = findViewById(R.id.bottom_nav);
         recyclerView = findViewById(R.id.recyclerView);
         tagsbtn = findViewById(R.id.tags);
+
+        createConectionToServer();
 
         GlobalColor globalColor = (GlobalColor) getApplication();
         int currentColor = globalColor.getCurrentColor();
@@ -361,5 +374,55 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
 
         recyclerView.getAdapter().notifyDataSetChanged();
         return true;
+    }
+
+    public void createConectionToServer()
+    {
+        // Iniciar el hilo para conectarse al servidor y recibir mensajes
+        new Thread(() -> {
+            try {
+                socket = new Socket(globalColor.getIp(), 3535); //192.168.18.206
+
+                out = new PrintWriter(socket.getOutputStream(), true);
+                in = new Scanner(socket.getInputStream());
+
+                while (true) {
+                    if (in.hasNextLine()) {
+                        String message = in.nextLine();
+                        setNewHouse(message);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    public void sendMessagesToServer()
+    {
+        for (String casa : listaCasas) {
+            new Thread(() -> {
+                try {
+                    if (out != null) {
+                        out.println("ObtenerInformacionVivienda_" + casa);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+
+    }
+
+    public void setNewHouse(String message)
+    {
+        for (String casa : listaCasas) {
+            if (message.startsWith(casa + ":")) {
+                String nuevoMensaje = message.replaceFirst(casa + ":", "");
+                GetHouseInfo newHouse = new GetHouseInfo(nuevoMensaje);
+                houseList.add(newHouse);
+            }
+        }
+
     }
 }
