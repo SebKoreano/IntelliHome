@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -207,11 +208,12 @@ public class LightControlActivity extends AppCompatActivity {
         }
     }
     private void SensorFuegoPrendido(String ip) {
-        runOnUiThread(() -> Toast.makeText(this, "¡SE QUEMA LA CASAAA!", Toast.LENGTH_SHORT).show());
+        runOnUiThread(() -> {
+            Toast.makeText(this, "¡SE QUEMA LA CASAAA!", Toast.LENGTH_SHORT).show();
+        });
         btnFuego.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_fire, 0);
-
-        String alertMessage = getString(R.string.FireAlert_Message);
-        WhatsAppNotificationHelper.sendWhatsAppMessageViaServer(ip, 3535, phoneNumber, alertMessage);
+        String firealertMessage = getString(R.string.FireAlert_Message);
+        WhatsAppNotificationHelper.sendWhatsAppMessageViaServer(ip, 3535, phoneNumber, firealertMessage);
         NotificationHelper.sendNotification(this, getString(R.string.FireAlert_Title), R.drawable.ic_fire);
     }
 
@@ -223,8 +225,8 @@ public class LightControlActivity extends AppCompatActivity {
         runOnUiThread(() -> Toast.makeText(this, "¡Alerta de temblor detectada!", Toast.LENGTH_SHORT).show());
         btnSismos.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_earthquake, 0);
 
-        String alertMessage = getString(R.string.EarthquakeAlert_Message);
-        WhatsAppNotificationHelper.sendWhatsAppMessageViaServer(ip, 3535, phoneNumber, alertMessage);
+        String sismoalertMessage = getString(R.string.EarthquakeAlert_Message);
+        WhatsAppNotificationHelper.sendWhatsAppMessageViaServer(ip, 3535, phoneNumber, sismoalertMessage);
         NotificationHelper.sendNotification(this, getString(R.string.EarthquakeAlert_Title), R.drawable.ic_earthquake);
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
