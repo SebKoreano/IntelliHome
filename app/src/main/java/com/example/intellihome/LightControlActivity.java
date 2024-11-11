@@ -21,8 +21,8 @@ import androidx.core.content.ContextCompat;
 
 public class LightControlActivity extends AppCompatActivity {
 
-    private Button btnCuartoPrincipal, btnBanoCuartoPrincipal, btnCuarto1, btnCuarto2;
-    private Button btnSala, btnBano, btnLavanderia;
+    public Button btnCuartoPrincipal, btnBanoCuartoPrincipal, btnCuarto1, btnCuarto2;
+    public Button btnSala, btnBano, btnLavanderia;
     private Socket socket;
     private PrintWriter out;
     private Scanner in;
@@ -36,7 +36,7 @@ public class LightControlActivity extends AppCompatActivity {
     private Button btnFuego, btnSismos, btnHumedad, btnPuerta;
     BiometricPrompt biometricPrompt;
     BiometricPrompt.PromptInfo promptInfo;
-    private boolean puerta = false;
+    private boolean puerta = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,14 +75,15 @@ public class LightControlActivity extends AppCompatActivity {
         btnPuerta.setBackgroundColor(currentColor);
         btnFuego.setBackgroundColor(currentColor);
 
-        // Configuración de listeners para cada botón
-        btnCuartoPrincipal.setOnClickListener(v -> sendMessage("Z"));
-        btnBanoCuartoPrincipal.setOnClickListener(v -> sendMessage("X"));
-        btnCuarto1.setOnClickListener(v -> sendMessage("C"));
-        btnCuarto2.setOnClickListener(v -> sendMessage("V"));
-        btnSala.setOnClickListener(v -> sendMessage("B"));
-        btnBano.setOnClickListener(v -> sendMessage("N"));
-        btnLavanderia.setOnClickListener(v -> sendMessage("M"));
+        // Configuración de listeners para cada botón con alternancia de iconos y envío de señal
+        setButtonToggleIcon(btnCuartoPrincipal, "Z");
+        setButtonToggleIcon(btnBanoCuartoPrincipal, "X");
+        setButtonToggleIcon(btnCuarto1, "C");
+        setButtonToggleIcon(btnCuarto2, "V");
+        setButtonToggleIcon(btnSala, "B");
+        setButtonToggleIcon(btnBano, "N");
+        setButtonToggleIcon(btnLavanderia, "M");
+
         btnPuerta.setOnClickListener(v -> {
             validarDispositivo();
             ejecutarBiometria();
@@ -95,33 +96,6 @@ public class LightControlActivity extends AppCompatActivity {
 
             biometricPrompt.authenticate(promptInfo);
         });
-
-        // Configuración de listeners para cada botón con alternancia de iconos
-        setButtonToggleIcon(btnCuartoPrincipal);
-        setButtonToggleIcon(btnBanoCuartoPrincipal);
-        setButtonToggleIcon(btnCuarto1);
-        setButtonToggleIcon(btnCuarto2);
-        setButtonToggleIcon(btnSala);
-        setButtonToggleIcon(btnBano);
-        setButtonToggleIcon(btnLavanderia);
-
-        // Hilo que establece la conexión con el servidor de Rasb
-
-        new Thread(() -> {
-            try {
-                // Conectar a la dirección IP y puerto del servidor
-                socket = new Socket("192.168.18.134", 6969);
-                // Inicializar el PrintWriter para enviar datos al servidor
-                out = new PrintWriter(socket.getOutputStream(), true);
-                // Inicializar el Scanner para recibir datos del servidor (actualmente no se usa)
-                in = new Scanner(socket.getInputStream());
-
-            } catch (Exception e) {
-                // Si hay un error en la conexión, mostrar un mensaje de error en la UI
-                runOnUiThread(() -> Toast.makeText(this, "Error de conexión", Toast.LENGTH_SHORT).show());
-                e.printStackTrace();
-            }
-        }).start();  // Iniciar el hilo de conexión
 
         // Iniciar el hilo para conectarse a Arduino por medio de Server.
         new Thread(() -> {
@@ -143,23 +117,6 @@ public class LightControlActivity extends AppCompatActivity {
         }).start();
     }
 
-    // Método para enviar un mensaje al servidor (en un hilo separado para evitar bloqueo en la UI)
-    private void sendMessage(String message) {
-        new Thread(() -> {
-            try {
-                if (out != null) {  // Verificar que el PrintWriter esté inicializado
-                    out.println(message);  // Enviar el mensaje al servidor
-                    // Mostrar un mensaje de éxito en la UI
-                    runOnUiThread(() -> mostrarMensaje("Éxito: Mensaje enviado para controlar las luces."));
-                }
-            } catch (Exception e) {
-                // Mostrar un mensaje de error en la UI si ocurre un problema al enviar el mensaje
-                runOnUiThread(() -> Toast.makeText(this, "Error al enviar el mensaje", Toast.LENGTH_SHORT).show());
-                e.printStackTrace();
-            }
-        }).start();  // Iniciar el hilo de envío de mensajes
-    }
-
     // Método llamado cuando la actividad se destruye (por ejemplo, al cerrar la app)
     @Override
     protected void onDestroy() {
@@ -179,8 +136,9 @@ public class LightControlActivity extends AppCompatActivity {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();  // Mostrar el mensaje en pantalla
     }
 
+
     //Esta funcion debe llamarse con "SERVO_90" para girar 90 grados o "SERVO_0" para devolver a posicion inicial.
-    public void sendArduinoMessage(String message){
+    public void sendArduinoMessage(String message) {
         new Thread(() -> {
             try {
                 if (outArd != null) {
@@ -207,6 +165,7 @@ public class LightControlActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     private void SensorFuegoPrendido(String ip) {
         runOnUiThread(() -> {
             Toast.makeText(this, "¡SE QUEMA LA CASAAA!", Toast.LENGTH_SHORT).show();
@@ -239,16 +198,17 @@ public class LightControlActivity extends AppCompatActivity {
         runOnUiThread(() -> humedadTextView.setText(humedad + " g/m²"));
     }
 
-
-    private void setButtonToggleIcon(Button button) {
+    private void setButtonToggleIcon(Button button, String letra) {
         button.setTag(false);
-
         button.setOnClickListener(v -> {
             boolean isOn = (boolean) button.getTag();
 
             isOn = !isOn;
             button.setTag(isOn);
             button.setCompoundDrawablesWithIntrinsicBounds(0, 0, isOn ? R.drawable.ic_lightbulb : R.drawable.ic_lightbulb_off, 0);
+
+            // Envía el comando de la luz solo cuando el botón cambia de estado
+            sendArduinoMessage("LETRA_" + letra);
         });
     }
 
@@ -288,6 +248,7 @@ public class LightControlActivity extends AppCompatActivity {
         });
     }
 
+
     //Este metodo se encarga de manejar el envio de señales al arduino para el control de la puerta
     public void manejarPuerta(){
         if (!puerta){
@@ -301,4 +262,5 @@ public class LightControlActivity extends AppCompatActivity {
             sendArduinoMessage("SERVO_0");
         }
     }
+
 }
