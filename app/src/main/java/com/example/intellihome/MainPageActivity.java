@@ -30,13 +30,18 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class MainPageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
 
@@ -48,6 +53,13 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     private RecyclerView recyclerView;
     private List<PropertyModule> elements, originalElements;
     private ImageButton tagsbtn;
+    private List<GetHouseInfo> houseList;
+    private boolean isConnected = false;
+
+    //Conexión con servidor
+    private Socket socket;
+    private PrintWriter out;
+    private Scanner in;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +73,6 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         bottomNavigationView = findViewById(R.id.bottom_nav);
         recyclerView = findViewById(R.id.recyclerView);
         tagsbtn = findViewById(R.id.tags);
-
         GlobalColor globalColor = (GlobalColor) getApplication();
         int currentColor = globalColor.getCurrentColor();
 
@@ -90,6 +101,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
                 showMultiSelectDialog();
             }
         });
+        createConectionToServer();
     }
 
     private void changeHeader(int currentColor) {
@@ -361,5 +373,76 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
 
         recyclerView.getAdapter().notifyDataSetChanged();
         return true;
+    }
+
+    public void createConectionToServer() {
+        Log.d("MainPageActivity", "Se intentó conexion con server");
+        new Thread(() -> {
+            try {
+                GlobalColor globalColor = (GlobalColor) getApplication();
+                socket = new Socket(globalColor.getIp(), 3535);
+                out = new PrintWriter(socket.getOutputStream(), true);
+                in = new Scanner(new InputStreamReader(socket.getInputStream()));
+                isConnected = true;
+                Log.d("MainPageActivity", "Conexión establecida y out/in creados.");
+                sendMessagesToServer();
+
+                // Hilo separado para la recepción de mensajes
+                new Thread(() -> {
+                    try {
+                        String message;
+                        while ((message = in.nextLine()) != null) {
+                            setNewHouse(message);
+                            Thread.sleep(500);
+                        }
+                    } catch (Exception e) {
+                        Log.d("MainPageActivity", "Error al leer mensajes desde el servidor");
+                        e.printStackTrace();
+                    }
+                }).start();
+
+            } catch (Exception e) {
+                Log.d("MainPageActivity", "No se creó el out, in ni socket");
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    public void sendMessagesToServer() {
+        new Thread(() -> {
+            GetHousesList housesList = new GetHousesList();
+            housesList.obtenerNombresViviendas();
+            List<String> casas = housesList.getListaCasas();
+
+            if (casas.isEmpty()) {
+                Log.d("MainPageActivity", "No se recibieron nombres de viviendas.");
+                return;
+            }
+
+            for (String casa : casas) {
+                try {
+                    if (isConnected && out != null) {
+                        Log.d("MainPageActivity", "Enviando mensaje al servidor.");
+                        out.println("ObtenerInformacionVivienda_" + casa);
+                        Thread.sleep(1000);
+                    } else {
+                        Log.d("MainPageActivity", "Conexión no lista o out es null");
+                    }
+                } catch (Exception e) {
+                    Log.e("MainPageActivity", "Error al mandar mensaje", e);
+                }
+            }
+        }).start();
+    }
+
+    public void setNewHouse(String message)
+    {
+        Log.d("MainPageActivity", "Se inició la creacion de objeto GetHouseInfo");
+        for (String casa : listaCasas) {
+            if (!message.startsWith(casa)) {
+                GetHouseInfo newHouse = new GetHouseInfo(message);
+                houseList.add(newHouse);
+            }
+        }
     }
 }

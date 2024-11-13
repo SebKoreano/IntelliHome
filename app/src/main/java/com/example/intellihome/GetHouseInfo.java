@@ -27,41 +27,30 @@ public class GetHouseInfo extends Application {
     private String Latitud;
     private List<String> Amenidades = new ArrayList<>();
 
-    private Socket socket;
-    private PrintWriter out;
-    private Scanner in;
-    private GlobalColor globalVaribles;
 
-    public GetHouseInfo(String house) {
-        this.nombreCasa = house;
+    public GetHouseInfo(String informacionDeCasa) {
+        Log.d("CreacionDeObjetoCasa", "Se creó objeto casa");
         this.uriList = new ArrayList<>();
-        iniciarInfo();
+        asignarAtributo(informacionDeCasa);
     }
 
-    // Método para obtener todos los Uris de las imágenes de una casa
     public Task<List<Uri>> getHouseImageUris() {
-        // Crear la referencia a la carpeta de imágenes de la casa
         String direccionCarpeta = "Viviendas Arrendadas/" + nombreCasa;
         StorageReference folderRef = FirebaseStorage.getInstance().getReference(direccionCarpeta);
 
-        // Crear una tarea que recolecta todos los Uris
         TaskCompletionSource<List<Uri>> taskCompletionSource = new TaskCompletionSource<>();
 
-        // Listar todos los archivos en la carpeta
         folderRef.listAll()
                 .addOnSuccessListener(listResult -> {
                     List<Task<Uri>> uriTasks = new ArrayList<>();
-
-                    // Para cada archivo en la lista, obtener el Uri de descarga
                     for (StorageReference fileRef : listResult.getItems()) {
                         Task<Uri> uriTask = fileRef.getDownloadUrl();
                         uriTasks.add(uriTask);
                     }
 
-                    // Cuando todos los Uris se hayan obtenido, almacenar en la lista uriList
                     Tasks.whenAllSuccess(uriTasks)
                             .addOnSuccessListener(results -> {
-                                List<Uri> uris = new ArrayList<>(); // Crear lista de Uri explícitamente
+                                List<Uri> uris = new ArrayList<>();
                                 for (Object result : results) {
                                     if (result instanceof Uri) {
                                         uris.add((Uri) result);
@@ -83,42 +72,10 @@ public class GetHouseInfo extends Application {
 
         return taskCompletionSource.getTask();
     }
-    public void iniciarInfo()
-    {
-        // Iniciar el hilo para conectarse al servidor y recibir mensajes
-        new Thread(() -> {
-            try {
-                socket = new Socket(globalVaribles.getIp(), 3535); //192.168.18.206
 
-                out = new PrintWriter(socket.getOutputStream(), true);
-                in = new Scanner(socket.getInputStream());
-
-                while (true) {
-                    if (in.hasNextLine()) {
-                        String message = in.nextLine();
-                        handleServerResponse(message); // Llama a handleServerResponse con el mensaje recibido
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
-
-
-        new Thread(() -> {
-            try {
-                if (out != null) {
-                    out.println("ObtenerInformacionVivienda_" + this.nombreCasa);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
-
-    }
-    public void handleServerResponse(String messageWithHouseInfo) {
+    public void asignarAtributo(String messageWithHouseInfo) {
         String[] datos = messageWithHouseInfo.split("_");
-
+        Log.d("CreacionDeObjetoCasa", "Se inicia asignacion de datos de casa:" + messageWithHouseInfo);
         for (String dato : datos) {
             if (dato.startsWith("DuenoDeVivienda:")) {
                 this.DuenoDeVivienda = dato.replace("DuenoDeVivienda:", "").trim();
@@ -139,31 +96,11 @@ public class GetHouseInfo extends Application {
     }
 
     // Getters
-    public String getDuenoDeVivienda() {
-        return DuenoDeVivienda;
-    }
-
-    public String getDescripcionGeneral() {
-        return DescripcionGeneral;
-    }
-
-    public String getNumeroHabitaciones() {
-        return NumeroHabitaciones;
-    }
-
-    public String getPrecio() {
-        return Precio;
-    }
-
-    public String getLongitud() {
-        return Longitud;
-    }
-
-    public String getLatitud() {
-        return Latitud;
-    }
-
-    public List<String> getAmenidades() {
-        return Amenidades;
-    }
+    public String getDuenoDeVivienda() { return DuenoDeVivienda; }
+    public String getDescripcionGeneral() { return DescripcionGeneral; }
+    public String getNumeroHabitaciones() { return NumeroHabitaciones; }
+    public String getPrecio() { return Precio; }
+    public String getLongitud() { return Longitud; }
+    public String getLatitud() { return Latitud; }
+    public List<String> getAmenidades() { return Amenidades; }
 }
