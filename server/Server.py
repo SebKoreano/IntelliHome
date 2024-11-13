@@ -103,6 +103,9 @@ class ChatServer:
                     elif message.startswith("Login_"):
                         self.buscar_login(message[len("Login_"):], client_socket)
 
+                    elif message.startswith("NombresViviendas"):
+                        self.obtenerNombresArchivos(client_socket)
+
                     elif message.startswith("WhatsApp/"):
                         data = message.split("/")
                         self.WhatsAppMessage(data[1], data[2])
@@ -513,6 +516,17 @@ class ChatServer:
         print(f"No se encontró la información de NombreDeVivienda en {ruta_archivo}.")
         return None
 
+    def obtenerNombresArchivos(self, socket):
+        # Ruta de la carpeta donde se encuentran los archivos .txt
+        carpeta = 'server/InformacionDeVivienda'
+        
+        # Obtener todos los nombres de archivos en la carpeta que terminen en .txt
+        archivos_txt = [archivo.replace('.txt', '') for archivo in os.listdir(carpeta) if archivo.endswith('.txt')]
+        
+        # Unir los nombres con guion bajo
+        nombres_unidos = '_'.join(archivos_txt)
+        
+        self.send_message_to_respond_request(socket, nombres_unidos)
     
     # Function to send WhatsApp Messages
     def WhatsAppMessage(self, phoneNumber, message):        

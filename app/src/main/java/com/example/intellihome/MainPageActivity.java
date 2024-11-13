@@ -399,11 +399,11 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
 
     public void sendMessagesToServer() {
         new Thread(() -> {
-            List<String> listaCasasAux = new ArrayList<>();
-            listaCasasAux.add("House 14");
-            listaCasasAux.add("House 16");
+            GlobalColor globalColor = (GlobalColor) getApplication();
+            globalColor.obtenerNombresViviendas();
+            List<String> casas = globalColor.getListaCasas();
 
-            for (String casa: listaCasasAux)
+            for (String casa: casas)
             {
                 try {
                     if (isConnected && out != null) {  // Comprobamos si la conexión está lista
