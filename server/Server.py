@@ -507,7 +507,7 @@ class ChatServer:
             # Agregar el nombre de la vivienda extraído al inicio de la cadena
             message = f"{nombre_vivienda_extraido}:{message}"
             print("Se envía información de casa!!!!!")
-            return self.send_message_to_respond_request(message, socket)  # Enviar la cadena modificada
+            return self.send_message_to_respond_request(socket, message)  # Enviar la cadena modificada
 
         # Si no se encuentra la información requerida, retornar None
         print(f"No se encontró la información de NombreDeVivienda en {ruta_archivo}.")

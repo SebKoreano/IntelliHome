@@ -52,8 +52,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     private List<PropertyModule> elements, originalElements;
     private ImageButton tagsbtn;
     private List<GetHouseInfo> houseList;
-
-    GlobalColor globalColor = (GlobalColor) getApplication();
+    private boolean isConnected = false;
 
     //Conexión con servidor
     private Socket socket;
@@ -72,9 +71,6 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         bottomNavigationView = findViewById(R.id.bottom_nav);
         recyclerView = findViewById(R.id.recyclerView);
         tagsbtn = findViewById(R.id.tags);
-
-        createConectionToServer();
-
         GlobalColor globalColor = (GlobalColor) getApplication();
         int currentColor = globalColor.getCurrentColor();
 
@@ -103,6 +99,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
                 showMultiSelectDialog();
             }
         });
+        createConectionToServer();
     }
 
     private void changeHeader(int currentColor) {
@@ -376,16 +373,17 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         return true;
     }
 
-    public void createConectionToServer()
-    {
-        // Iniciar el hilo para conectarse al servidor y recibir mensajes
+    public void createConectionToServer() {
+        Log.d("MainPageActivity", "Se intentó conexion con server");
         new Thread(() -> {
             try {
-                socket = new Socket(globalColor.getIp(), 3535); //192.168.18.206
-
+                GlobalColor globalColor = (GlobalColor) getApplication();
+                socket = new Socket(globalColor.getIp(), 3535);
                 out = new PrintWriter(socket.getOutputStream(), true);
                 in = new Scanner(socket.getInputStream());
-
+                isConnected = true;  // Actualizamos el estado de conexión
+                Log.d("MainPageActivity", "Conexión establecida y out/in creados.");
+                sendMessagesToServer();
                 while (true) {
                     if (in.hasNextLine()) {
                         String message = in.nextLine();
@@ -393,29 +391,39 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
                     }
                 }
             } catch (Exception e) {
+                Log.d("MainPageActivity", "No se creo el out, in ni socket");
                 e.printStackTrace();
             }
         }).start();
     }
 
-    public void sendMessagesToServer()
-    {
-        for (String casa : listaCasas) {
-            new Thread(() -> {
+    public void sendMessagesToServer() {
+        new Thread(() -> {
+            List<String> listaCasasAux = new ArrayList<>();
+            listaCasasAux.add("House 14");
+            listaCasasAux.add("House 16");
+
+            for (String casa: listaCasasAux)
+            {
                 try {
-                    if (out != null) {
+                    if (isConnected && out != null) {  // Comprobamos si la conexión está lista
+                        Log.d("MainPageActivity", "Enviando mensaje al servidor.");
                         out.println("ObtenerInformacionVivienda_" + casa);
+                        Thread.sleep(1000);
+                    } else {
+                        Log.d("MainPageActivity", "Conexión no lista o out es null");
                     }
                 } catch (Exception e) {
+                    Log.d("MainPageActivity", "Error al mandar mensaje" + e);
                     e.printStackTrace();
                 }
-            }).start();
-        }
-
+            }
+        }).start();
     }
 
     public void setNewHouse(String message)
     {
+        Log.d("MainPageActivity", "Se inició la creacion de objeto GetHouseInfo");
         for (String casa : listaCasas) {
             if (message.startsWith(casa + ":")) {
                 String nuevoMensaje = message.replaceFirst(casa + ":", "");
