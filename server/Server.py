@@ -92,7 +92,7 @@ class ChatServer:
 
                     elif message.startswith("ObtenerInformacionUsuario_"):
                         info = message[len("ObtenerInformacionUsuario_"):].split("_")
-                        self.leerInformacionDeUsuario(info[0], info[1])
+                        self.leerInformacionDeUsuario(info[0], info[1], client_socket)
 
                     elif message.startswith("InformacionDeVivienda_"):
                         self.guardarInforDeVivienda(message[len("InformacionDeVivienda_"):])
@@ -424,7 +424,7 @@ class ChatServer:
         with open(ruta_archivo, 'w') as archivo:
             archivo.write(info_usuario)
 
-    def leerInformacionDeUsuario(self, informacionRequerida, userName):
+    def leerInformacionDeUsuario(self, informacionRequerida, userName, socket):
         ruta_archivo = f'server/InformacionDeUsuarios/{userName}.txt'
         
         # Verificar si el archivo existe
@@ -437,7 +437,7 @@ class ChatServer:
             for linea in archivo:
                 # Verificar si la línea contiene la información requerida
                 if linea.startswith(f"{informacionRequerida}:"):
-                    return self.send_message_to_respond_request(linea.split(":", 1)[1].strip())
+                    return self.send_message_to_respond_request(socket, linea.split(":", 1)[1].strip())
         
         # Si no se encuentra la información requerida, retornar None
         print(f"No se encontró '{informacionRequerida}' en {ruta_archivo}.")
