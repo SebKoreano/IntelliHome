@@ -79,8 +79,12 @@ public class GetHouseInfo extends Application {
         for (String dato : datos) {
             if (dato.startsWith("DuenoDeVivienda:")) {
                 this.DuenoDeVivienda = dato.replace("DuenoDeVivienda:", "").trim();
+                Log.d("GenerarInstancia", "Dueño:" + this.DuenoDeVivienda);
+
             } else if (dato.startsWith("DescripcionGeneral:")) {
                 this.DescripcionGeneral = dato.replace("DescripcionGeneral:", "").trim();
+                Log.d("GenerarInstancia", "Descr:" + this.DescripcionGeneral);
+
             } else if (dato.startsWith("NumeroHabitaciones:")) {
                 this.NumeroHabitaciones = dato.replace("NumeroHabitaciones:", "").trim();
             } else if (dato.startsWith("Precio:")) {
@@ -91,6 +95,8 @@ public class GetHouseInfo extends Application {
                 this.Latitud = dato.replace("Latitud:", "").trim();
             } else if (dato.startsWith("Amenidad")) {
                 this.Amenidades.add(dato.replace("Amenidad", "").replaceAll("\\d*:", "").trim());
+            } else if (dato.startsWith("NombreDeVivienda:")) {
+                this.nombreCasa = dato.replace("NombreDeVivienda:", "");
             }
         }
     }
@@ -103,4 +109,5 @@ public class GetHouseInfo extends Application {
     public String getLongitud() { return Longitud; }
     public String getLatitud() { return Latitud; }
     public List<String> getAmenidades() { return Amenidades; }
+    public String getNombreCasa() { return nombreCasa; }
 }
