@@ -399,14 +399,18 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
 
     public void sendMessagesToServer() {
         new Thread(() -> {
-            GlobalColor globalColor = (GlobalColor) getApplication();
-            globalColor.obtenerNombresViviendas();
-            List<String> casas = globalColor.getListaCasas();
+            GetHousesList housesList = new GetHousesList();  
+            housesList.obtenerNombresViviendas();
+            List<String> casas = housesList.getListaCasas();
 
-            for (String casa: casas)
-            {
+            if (casas.isEmpty()) {
+                Log.d("MainPageActivity", "No se recibieron nombres de viviendas.");
+                return;
+            }
+
+            for (String casa : casas) {
                 try {
-                    if (isConnected && out != null) {  // Comprobamos si la conexión está lista
+                    if (isConnected && out != null) {
                         Log.d("MainPageActivity", "Enviando mensaje al servidor.");
                         out.println("ObtenerInformacionVivienda_" + casa);
                         Thread.sleep(1000);
@@ -414,8 +418,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
                         Log.d("MainPageActivity", "Conexión no lista o out es null");
                     }
                 } catch (Exception e) {
-                    Log.d("MainPageActivity", "Error al mandar mensaje" + e);
-                    e.printStackTrace();
+                    Log.e("MainPageActivity", "Error al mandar mensaje", e);
                 }
             }
         }).start();
