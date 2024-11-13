@@ -53,13 +53,14 @@ class ChatServer:
         self.agregar_usuario_a_matriz()
 
         # Conectarse con Arduino
-       # serialPort = 'COM3'  # Cambia 'COM3' al puerto correcto
-     #   try:
-       #     self.arduino = serial.Serial(serialPort, 9600)
-         #   time.sleep(2)  # Espera a que el puerto serial se inicie
-     #       print('Conectado al Arduino en', serialPort)
-       # except serial.SerialException as e:
-      #      print(f'Error al abrir puerto serial: {e}')
+        serialPort = 'COM3'  # Cambia 'COM3' al puerto correcto
+        try:
+            self.arduino = serial.Serial(serialPort, 600)
+            time.sleep(2)  # Espera a que el puerto serial se inicie
+            print('Conectado al Arduino en', serialPort)
+        except serial.SerialException as e:
+            print(f'Error al abrir puerto serial: {e}')
+
 
         # Hilo para manejar el servidor
         self.thread = threading.Thread(target=self.accept_connections)
@@ -115,13 +116,19 @@ class ChatServer:
 
                     elif message.startswith("SERVO_"):  # Enviar comando al Arduino
                         self.envioMensajeArduino(message)
+                    
+                    elif message.startswith("LETRA_"):  # Enviar comando al Arduino
+                        self.envioMensajeArduino(message)
+
                     else:
                         print("No llegó mensaje relevante")
+                        
             except Exception as e:
                 print("Error:", e)
                 break
         client_socket.close()
         self.clients.remove(client_socket)
+
 
     def broadcast(self, message, sender_socket):
         try:

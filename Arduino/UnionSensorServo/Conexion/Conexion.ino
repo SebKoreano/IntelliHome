@@ -5,6 +5,15 @@
 #define SENSOR_FLAME_PIN 12
 #define MOVE_SENSOR_PIN 3
 
+// Pines para los LEDs correspondientes a las letras Z, X, C, V, B, N, M
+#define LED_Z_PIN 5
+#define LED_X_PIN 6
+#define LED_C_PIN 7
+#define LED_V_PIN 8
+#define LED_B_PIN 10
+#define LED_N_PIN 11
+#define LED_M_PIN 13
+
 // Definición de pin y creación del objeto DHT para poder leer humedad.
 #define DHTPIN 4    
 #define DHTTYPE DHT11
@@ -23,8 +32,17 @@ int delimiterIndex;
 // Variables para el sensor de llama y movimiento
 bool flameSensor, fire;
 
+// Estados de los LEDs para alternar encendido y apagado
+bool ledZState = LOW;
+bool ledXState = LOW;
+bool ledCState = LOW;
+bool ledVState = LOW;
+bool ledBState = LOW;
+bool ledNState = LOW;
+bool ledMState = LOW;
+
 void setup() {
-  Serial.begin(9600); // Iniciar puerto serial a 9600 baud
+  Serial.begin(600); // Iniciar puerto serial a 9600 baud
 
   // Inicializar el servo
   myServo.attach(SERVO_PIN);
@@ -33,6 +51,15 @@ void setup() {
   // Configurar los pines del sensor de llama y movimiento
   pinMode(SENSOR_FLAME_PIN, INPUT);
   pinMode(MOVE_SENSOR_PIN, INPUT);
+
+  // Configurar los pines de los LEDs como salidas
+  pinMode(LED_Z_PIN, OUTPUT);
+  pinMode(LED_X_PIN, OUTPUT);
+  pinMode(LED_C_PIN, OUTPUT);
+  pinMode(LED_V_PIN, OUTPUT);
+  pinMode(LED_B_PIN, OUTPUT);
+  pinMode(LED_N_PIN, OUTPUT);
+  pinMode(LED_M_PIN, OUTPUT);
 
   // Iniciar el sensor de humedad
   dht.begin();
@@ -56,6 +83,14 @@ void loop() {
         }
       }
     }
+  }
+  else if (serverMessage.startsWith("LETRA_")) {
+    // Extraer la letra
+    delimiterIndex = serverMessage.indexOf(delimiter);
+    value = serverMessage.substring(delimiterIndex + 1);
+
+    // Alternar el estado del LED correspondiente a la letra recibida
+    alternarLed(value);
   }
 
   // Verificar sensor de llama
@@ -84,10 +119,35 @@ void loop() {
   if (switchState == HIGH) {
     Serial.println("Inclinación:No detectada");
   } else {
-   
     Serial.println("T"); // T indica inclinación detectada
   }
 
   // Pequeño retraso entre cada envío de datos
-  delay(2000);
+  delay(200);
+}
+
+// Función para alternar el estado del LED correspondiente a la letra recibida
+void alternarLed(String letra) {
+  if (letra == "Z") {
+    ledZState = !ledZState;
+    digitalWrite(LED_Z_PIN, ledZState);
+  } else if (letra == "X") {
+    ledXState = !ledXState;
+    digitalWrite(LED_X_PIN, ledXState);
+  } else if (letra == "C") {
+    ledCState = !ledCState;
+    digitalWrite(LED_C_PIN, ledCState);
+  } else if (letra == "V") {
+    ledVState = !ledVState;
+    digitalWrite(LED_V_PIN, ledVState);
+  } else if (letra == "B") {
+    ledBState = !ledBState;
+    digitalWrite(LED_B_PIN, ledBState);
+  } else if (letra == "N") {
+    ledNState = !ledNState;
+    digitalWrite(LED_N_PIN, ledNState);
+  } else if (letra == "M") {
+    ledMState = !ledMState;
+    digitalWrite(LED_M_PIN, ledMState);
+  }
 }
