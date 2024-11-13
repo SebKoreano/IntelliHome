@@ -1,0 +1,1 @@
+DuenoDeVivienda:Eudus123_NombreDeVivienda:House 18_DescripcionGeneral:Casa18_NumeroHabitaciones:94_Precio:32.00_Longitud:-84.01227079331875_Latitud:9.909572453662546_Amenidad0:BBQ Area_TipoCasa:Beach House_VehiculoPreferencia:Convertible_

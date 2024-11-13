@@ -30,7 +30,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.file.*;
@@ -380,18 +382,27 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
                 GlobalColor globalColor = (GlobalColor) getApplication();
                 socket = new Socket(globalColor.getIp(), 3535);
                 out = new PrintWriter(socket.getOutputStream(), true);
-                in = new Scanner(socket.getInputStream());
-                isConnected = true;  // Actualizamos el estado de conexión
+                in = new Scanner(new InputStreamReader(socket.getInputStream()));
+                isConnected = true;
                 Log.d("MainPageActivity", "Conexión establecida y out/in creados.");
                 sendMessagesToServer();
-                while (true) {
-                    if (in.hasNextLine()) {
-                        String message = in.nextLine();
-                        setNewHouse(message);
+
+                // Hilo separado para la recepción de mensajes
+                new Thread(() -> {
+                    try {
+                        String message;
+                        while ((message = in.nextLine()) != null) {
+                            setNewHouse(message);
+                            Thread.sleep(500);
+                        }
+                    } catch (Exception e) {
+                        Log.d("MainPageActivity", "Error al leer mensajes desde el servidor");
+                        e.printStackTrace();
                     }
-                }
+                }).start();
+
             } catch (Exception e) {
-                Log.d("MainPageActivity", "No se creo el out, in ni socket");
+                Log.d("MainPageActivity", "No se creó el out, in ni socket");
                 e.printStackTrace();
             }
         }).start();
@@ -399,7 +410,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
 
     public void sendMessagesToServer() {
         new Thread(() -> {
-            GetHousesList housesList = new GetHousesList();  
+            GetHousesList housesList = new GetHousesList();
             housesList.obtenerNombresViviendas();
             List<String> casas = housesList.getListaCasas();
 
@@ -428,12 +439,10 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     {
         Log.d("MainPageActivity", "Se inició la creacion de objeto GetHouseInfo");
         for (String casa : listaCasas) {
-            if (message.startsWith(casa + ":")) {
-                String nuevoMensaje = message.replaceFirst(casa + ":", "");
-                GetHouseInfo newHouse = new GetHouseInfo(nuevoMensaje);
+            if (!message.startsWith(casa)) {
+                GetHouseInfo newHouse = new GetHouseInfo(message);
                 houseList.add(newHouse);
             }
         }
-
     }
 }

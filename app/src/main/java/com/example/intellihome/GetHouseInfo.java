@@ -27,12 +27,9 @@ public class GetHouseInfo extends Application {
     private String Latitud;
     private List<String> Amenidades = new ArrayList<>();
 
-    private Socket socket;
-    private PrintWriter out;
-    private Scanner in;
-    private GlobalColor globalVaribles;
 
     public GetHouseInfo(String informacionDeCasa) {
+        Log.d("CreacionDeObjetoCasa", "Se creó objeto casa");
         this.uriList = new ArrayList<>();
         asignarAtributo(informacionDeCasa);
     }
@@ -78,7 +75,7 @@ public class GetHouseInfo extends Application {
 
     public void asignarAtributo(String messageWithHouseInfo) {
         String[] datos = messageWithHouseInfo.split("_");
-
+        Log.d("CreacionDeObjetoCasa", "Se inicia asignacion de datos de casa:" + messageWithHouseInfo);
         for (String dato : datos) {
             if (dato.startsWith("DuenoDeVivienda:")) {
                 this.DuenoDeVivienda = dato.replace("DuenoDeVivienda:", "").trim();

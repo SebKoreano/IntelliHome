@@ -496,20 +496,11 @@ class ChatServer:
         # Leer todo el contenido del archivo
         with open(ruta_archivo, 'r', encoding='utf-8') as archivo:
             message = archivo.read()  # Lee todo el contenido sin eliminar espacios
-
-        # Extraer el valor de NombreDeVivienda dividiendo por "_"
-        nombre_vivienda_extraido = None
-        partes = message.split('_')
-        for parte in partes:
-            if parte.startswith("NombreDeVivienda:"):
-                nombre_vivienda_extraido = parte.split(":", 1)[1]
-                break
         
         # Verificar si se extrajo el nombre de la vivienda
-        if nombre_vivienda_extraido:
+        if message:
             # Agregar el nombre de la vivienda extraído al inicio de la cadena
-            message = f"{nombre_vivienda_extraido}:{message}"
-            print("Se envía información de casa!!!!!")
+            print(message)
             return self.send_message_to_respond_request(socket, message)  # Enviar la cadena modificada
 
         # Si no se encuentra la información requerida, retornar None
