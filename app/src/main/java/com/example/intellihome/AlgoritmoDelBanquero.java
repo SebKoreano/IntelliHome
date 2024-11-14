@@ -31,7 +31,7 @@ public class AlgoritmoDelBanquero extends Application {
         double costoLimpieza = calcularCostoLimpieza();
         double costoImpuesto = calcularCostoImpuesto();
 
-        precioTotal = mediaArmonicaAjustada + costoLimpieza + costoImpuesto;
+        precioTotal = mediaArmonicaAjustada + costoLimpieza + costoImpuesto + precioNoche;
         return precioTotal;
     }
 
