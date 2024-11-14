@@ -254,6 +254,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
             elements.clear();
             elements.addAll(filterElements);
         }
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 
     @Override
@@ -436,8 +437,8 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         });
 
         elements.add(new PropertyModule(house.getNombreCasa(),
-                "Apartament",
-                "4X4",
+                house.getHouseType(),
+                house.getVehicleType(),
                 house.getDescripcionGeneral(),
                 house.getNumeroHabitaciones(),
                 house.getPrecio(),

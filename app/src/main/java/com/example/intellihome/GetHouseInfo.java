@@ -27,6 +27,8 @@ public class GetHouseInfo extends Application {
     private String Precio;
     private String Longitud;
     private String Latitud;
+    private String HouseType;
+    private String vehicleType;
     private List<String> Amenidades = new ArrayList<>();
 
 
@@ -116,6 +118,10 @@ public class GetHouseInfo extends Application {
                 this.Amenidades.add(dato.replace("Amenidad", "").replaceAll("\\d*:", "").trim());
             } else if (dato.startsWith("NombreDeVivienda:")) {
                 this.nombreCasa = dato.replace("NombreDeVivienda:", "");
+            } else if (dato.startsWith("TipoCasa:")) {
+                this.HouseType = dato.replace("TipoCasa:", "");
+            } else if (dato.startsWith("VehiculoPreferencia:")) {
+                this.vehicleType = dato.replace("VehiculoPreferencia:", "");
             }
         }
     }
@@ -129,4 +135,6 @@ public class GetHouseInfo extends Application {
     public String getLatitud() { return Latitud; }
     public List<String> getAmenidades() { return Amenidades; }
     public String getNombreCasa() { return nombreCasa; }
+    public String getHouseType() {return HouseType; }
+    public String getVehicleType() {return vehicleType; }
 }
