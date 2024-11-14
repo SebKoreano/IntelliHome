@@ -17,6 +17,7 @@ public class GlobalColor extends Application {
     private int currentColor = 0xFF57CDF5;
     private String userName;
     private String tipoUsuario;
+
     private String ip = "192.168.18.134";
     private List<String> listaCasas = new ArrayList<>();
 
@@ -39,5 +40,4 @@ public class GlobalColor extends Application {
     public String getIp() {
         return ip;
     }
-
 }

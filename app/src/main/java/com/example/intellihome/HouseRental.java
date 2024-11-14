@@ -75,7 +75,7 @@ public class HouseRental extends AppCompatActivity {
 
             List<Uri> imageUris = house.getImageUris();
             if (imageUris != null && !imageUris.isEmpty()) {
-                Uri firstImageUri = imageUris.get(0);
+                Uri firstImageUri = imageUris.get(house.getImageIndex());
                 background.setImageURI(firstImageUri);
             }
 

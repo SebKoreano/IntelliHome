@@ -70,7 +70,7 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ViewHo
 
             List<Uri> imageUris = item.getImageUris();
             if (imageUris != null && !imageUris.isEmpty()) {
-                Uri firstImageUri = imageUris.get(0);
+                Uri firstImageUri = imageUris.get(item.getImageIndex());
                 photo.setImageURI(firstImageUri);
             }
             itemView.setOnClickListener(new View.OnClickListener() {

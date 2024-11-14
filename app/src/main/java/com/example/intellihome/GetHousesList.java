@@ -13,7 +13,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GetHousesList extends Application {
+
     private String ip = "192.168.18.134";
+
     private List<String> listaCasas = new ArrayList<>();
 
     public void obtenerNombresViviendas() {
