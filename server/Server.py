@@ -120,6 +120,9 @@ class ChatServer:
                     elif message.startswith("LETRA_"):  # Enviar comando al Arduino
                         self.envioMensajeArduino(message)
 
+                    elif message.startswith("CantidadCasas"):
+                        self.retornarCantidadCasas( client_socket)
+
                     else:
                         print("No llegó mensaje relevante")
                         
@@ -525,7 +528,18 @@ class ChatServer:
         nombres_unidos = '_'.join(archivos_txt)
         
         self.send_message_to_respond_request(socket, nombres_unidos)
-    
+    def retornarCantidadCasas(self, socket):
+        ruta = 'server/InformacionDeVivienda/'
+        try:
+            archivos_txt = [archivo for archivo in os.listdir(ruta) if archivo.endswith('.txt')]
+            return self.send_message_to_respond_request(len(archivos_txt), socket)
+        except FileNotFoundError:
+            print(f"La ruta {ruta} no existe.")
+            return 0
+        except Exception as e:
+            print(f"Error al contar archivos: {e}")
+            return 0
+
     # Function to send WhatsApp Messages
     def WhatsAppMessage(self, phoneNumber, message):        
 

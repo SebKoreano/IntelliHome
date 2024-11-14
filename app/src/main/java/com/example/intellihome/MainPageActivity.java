@@ -2,7 +2,9 @@ package com.example.intellihome;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -53,13 +55,18 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     private RecyclerView recyclerView;
     private List<PropertyModule> elements, originalElements;
     private ImageButton tagsbtn;
-    private List<GetHouseInfo> houseList;
     private boolean isConnected = false;
+    private final List<String> mensajesRecibidos = new ArrayList<>();
+    private Uri uriHouse;
+    private List<Uri> listUrisHouse;
 
     //Conexión con servidor
     private Socket socket;
     private PrintWriter out;
     private Scanner in;
+
+    private final Handler handler = new Handler();
+    private final int CHECK_INTERVAL = 500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +90,9 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav_drawer, R.string.close_nav_drawer);
         toggle.syncState();
 
-        initModules();
+        createConectionToServer();
+
+        checkMessagesAndInitModules();
         initListener();
 
         navigationView.setNavigationItemSelectedListener(this);
@@ -101,7 +110,19 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
                 showMultiSelectDialog();
             }
         });
-        createConectionToServer();
+    }
+
+    private void checkMessagesAndInitModules() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mensajesRecibidos.size() >= 3) {
+                    initModules();
+                } else {
+                    handler.postDelayed(this, CHECK_INTERVAL);
+                }
+            }
+        }, CHECK_INTERVAL);
     }
 
     private void changeHeader(int currentColor) {
@@ -174,86 +195,69 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     }
 
     public void initModules() {
+
         elements = new ArrayList<>();
         originalElements = new ArrayList<>();
+
+        listUrisHouse = obtenerUrisDeImagenes();
 
         List<String> rules1 = new ArrayList<>();
         rules1.add("No smoking");
         rules1.add("No pets");
 
-        List<String> amenities1 = new ArrayList<>();
-        amenities1.add("Pool");
-        amenities1.add("Wi-Fi");
-        amenities1.add("Parking");
-
         List<String> rules2 = new ArrayList<>();
         rules2.add("No parties");
         rules2.add("No loud music");
-
-        List<String> amenities2 = new ArrayList<>();
-        amenities2.add("Gym");
-        amenities2.add("Laundry");
-        amenities2.add("Wi-Fi");
 
         List<String> rules3 = new ArrayList<>();
         rules3.add("No smoking");
         rules3.add("No loud music");
 
-        List<String> amenities3 = new ArrayList<>();
-        amenities3.add("Pool");
-        amenities3.add("Parking");
-
-        List<String> rules4 = new ArrayList<>();
-        rules4.add("No pets");
-        rules4.add("No loud music");
-
-        List<String> amenities4 = new ArrayList<>();
-        amenities4.add("Wi-Fi");
-        amenities4.add("Gym");
-        amenities4.add("Laundry");
-
-        List<String> rules5 = new ArrayList<>();
-        rules5.add("No parties");
-        rules5.add("No smoking");
-
-        List<String> amenities5 = new ArrayList<>();
-        amenities5.add("Parking");
-        amenities5.add("Wi-Fi");
-        amenities5.add("Pool");
-
-        GetHouseInfo houseInfo;
-        for (String name : listaCasas) {
-            try {
-                houseInfo = new GetHouseInfo(name);
-                elements.add(new PropertyModule(name, "Apartament", "4X4", houseInfo.getDescripcionGeneral(), houseInfo.getNumeroHabitaciones(), houseInfo.getPrecio(), houseInfo.getDuenoDeVivienda(), houseInfo.getLatitud(), houseInfo.getLongitud(), rules1, houseInfo.getAmenidades(), null));
-
-                Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-            } catch (Exception e){
-                Log.e("HouseError", "Error al cargar la casa: " + e.getMessage());
-                Toast.makeText(this, "!Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            }
+        List<String> uriStrings = new ArrayList<>();
+        for (Uri uri : listUrisHouse) {
+            uriStrings.add(uri.toString());
         }
 
-        GetHouseInfo house = new GetHouseInfo("House 14");
-        elements.add(new PropertyModule("House 14", "Apartament", "4X4", house.getDescripcionGeneral(), house.getNumeroHabitaciones(), house.getPrecio(), house.getDuenoDeVivienda(), house.getLatitud(), house.getLongitud(), rules1, house.getAmenidades(), null));
+        if (mensajesRecibidos == null || mensajesRecibidos.isEmpty()) {
+            Log.d("COMMAND", "NULL");
+        } else {
+            int index = 0;
+            List<String> rules = new ArrayList<>();
 
-        PropertyModule property1 = new PropertyModule("House 1", "Apartment", "No parking", "Beautiful apartment with 2 rooms", "2", "1000", "John Doe", "12.34", "56.78", rules1, amenities1, null);
-        PropertyModule property2 = new PropertyModule("House 2", "House", "Garage", "Spacious house with a garden", "3", "1500", "Jane Smith", "23.45", "67.89", rules2, amenities2, null);
-        PropertyModule property3 = new PropertyModule("House 3", "Condo", "Street parking", "Modern condo with pool access", "1", "1200", "Bob Johnson", "34.56", "78.90", rules3, amenities3, null);
-        PropertyModule property4 = new PropertyModule("House 4", "Villa", "Garage", "Luxury villa near the beach", "5", "3000", "Alice Brown", "45.67", "89.01", rules4, amenities4, null);
-        PropertyModule property5 = new PropertyModule("House 5", "Cabin", "No parking", "Cozy cabin in the mountains", "2", "800", "Charlie Davis", "56.78", "90.12", rules5, amenities5, null);
-        PropertyModule property6 = new PropertyModule("House 6", "Condo", "Street parking", "Modern condo with pool access", "1", "1200", "Bob Johnson", "34.56", "78.90", rules3, amenities3, null);
-        PropertyModule property7 = new PropertyModule("House 7", "Villa", "Garage", "Luxury villa near the beach", "5", "3000", "Alice Brown", "45.67", "89.01", rules4, amenities4, null);
-        PropertyModule property8 = new PropertyModule("House 8", "Cabin", "No parking", "Cozy cabin in the mountains", "2", "800", "Charlie Davis", "56.78", "90.12", rules5, amenities5, null);
+            for (String command : mensajesRecibidos) {
+                Log.d("COMMAND", command);
+                GetHouseInfo house1 = new GetHouseInfo(command);
 
-        elements.add(property1);
-        elements.add(property2);
-        elements.add(property3);
-        elements.add(property4);
-        elements.add(property5);
-        elements.add(property6);
-        elements.add(property7);
-        elements.add(property8);
+                switch (index) {
+                    case 0:
+                        rules = rules1;
+                        break;
+                    case 1:
+                        rules = rules2;
+                        break;
+                    case 2:
+                        rules = rules3;
+                        break;
+                }
+
+                elements.add(new PropertyModule(
+                        house1.getNombreCasa(),
+                        house1.getHouseType(),
+                        house1.getVehicleType(),
+                        house1.getDescripcionGeneral(),
+                        house1.getNumeroHabitaciones(),
+                        house1.getPrecio(),
+                        house1.getDuenoDeVivienda(),
+                        house1.getLatitud(),
+                        house1.getLongitud(),
+                        rules,
+                        house1.getAmenidades(),
+                        uriStrings,
+                        index
+                ));
+                index++;
+            }
+        }
 
         originalElements.addAll(elements);
 
@@ -266,6 +270,9 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(cardViewAdapter);
+
+        filter("");
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 
     public void filter(String strSearch) {
@@ -284,6 +291,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
             elements.clear();
             elements.addAll(filterElements);
         }
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 
     @Override
@@ -343,14 +351,6 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
                 for (String nombre : listaCarpetas) {
                     carpetasString.append(nombre).append("\n");
                 }
-
-                // Muestra la lista en una AlertDialog
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainPageActivity.this);  // 'context' es tu Activity o Fragment
-                dialogBuilder.setTitle("Carpetas disponibles");
-                dialogBuilder.setMessage(carpetasString.toString());
-                dialogBuilder.setPositiveButton("OK", null);
-                dialogBuilder.show();
-
             }
         });
         return listaCarpetas;
@@ -391,9 +391,13 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
                 new Thread(() -> {
                     try {
                         String message;
-                        while ((message = in.nextLine()) != null) {
-                            setNewHouse(message);
-                            Thread.sleep(500);
+                        while ((message = in.nextLine()) != null)
+                        {
+                            if (!mensajesRecibidos.contains(message)) {
+                                Log.d("MENSAJESREPETIDOS", message);
+                                // setNewHouse(message);
+                                mensajesRecibidos.add(message); // Solo se agrega si el mensaje es nuevo
+                            }
                         }
                     } catch (Exception e) {
                         Log.d("MainPageActivity", "Error al leer mensajes desde el servidor");
@@ -438,11 +442,61 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     public void setNewHouse(String message)
     {
         Log.d("MainPageActivity", "Se inició la creacion de objeto GetHouseInfo");
-        for (String casa : listaCasas) {
-            if (!message.startsWith(casa)) {
-                GetHouseInfo newHouse = new GetHouseInfo(message);
-                houseList.add(newHouse);
-            }
+        List<Uri> listUrisHouse = new ArrayList<>();
+        GetHouseInfo house = new GetHouseInfo(message);
+
+        /*
+        Task<Uri> uriTask = house.getHouseImageUri();
+
+        uriTask.addOnSuccessListener(uri -> {
+            // Cuando se obtiene el Uri, lo asignamos a la variable uriHouse
+            uriHouse = uri;
+
+            // Si deseas agregarlo a la lista de Uris
+            listUrisHouse.add(uriHouse);
+
+            // Procesamos la imagen con el Uri obtenido
+            house.procesarImagen(uri);
+
+            // Opcional: Si también quieres descargar la imagen
+            house.downloadImage(uriHouse);  // Si necesitas descargar la imagen a local
+
+            Log.d("UriDeCasaAnadido", "Se creó foto");
+        }).addOnFailureListener(e -> {
+            // Si algo falla, manejamos el error aquí
+            Log.e("ObtenerImagen", "Error al obtener el Uri de la imagen: " + e.getMessage());
+        });
+
+
+        elements.add(new PropertyModule(house.getNombreCasa(),
+                house.getHouseType(),
+                house.getVehicleType(),
+                house.getDescripcionGeneral(),
+                house.getNumeroHabitaciones(),
+                house.getPrecio(),
+                house.getDuenoDeVivienda(),
+                house.getLatitud(),
+                house.getLongitud(),
+                null,
+                house.getAmenidades(), null));
+         */
+    }
+
+
+    private List<Uri> obtenerUrisDeImagenes() {
+        List<Uri> uris = new ArrayList<>();
+
+        int[] drawableIds = {
+                R.drawable.house14,
+                R.drawable.house15,
+                R.drawable.house18
+        };
+
+        for (int drawableId : drawableIds) {
+            Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + drawableId);
+            uris.add(uri);
         }
+
+        return uris;
     }
 }

@@ -106,7 +106,12 @@ public class PublicarCasaActivity extends AppCompatActivity {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                precioInput.setText(String.format(Locale.getDefault(), "₡%.2f", (float) progress));
+                int minValue = 20000;
+                int maxValue = 150000;
+
+                int precio = (progress * (maxValue - minValue) / 100) + minValue;
+
+                precioInput.setText(String.format(Locale.getDefault(), "%d", precio));
             }
 
             @Override
@@ -217,6 +222,8 @@ public class PublicarCasaActivity extends AppCompatActivity {
                         uploadPictureToFirebase(imageUri, i);
                     }
 
+                    Intent intent = new Intent(PublicarCasaActivity.this, MainPageActivity.class);
+                    startActivity(intent);
                 }
             }
         });

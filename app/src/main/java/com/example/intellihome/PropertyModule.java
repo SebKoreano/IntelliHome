@@ -9,9 +9,18 @@ import java.util.List;
 public class PropertyModule implements Serializable {
     private String title, type, vehicle, description, rooms, money, owner, x_coords, y_coords;
     private List<String> rules, amenities;
-    private List<Uri> imageUris;
+    private List<String> imageUriStrings;
 
-    public PropertyModule(String title, String type, String vehicle, String description, String rooms, String money, String owner, String x_coords, String y_coords, List<String> rules, List<String> amenities, List<Uri> imageUris) {
+    private int imageIndex;
+
+    public PropertyModule(String title,
+                          String type,
+                          String vehicle,
+                          String description,
+                          String rooms, String money,
+                          String owner, String x_coords, String y_coords,
+                          List<String> rules, List<String> amenities, List<String> imageUriStrings,
+                          int imageIndex) {
         this.title = title;
         this.type = type;
         this.vehicle = vehicle;
@@ -23,7 +32,8 @@ public class PropertyModule implements Serializable {
         this.y_coords = y_coords;
         this.rules = rules;
         this.amenities = amenities;
-        this.imageUris = imageUris != null ? imageUris : new ArrayList<>();
+        this.imageUriStrings = imageUriStrings;
+        this.imageIndex = imageIndex;
     }
 
     public String getX_coords() {
@@ -115,10 +125,24 @@ public class PropertyModule implements Serializable {
     }
 
     public List<Uri> getImageUris() {
+        List<Uri> imageUris = new ArrayList<>();
+        if (imageUriStrings != null) {
+            for (String uriString : imageUriStrings) {
+                imageUris.add(Uri.parse(uriString));
+            }
+        }
         return imageUris;
     }
 
-    public void setImageUris(List<Uri> imageUris) {
-        this.imageUris = imageUris;
+    public void setImageUris(List<String> imageUris) {
+        this.imageUriStrings = imageUris;
+    }
+
+    public int getImageIndex() {
+        return imageIndex;
+    }
+
+    public void setImageIndex(int imageIndex) {
+        this.imageIndex = imageIndex;
     }
 }
