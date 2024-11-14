@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -55,12 +56,16 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     private List<PropertyModule> elements, originalElements;
     private ImageButton tagsbtn;
     private boolean isConnected = false;
-    private List<String> mensajesRecibidos = new ArrayList<>();
+    private final List<String> mensajesRecibidos = new ArrayList<>();
     private Uri uriHouse;
+
     //Conexión con servidor
     private Socket socket;
     private PrintWriter out;
     private Scanner in;
+
+    private final Handler handler = new Handler();
+    private final int CHECK_INTERVAL = 500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +89,9 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav_drawer, R.string.close_nav_drawer);
         toggle.syncState();
 
-        initModules();
+        createConectionToServer();
+
+        checkMessagesAndInitModules();
         initListener();
 
         navigationView.setNavigationItemSelectedListener(this);
@@ -102,6 +109,19 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
                 showMultiSelectDialog();
             }
         });
+    }
+
+    private void checkMessagesAndInitModules() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mensajesRecibidos.size() >= 3) {
+                    initModules();
+                } else {
+                    handler.postDelayed(this, CHECK_INTERVAL);
+                }
+            }
+        }, CHECK_INTERVAL);
     }
 
     private void changeHeader(int currentColor) {
@@ -175,7 +195,6 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
 
     public void initModules() {
 
-        createConectionToServer();
         elements = new ArrayList<>();
         originalElements = new ArrayList<>();
 
@@ -188,40 +207,31 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         amenities1.add("Wi-Fi");
         amenities1.add("Parking");
 
-        List<String> rules2 = new ArrayList<>();
-        rules2.add("No parties");
-        rules2.add("No loud music");
+        if (mensajesRecibidos == null || mensajesRecibidos.isEmpty()) {
+            Log.d("COMMAND007", "NULL");
+        } else {
+            for (String command : mensajesRecibidos) {
+                Log.d("COMMAND006", command);
+                GetHouseInfo house1 = new GetHouseInfo(command);
 
-        List<String> amenities2 = new ArrayList<>();
-        amenities2.add("Gym");
-        amenities2.add("Laundry");
-        amenities2.add("Wi-Fi");
+                elements.add(new PropertyModule(
+                        house1.getNombreCasa(),
+                        house1.getHouseType(),
+                        house1.getVehicleType(),
+                        house1.getDescripcionGeneral(),
+                        house1.getNumeroHabitaciones(),
+                        house1.getPrecio(),
+                        house1.getDuenoDeVivienda(),
+                        house1.getLatitud(),
+                        house1.getLongitud(),
+                        null,
+                        house1.getAmenidades(),
+                        null
+                ));
+            }
+        }
 
-        List<String> rules3 = new ArrayList<>();
-        rules3.add("No smoking");
-        rules3.add("No loud music");
-
-        List<String> amenities3 = new ArrayList<>();
-        amenities3.add("Pool");
-        amenities3.add("Parking");
-
-        List<String> rules4 = new ArrayList<>();
-        rules4.add("No pets");
-        rules4.add("No loud music");
-
-        List<String> amenities4 = new ArrayList<>();
-        amenities4.add("Wi-Fi");
-        amenities4.add("Gym");
-        amenities4.add("Laundry");
-
-        List<String> rules5 = new ArrayList<>();
-        rules5.add("No parties");
-        rules5.add("No smoking");
-
-        List<String> amenities5 = new ArrayList<>();
-        amenities5.add("Parking");
-        amenities5.add("Wi-Fi");
-        amenities5.add("Pool");
+        elements.add(new PropertyModule("Casa 1", "Apartment", "4X4", "Casa moderna", "2", "1500", "Juan Pérez", "35.6895", "139.6917", null, amenities1, null));
 
         originalElements.addAll(elements);
 
@@ -234,6 +244,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(cardViewAdapter);
+
         filter("");
         recyclerView.getAdapter().notifyDataSetChanged();
     }
@@ -314,14 +325,6 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
                 for (String nombre : listaCarpetas) {
                     carpetasString.append(nombre).append("\n");
                 }
-
-                // Muestra la lista en una AlertDialog
-               // AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainPageActivity.this);  // 'context' es tu Activity o Fragment
-               // dialogBuilder.setTitle("Carpetas disponibles");
-               // dialogBuilder.setMessage(carpetasString.toString());
-               // dialogBuilder.setPositiveButton("OK", null);
-               // dialogBuilder.show();
-
             }
         });
         return listaCarpetas;
@@ -366,7 +369,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
                         {
                             if (!mensajesRecibidos.contains(message)) {
                                 Log.d("MENSAJESREPETIDOS", message);
-                                setNewHouse(message);
+                                // setNewHouse(message);
                                 mensajesRecibidos.add(message); // Solo se agrega si el mensaje es nuevo
                             }
                         }
@@ -415,6 +418,8 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         Log.d("MainPageActivity", "Se inició la creacion de objeto GetHouseInfo");
         List<Uri> listUrisHouse = new ArrayList<>();
         GetHouseInfo house = new GetHouseInfo(message);
+
+        /*
         Task<Uri> uriTask = house.getHouseImageUri();
 
         uriTask.addOnSuccessListener(uri -> {
@@ -435,6 +440,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
             // Si algo falla, manejamos el error aquí
             Log.e("ObtenerImagen", "Error al obtener el Uri de la imagen: " + e.getMessage());
         });
+        */
 
         elements.add(new PropertyModule(house.getNombreCasa(),
                 house.getHouseType(),
@@ -446,7 +452,6 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
                 house.getLatitud(),
                 house.getLongitud(),
                 null,
-                house.getAmenidades(), null
-                ));
+                house.getAmenidades(), null));
     }
 }
