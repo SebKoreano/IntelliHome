@@ -241,5 +241,15 @@
     <string name="label_reservation_dates">Reservation Dates:</string>
     <string name="button_confirm">Confirm</string>
     <string name="toast_house_rented">House rented successfully</string>
+    <string name="seleccion_fecha_inicio">Select start date</string>
+    <string name="seleccion_fecha_fin">Select end date</string>
+    <string name="check_in">Check-In</string>
+    <string name="check_out">Check-Out</string>
+    <string name="alquilar">Rent</string>
+    <string name="error_fecha_no_seleccionada">Please select both dates</string>
+    <string name="error_checkboxes_no_seleccionados">Please select check-in and check-out</string>
+    <string name="error_fecha_inicio_mayor">Start date must be before end date</string>
+    <string name="error_parse_fecha">Error processing dates</string>
+
 
 </resources>
