@@ -11,7 +11,8 @@ import java.net.Socket;
 
 
 public class GetNumberFromUser extends Application {
-    private String ip = "192.168.18.5";
+    private String ip = "192.168.18.134";
+
     private String numUsuario;
     private String nombreUsuario;
 

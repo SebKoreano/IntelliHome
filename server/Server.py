@@ -8,7 +8,7 @@ import serial
 import time
 
 # Twilio Connection Extensions
-#from twilio.rest import Client
+from twilio.rest import Client
 
 # Para envio de email.
 import smtplib

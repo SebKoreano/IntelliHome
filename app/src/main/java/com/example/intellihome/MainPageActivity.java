@@ -312,7 +312,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         }
 
         if (id == R.id.bottom_nav_home) {
-            Intent intent = new Intent(MainPageActivity.this, ConfigActivity.class);
+            Intent intent = new Intent(MainPageActivity.this, MainPageActivity.class);
             startActivity(intent);
             return true;
         } else if (id == R.id.bottom_nav_search) {
