@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.icu.util.Calendar;
+import android.net.ParseException;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.ImageView;
@@ -18,6 +20,8 @@ import android.widget.Toast;
 
 import com.google.android.material.datepicker.MaterialStyledDatePickerDialog;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,6 +40,7 @@ public class HouseRental extends AppCompatActivity {
     private Button rent;
     private TextView dateStart, dateEnd;
     private ImageView background;
+    private CheckBox checkInCheckOutCheckbox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +63,7 @@ public class HouseRental extends AppCompatActivity {
         dateStart = findViewById(R.id.btnDateStart);
         dateEnd = findViewById(R.id.btnDateEnd);
         background = findViewById(R.id.background);
+        checkInCheckOutCheckbox = findViewById(R.id.checkInCheckOutCheckbox);
 
         GlobalColor globalColor = (GlobalColor) getApplication();
         int currentColor =  globalColor.getCurrentColor();
@@ -153,7 +159,29 @@ public class HouseRental extends AppCompatActivity {
             }
         });
 
-        rent.setOnClickListener(v -> showRentConfirmationDialog(house.getMoney()));
+        rent.setOnClickListener(v -> {
+            String fechaInicio = dateStart.getText().toString();
+            String fechaFin = dateEnd.getText().toString();
+            boolean checkInSelected = checkInCheckOutCheckbox.isChecked();
+
+            // Verifica que las fechas de inicio y fin estén seleccionadas
+            if (fechaInicio.equals(getString(R.string.seleccion_fecha_inicio)) || fechaFin.equals(getString(R.string.seleccion_fecha_fin))) {
+                Toast.makeText(HouseRental.this, getString(R.string.error_fecha_no_seleccionada), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Verifica que los checkboxes estén seleccionados
+            if (!checkInSelected) {
+                Toast.makeText(HouseRental.this, getString(R.string.error_checkboxes_no_seleccionados), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Si pasa todas las validaciones, llama a tu método de confirmación o realiza la acción
+            showRentConfirmationDialog(house.getMoney());
+        });
+
+
+
     }
 
     private void showRentConfirmationDialog(String moneyPerNight) {
