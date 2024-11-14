@@ -237,5 +237,9 @@
 
     <string name="FireAlert_Title">TŰZRIADÓ</string>
     <string name="EarthquakeAlert_Title">FÖLDRENGÉS RIADÓ</string>
+    <string name="label_price_total">Teljes ár:</string>
+    <string name="label_reservation_dates">Foglalási dátumok:</string>
+    <string name="button_confirm">Megerősít</string>
+    <string name="toast_house_rented">A ház sikeresen kiadva</string>
 
 </resources>

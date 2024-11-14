@@ -234,8 +234,11 @@
         *Recuerde:* Espere a que el temblor termine antes de evacuar el edificio y evite usar ascensores.\n\n
         Este mensaje ha sido enviado automáticamente por el sistema de monitoreo _*IntelliHome*_.
     </string>
-
     <string name="FireAlert_Title">ALERTA DE FUEGO</string>
     <string name="EarthquakeAlert_Title">ALERTA DE SISMO</string>
+    <string name="label_price_total">Precio total:</string>
+    <string name="label_reservation_dates">Fechas de reserva:</string>
+    <string name="button_confirm">Confirmar</string>
+    <string name="toast_house_rented">Casa alquilada exitosamente</string>
 
 </resources>

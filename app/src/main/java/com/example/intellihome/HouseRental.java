@@ -1,20 +1,25 @@
 package com.example.intellihome;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.material.datepicker.MaterialStyledDatePickerDialog;
 
 import java.util.List;
+import java.util.Locale;
 
 public class HouseRental extends AppCompatActivity {
 
@@ -147,5 +152,45 @@ public class HouseRental extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+
+        rent.setOnClickListener(v -> showRentConfirmationDialog(house.getMoney()));
     }
+
+    private void showRentConfirmationDialog(String moneyPerNight) {
+        // Calcular el precio total usando el algoritmo del banquero
+        double precioNoche = Double.parseDouble(moneyPerNight);
+        double comision = 0.15 * precioNoche;
+        double precioTotal = calcularPrecioTotal(precioNoche, comision);
+
+        // Mostrar el diálogo de confirmación
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_rent_confirmation, null);
+        builder.setView(dialogView);
+
+        TextView textPriceTotal = dialogView.findViewById(R.id.text_price_total);
+        TextView textReservationDates = dialogView.findViewById(R.id.text_reservation_dates);
+        Button buttonConfirmRent = dialogView.findViewById(R.id.button_confirm_rent);
+
+        // Establecer el precio total y las fechas seleccionadas
+        textPriceTotal.setText(String.format(Locale.getDefault(), "%.2f", precioTotal));
+        String selectedDates = dateStart.getText().toString() + " - " + dateEnd.getText().toString();
+        textReservationDates.setText(selectedDates);
+
+        AlertDialog dialog = builder.create();
+
+        buttonConfirmRent.setOnClickListener(view -> {
+            Toast.makeText(this, R.string.toast_house_rented, Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(HouseRental.this, MainPageActivity.class));
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    private double calcularPrecioTotal(double precioNoche, double comision) {
+        AlgoritmoDelBanquero algoritmoDelBanquero = new AlgoritmoDelBanquero(comision,precioNoche);
+        return algoritmoDelBanquero.calcularNuevaCantidad();
+    }
+
 }

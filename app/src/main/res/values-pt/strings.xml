@@ -237,5 +237,9 @@
 
     <string name="FireAlert_Title">ALERTA DE INCÊNDIO</string>
     <string name="EarthquakeAlert_Title">ALERTA DE TERREMOTO</string>
+    <string name="label_price_total">Preço total:</string>
+    <string name="label_reservation_dates">Datas de reserva:</string>
+    <string name="button_confirm">Confirmar</string>
+    <string name="toast_house_rented">Casa alugada com sucesso</string>
 
 </resources>

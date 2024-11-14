@@ -237,5 +237,9 @@
 
     <string name="FireAlert_Title">FIRE ALERT</string>
     <string name="EarthquakeAlert_Title">EARTHQUAKE ALERT</string>
+    <string name="label_price_total">Total Price:</string>
+    <string name="label_reservation_dates">Reservation Dates:</string>
+    <string name="button_confirm">Confirm</string>
+    <string name="toast_house_rented">House rented successfully</string>
 
 </resources>
