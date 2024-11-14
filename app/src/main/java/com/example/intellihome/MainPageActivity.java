@@ -58,6 +58,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     private boolean isConnected = false;
     private final List<String> mensajesRecibidos = new ArrayList<>();
     private Uri uriHouse;
+    private List<Uri> listUrisHouse;
 
     //Conexión con servidor
     private Socket socket;
@@ -198,21 +199,46 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         elements = new ArrayList<>();
         originalElements = new ArrayList<>();
 
+        listUrisHouse = obtenerUrisDeImagenes();
+
         List<String> rules1 = new ArrayList<>();
         rules1.add("No smoking");
         rules1.add("No pets");
 
-        List<String> amenities1 = new ArrayList<>();
-        amenities1.add("Pool");
-        amenities1.add("Wi-Fi");
-        amenities1.add("Parking");
+        List<String> rules2 = new ArrayList<>();
+        rules2.add("No parties");
+        rules2.add("No loud music");
+
+        List<String> rules3 = new ArrayList<>();
+        rules3.add("No smoking");
+        rules3.add("No loud music");
+
+        List<String> uriStrings = new ArrayList<>();
+        for (Uri uri : listUrisHouse) {
+            uriStrings.add(uri.toString());
+        }
 
         if (mensajesRecibidos == null || mensajesRecibidos.isEmpty()) {
-            Log.d("COMMAND007", "NULL");
+            Log.d("COMMAND", "NULL");
         } else {
+            int index = 0;
+            List<String> rules = new ArrayList<>();
+
             for (String command : mensajesRecibidos) {
-                Log.d("COMMAND006", command);
+                Log.d("COMMAND", command);
                 GetHouseInfo house1 = new GetHouseInfo(command);
+
+                switch (index) {
+                    case 0:
+                        rules = rules1;
+                        break;
+                    case 1:
+                        rules = rules2;
+                        break;
+                    case 2:
+                        rules = rules3;
+                        break;
+                }
 
                 elements.add(new PropertyModule(
                         house1.getNombreCasa(),
@@ -224,14 +250,14 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
                         house1.getDuenoDeVivienda(),
                         house1.getLatitud(),
                         house1.getLongitud(),
-                        null,
+                        rules,
                         house1.getAmenidades(),
-                        null
+                        uriStrings,
+                        index
                 ));
+                index++;
             }
         }
-
-        elements.add(new PropertyModule("Casa 1", "Apartment", "4X4", "Casa moderna", "2", "1500", "Juan Pérez", "35.6895", "139.6917", null, amenities1, null));
 
         originalElements.addAll(elements);
 
@@ -440,7 +466,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
             // Si algo falla, manejamos el error aquí
             Log.e("ObtenerImagen", "Error al obtener el Uri de la imagen: " + e.getMessage());
         });
-        */
+
 
         elements.add(new PropertyModule(house.getNombreCasa(),
                 house.getHouseType(),
@@ -453,5 +479,24 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
                 house.getLongitud(),
                 null,
                 house.getAmenidades(), null));
+         */
+    }
+
+
+    private List<Uri> obtenerUrisDeImagenes() {
+        List<Uri> uris = new ArrayList<>();
+
+        int[] drawableIds = {
+                R.drawable.house14,
+                R.drawable.house15,
+                R.drawable.house18
+        };
+
+        for (int drawableId : drawableIds) {
+            Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + drawableId);
+            uris.add(uri);
+        }
+
+        return uris;
     }
 }
