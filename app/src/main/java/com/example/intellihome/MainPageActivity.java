@@ -56,7 +56,7 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     private ImageButton tagsbtn;
     private boolean isConnected = false;
     private List<String> mensajesRecibidos = new ArrayList<>();
-
+    private Uri uriHouse;
     //Conexión con servidor
     private Socket socket;
     private PrintWriter out;
@@ -223,19 +223,6 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         amenities5.add("Wi-Fi");
         amenities5.add("Pool");
 
-        GetHouseInfo houseInfo;
-        for (String name : listaCasas) {
-            try {
-                houseInfo = new GetHouseInfo(name);
-                elements.add(new PropertyModule(name, "Apartament", "4X4", houseInfo.getDescripcionGeneral(), houseInfo.getNumeroHabitaciones(), houseInfo.getPrecio(), houseInfo.getDuenoDeVivienda(), houseInfo.getLatitud(), houseInfo.getLongitud(), rules1, houseInfo.getAmenidades(), null));
-
-                Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-            } catch (Exception e){
-                Log.e("HouseError", "Error al cargar la casa: " + e.getMessage());
-                Toast.makeText(this, "!Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }
-
         originalElements.addAll(elements);
 
         CardViewAdapter cardViewAdapter = new CardViewAdapter(elements, this, new CardViewAdapter.OnItemClickListener() {
@@ -247,6 +234,8 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(cardViewAdapter);
+        filter("");
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 
     public void filter(String strSearch) {
@@ -373,10 +362,13 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
                     try {
                         String message;
                         while ((message = in.nextLine()) != null)
+                        {
                             if (!mensajesRecibidos.contains(message)) {
+                                Log.d("MENSAJESREPETIDOS", message);
                                 setNewHouse(message);
                                 mensajesRecibidos.add(message); // Solo se agrega si el mensaje es nuevo
                             }
+                        }
                     } catch (Exception e) {
                         Log.d("MainPageActivity", "Error al leer mensajes desde el servidor");
                         e.printStackTrace();
@@ -420,23 +412,40 @@ public class MainPageActivity extends AppCompatActivity implements NavigationVie
     public void setNewHouse(String message)
     {
         Log.d("MainPageActivity", "Se inició la creacion de objeto GetHouseInfo");
-        for (String casa : listaCasas) {
-            if (!message.startsWith(casa)) {
-                GetHouseInfo house = new GetHouseInfo(message);
-                //Task<List<Uri>> uris = house.getHouseImageUris();
-                elements.add(new PropertyModule(house.getNombreCasa(),
-                        "Apartament",
-                        "4X4",
-                        house.getDescripcionGeneral(),
-                        house.getNumeroHabitaciones(),
-                        house.getPrecio(),
-                        house.getDuenoDeVivienda(),
-                        house.getLatitud(),
-                        house.getLongitud(),
-                        null,
-                        house.getAmenidades(), null
-                        ));
-            }
-        }
+        List<Uri> listUrisHouse = new ArrayList<>();
+        GetHouseInfo house = new GetHouseInfo(message);
+        Task<Uri> uriTask = house.getHouseImageUri();
+
+        uriTask.addOnSuccessListener(uri -> {
+            // Cuando se obtiene el Uri, lo asignamos a la variable uriHouse
+            uriHouse = uri;
+
+            // Si deseas agregarlo a la lista de Uris
+            listUrisHouse.add(uriHouse);
+
+            // Procesamos la imagen con el Uri obtenido
+            house.procesarImagen(uri);
+
+            // Opcional: Si también quieres descargar la imagen
+            house.downloadImage(uriHouse);  // Si necesitas descargar la imagen a local
+
+            Log.d("UriDeCasaAnadido", "Se creó foto");
+        }).addOnFailureListener(e -> {
+            // Si algo falla, manejamos el error aquí
+            Log.e("ObtenerImagen", "Error al obtener el Uri de la imagen: " + e.getMessage());
+        });
+
+        elements.add(new PropertyModule(house.getNombreCasa(),
+                "Apartament",
+                "4X4",
+                house.getDescripcionGeneral(),
+                house.getNumeroHabitaciones(),
+                house.getPrecio(),
+                house.getDuenoDeVivienda(),
+                house.getLatitud(),
+                house.getLongitud(),
+                null,
+                house.getAmenidades(), null
+                ));
     }
 }
