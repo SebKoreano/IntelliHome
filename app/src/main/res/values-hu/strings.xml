@@ -204,7 +204,7 @@
     <string name="biometric_invalid_fingerprint">Érvénytelen ujjlenyomat</string>
     <string name="biometric_valid_fingerprint">Érvényes ujjlenyomat</string>
     <string name="biometric_authentication_error">Hitelesítési hiba</string>
-    <string name="Monitoreo">Monitoring">Fényfigyelés és -vezérlés</string>
+    <string name="Monitoreo">Belföldi felügyelet és ellenőrzés</string>
     <string name="Bano">Fürdőszoba</string>
     <string name="Fuego">Tűz</string>
     <string name="Sismos">Földrengések</string>
