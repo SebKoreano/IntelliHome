@@ -204,7 +204,7 @@
     <string name="biometric_invalid_fingerprint">Huella invalida</string>
     <string name="biometric_valid_fingerprint">Huella valida</string>
     <string name="biometric_authentication_error">Error en la autenticación</string>
-    <string name="Monitoreo">Monitoreo y Control de Luces</string>
+    <string name="Monitoreo">Monitoreo y Control de Casa</string>
     <string name="Bano">Baño</string>
     <string name="Fuego">Fuego</string>
     <string name="Sismos">Sismos</string>

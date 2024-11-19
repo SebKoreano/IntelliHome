@@ -204,7 +204,7 @@
     <string name="biometric_invalid_fingerprint">Impressão digital inválida</string>
     <string name="biometric_valid_fingerprint">Impressão digital válida</string>
     <string name="biometric_authentication_error">Erro de autenticação</string>
-    <string name="Monitoreo">Monitoramento e Controle de Luz</string>
+    <string name="Monitoreo">Monitoramento e Controle Doméstico</string>
     <string name="Bano">Banheiro</string>
     <string name="Fuego">Fogo</string>
     <string name="Sismos">Terremotos</string>
