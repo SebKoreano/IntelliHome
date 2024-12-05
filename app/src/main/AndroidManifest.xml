@@ -27,7 +27,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyC5Xy3Y-UblR89jL0Ig3ffdmirmgkXejvQ" />
+            android:value="[GOOGLE API KEY]" />
 
         <activity android:name=".HouseRental" />
         <activity android:name=".RegisterActivity" />
