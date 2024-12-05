@@ -26,11 +26,11 @@
     <string name="casaplaRegisterActivity">Tengerparti ház</string>
     <string name="cabañaRegisterActivity">Kabina</string>
     <string name="pisocciuRegisterActivity">Városi lakás</string>
-    <string name="x4RegisterActivity">4x4</string>
+    <string name="x4RegisterActivity">Ferdehátú</string>
     <string name="sedanRegisterActivity">Sedán</string>
     <string name="pickupRegisterActivity">Pickup</string>
     <string name="suvRegisterActivity">SUV</string>
-    <string name="camionetaRegisterActivity">Kisteherautó</string>
+    <string name="camionetaRegisterActivity">átváltható</string>
     <string name="sanjoseRegisterActivity">San José</string>
     <string name="alajuelaRegisterActivity">Alajuela</string>
     <string name="herediaRegisterActivity">Herédia</string>
@@ -109,4 +109,147 @@
     <string name="section12">12. Kapcsolat</string>
     <string name="section12_content">Bármilyen kérdés vagy észrevétel esetén kérjük, vegye fel velünk a kapcsolatot az intellihome@gmail.com címen.</string>
     <string name="btn_continue">Folytatás</string>
+    <string name="signUp">Nyilvántartás</string>
+    <string name="configuraciones">Beállítások elemre</string>
+    <string name="publicar_casa">Post Home</string>
+    <string name="monitorear_viviendas">Monitor Homes</string>
+    <string name="perfil">Profil</string>
+    <string name="buscar">Keres</string>
+    <string name="pagina_principal">Főoldal</string>
+    <string name="open_nav_drawer">Nyissa meg a menüt</string>
+    <string name="close_nav_drawer">Menü bezárása</string>
+    <string name="descripcionTitle">Leírás</string>
+    <string name="descripcionHint">Adjon meg egy leírást...</string>
+    <string name="numHabitacionesTitle">Szobák száma</string>
+    <string name="precioPorNocheTitle">Ár éjszakánként</string>
+    <string name="precioPorNocheHint">Adja meg az éjszakánkénti árat</string>
+    <string name="imagenesDeLaCasaTitle">A ház képei</string>
+    <string name="reglasDeUsoTitle">Használati szabályok</string>
+    <string name="amenidadesTitle">Felszereltség</string>
+    <string name="btnAdd">+</string>
+    <string name="tipoCasaHint">Ház típusa</string>
+    <string name="vehiculoHint">Jármű</string>
+    <string name="checkboxHours">Check In 15:00 / Check Out 11:00</string>
+    <string name="btnPublish">Publicar</string>
+    <string name="reglasHint">Szabályok #</string>
+    <string name="amenidadHint">Kényelmi #</string>
+    <string name="descripcionHint2">Leírás</string>
+    <string name="precioPorNocheHint2">Ár éjszakánként</string>
+    <string name="numHabitaciones">Szobák száma</string>
+    <string name="btnAddReglas">Szabály hozzáadása</string>
+    <string name="btnAddAmenidades">Kényelmi hozzáadása</string>
+    <string name="btnPhoto">Kép hozzáadása</string>
+    <string name="ubicacion">Elhelyezkedés</string>
+    <string name="elegir_ubicaci_n">Válasszon helyet</string>
+    <string name="hint_latitud">Szélesség: </string>
+    <string name="hint_longitud">Hossz: </string>
+    <string name="aceptar">Elfogadás</string>
+    <string name="maxFotoCasa">Házonként maximum 10 fotó lehet</string>
+    <string name="publicarCasa">A ház kiadása...</string>
+    <string name="validarDescripcion">A leírás nem lehet üres</string>
+    <string name="validarPrecio">Az ár nem lehet üres</string>
+    <string name="validarUbicacion">Ki kell választani egy helyet</string>
+    <string name="validarFoto">Legalább egy fényképet hozzá kell adnia</string>
+    <string name="validarReglas">Legalább egy használati szabályt hozzá kell adnia</string>
+    <string name="validarAmenidades">Legalább egy kényelmi szolgáltatást ki kell választania</string>
+    <string name="validarcheckInCheckOut">El kell fogadnia a be- és kijelentkezés feltételeit</string>
+    <string name="ok">Rendben</string>
+    <string name="seleccionAmenidades">Válassza a Felszerelések lehetőséget</string>
+    <string name="amenidadSeleccionadas">Válogatott szolgáltatások</string>
+    <string name="amenidadesSeleccionadas">Kiválasztott</string>
+    <string name="errorUbicacion">A helyszín nem sikerült</string>
+    <string name="labelTitulo">Rezidencia címe</string>
+    <string name="inputTitulo">Adjon meg egy címet a rezidenciájához</string>
+    <string name="errorTitulo">A cím nem lehet üres</string>
+    <string-array name="amenities_array">
+        <item>Felszerelt Konyha</item>
+        <item>Fűtés</item>
+        <item>Légkondicionáló</item>
+        <item>Ingyenes Wi-Fi</item>
+        <item>Kábel TV</item>
+        <item>Mosógép és Szárító</item>
+        <item>Kert</item>
+        <item>Medence</item>
+        <item>Grillező Terület</item>
+        <item>Biztonság</item>
+        <item>Edzőterem</item>
+        <item>Terasz</item>
+        <item>Erkély</item>
+        <item>Fürdőszobás Szoba</item>
+        <item>Kültéri Bútor</item>
+        <item>Mosogatógép</item>
+        <item>Kávéfőző</item>
+        <item>Törölközők Tartalmazva</item>
+        <item>Közös Terek Hozzáférése</item>
+        <item>Kanapéágy</item>
+        <item>Kiegészítő Takarítási Szolgáltatás</item>
+        <item>Közeli Tömegközlekedés</item>
+        <item>Közeli Hegy</item>
+        <item>Munkahely</item>
+        <item>Szórakozás</item>
+        <item>Kandalló</item>
+        <item>Nagysebességű Wi-Fi</item>
+    </string-array>
+    <string name="Propietario">Tulajdonos</string>
+    <string name="Rent">Bérlés</string>
+
+    <string name="humedad">Nedvesség:</string>
+
+    <string name="FechaInicio">Kezdeti időpont</string>
+    <string name="FechaFinal">Végső időpont</string>
+    <string name="biometric_prompt_title">Hitelesítés</string>
+    <string name="biometric_prompt_subtitle">Használja az ujjlenyomatát a belépéshez</string>
+    <string name="biometric_prompt_cancel">Mégse</string>
+    <string name="biometric_no_hardware">Az eszköz nem kompatibilis a biometrikus azonosítással</string>
+    <string name="biometric_invalid_fingerprint">Érvénytelen ujjlenyomat</string>
+    <string name="biometric_valid_fingerprint">Érvényes ujjlenyomat</string>
+    <string name="biometric_authentication_error">Hitelesítési hiba</string>
+    <string name="Monitoreo">Belföldi felügyelet és ellenőrzés</string>
+    <string name="Bano">Fürdőszoba</string>
+    <string name="Fuego">Tűz</string>
+    <string name="Sismos">Földrengések</string>
+    <string name="Puerta">Ajtó</string>
+    <string name="Humedad">Páratartalom</string>
+    <string name="Sala">Salão</string>
+    <string name="Pila">Mosogatóban</string>
+
+    <string name="FireAlert_Message">
+        *TŰZRIADÓ*\n\n
+        Magas tűzszintet észleltek az otthonban. Kérjük, az alábbi lépéseket azonnal kövesse:\n\n
+        1. Győződjön meg róla, hogy minden lakó elhagyja az épületet.\n
+        2. Hívja a sürgősségi szolgálatokat a _911_ számot.\n
+        3. Ha biztonságos, próbálja eloltani a tüzet tűzoltó készülék segítségével.\n
+        4. Várjon, amíg a sürgősségi szolgáltatások megérkeznek.\n\n
+        _A biztonság az első! Ne próbálja meg eloltani a tüzet megfelelő felszerelés nélkül._\n\n
+        Ezt az üzenetet automatikusan küldte a _*IntelliHome*_ megfigyelőrendszer.
+    </string>
+
+    <string name="EarthquakeAlert_Message">
+        *FÖLDRENGÉS RIASZTÁS*\n\n
+        Szeizmikus aktivitást észleltek a területen. Kérjük, kövesse az alábbi biztonsági lépéseket:\n\n
+        1. Maradjon nyugodt és keressen biztonságos helyet.\n
+        2. Tartózkodjon az ablakoktól, tükröktől és olyan tárgyaktól, amelyek leeshetnek.\n
+        3. Ha bent van, húzódjon be egy erős asztal alá, vagy egy teherhordó fal mellé.\n
+        4. Ha kívül van, távolodjon el az épületektől, fáktól és elektromos vezetékektől.\n\n
+        *Ne feledje:* Várja meg, amíg a rengés véget ér, mielőtt elhagyná az épületet, és kerülje a lift használatát.\n\n
+        Ezt az üzenetet automatikusan küldte a _*IntelliHome*_ megfigyelőrendszer.
+    </string>
+
+    <string name="FireAlert_Title">TŰZRIADÓ</string>
+    <string name="EarthquakeAlert_Title">FÖLDRENGÉS RIADÓ</string>
+    <string name="label_price_total">Teljes ár:</string>
+    <string name="label_reservation_dates">Foglalási dátumok:</string>
+    <string name="button_confirm">Megerősít</string>
+    <string name="toast_house_rented">A ház sikeresen kiadva</string>
+    <string name="seleccion_fecha_inicio">Válassza ki a kezdő dátumot</string>
+    <string name="seleccion_fecha_fin">Válassza ki a befejező dátumot</string>
+    <string name="check_in">Bejelentkezés</string>
+    <string name="check_out">Kijelentkezés</string>
+    <string name="alquilar">Bérlés</string>
+    <string name="error_fecha_no_seleccionada">Kérjük, válassza ki mindkét dátumot</string>
+    <string name="error_checkboxes_no_seleccionados">Kérjük, válassza ki a be- és kijelentkezést</string>
+    <string name="error_fecha_inicio_mayor">A kezdési dátumnak a befejezés előtt kell lennie</string>
+    <string name="error_parse_fecha">Hiba a dátumok feldolgozásakor</string>
+
+
 </resources>

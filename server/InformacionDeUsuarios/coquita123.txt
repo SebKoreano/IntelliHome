@@ -1,0 +1,11 @@
+
+Nombre:Hola
+Apellido:jola
+Username:coquita123
+Telefono:12345678
+Correo:aaa@gmail.com
+Hobbies:hola
+Vehiculo:SUV
+CasaPreferencia:Cabaña
+Domicilio:Guanacaste
+FechaNacimiento:7/11/1980

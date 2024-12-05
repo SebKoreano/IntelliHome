@@ -26,11 +26,11 @@
     <string name="casaplaRegisterActivity">Beach House</string>
     <string name="cabañaRegisterActivity">Cabin</string>
     <string name="pisocciuRegisterActivity">City Apartment</string>
-    <string name="x4RegisterActivity">4x4</string>
+    <string name="x4RegisterActivity">Hatchback</string>
     <string name="sedanRegisterActivity">Sedan</string>
     <string name="pickupRegisterActivity">PickUp</string>
     <string name="suvRegisterActivity">SUV</string>
-    <string name="camionetaRegisterActivity">Truck</string>
+    <string name="camionetaRegisterActivity">Convertible</string>
     <string name="sanjoseRegisterActivity">San José</string>
     <string name="alajuelaRegisterActivity">Alajuela</string>
     <string name="herediaRegisterActivity">Heredia</string>
@@ -109,5 +109,147 @@
     <string name="section12">12. Contact</string>
     <string name="section12_content">For any questions or concerns about these terms, please contact us at intellihome@gmail.com.</string>
     <string name="btn_continue">Continue</string>
+    <string name="signUp">Sign-Up</string>
+    <string name="configuraciones">Settings</string>
+    <string name="publicar_casa">Publish Home</string>
+    <string name="monitorear_viviendas">Monitor Homes</string>
+    <string name="perfil">Profile</string>
+    <string name="buscar">Search</string>
+    <string name="pagina_principal">Home</string>
+    <string name="open_nav_drawer">Open Menu</string>
+    <string name="close_nav_drawer">Close Menu</string>
+    <string name="descripcionTitle">Description</string>
+    <string name="descripcionHint">Enter a description...</string>
+    <string name="numHabitacionesTitle">Num. Rooms</string>
+    <string name="precioPorNocheTitle">Price per night</string>
+    <string name="precioPorNocheHint">Enter the price per night</string>
+    <string name="imagenesDeLaCasaTitle">House images</string>
+    <string name="reglasDeUsoTitle">Usage rules</string>
+    <string name="amenidadesTitle">Amenities</string>
+    <string name="btnAdd">+</string>
+    <string name="tipoCasaHint">House type</string>
+    <string name="vehiculoHint">Vehicle</string>
+    <string name="checkboxHours">Check In 3:00pm / Check Out 11:00am</string>
+    <string name="btnPublish">Publish</string>
+    <string name="reglasHint">Rules #</string>
+    <string name="amenidadHint">Amenity #</string>
+    <string name="descripcionHint2">Description</string>
+    <string name="precioPorNocheHint2">Price per night</string>
+    <string name="numHabitaciones">Number of rooms</string>
+    <string name="btnAddReglas">Add Rule</string>
+    <string name="btnAddAmenidades">Add Amenity</string>
+    <string name="btnPhoto">Add Photo</string>
+    <string name="ubicacion">Location</string>
+    <string name="elegir_ubicaci_n">Select location</string>
+    <string name="hint_latitud">Width: </string>
+    <string name="hint_longitud">Length: </string>
+    <string name="aceptar">Accept</string>
+    <string name="maxFotoCasa">There is a maximum of 10 photos per house</string>
+    <string name="publicarCasa">Publishing the house...</string>
+    <string name="validarDescripcion">Description cannot be empty</string>
+    <string name="validarPrecio">Price cannot be empty</string>
+    <string name="validarUbicacion">You must choose a location</string>
+    <string name="validarFoto">You must add at least one photo</string>
+    <string name="validarReglas">You must add at least one usage rule</string>
+    <string name="validarAmenidades">You must select at least one amenity</string>
+    <string name="validarcheckInCheckOut">You must accept the check-in and check-out terms</string>
+    <string name="ok">Ok</string>
+    <string name="seleccionAmenidades">Select Amenities</string>
+    <string name="amenidadSeleccionadas">Selected amenities: </string>
+    <string name="amenidadesSeleccionadas">Selected: </string>
+    <string name="errorUbicacion">Location not obtained</string>
+    <string name="labelTitulo">Residence title</string>
+    <string name="inputTitulo">Enter a title for your residence</string>
+    <string name="errorTitulo">The title cannot be empty</string>
+    <string-array name="amenities_array">
+        <item>Equipped Kitchen</item>
+        <item>Heating</item>
+        <item>Air Conditioning</item>
+        <item>Free WiFi</item>
+        <item>Cable Television</item>
+        <item>Washer and Dryer</item>
+        <item>Garden</item>
+        <item>Pool</item>
+        <item>BBQ Area</item>
+        <item>Security</item>
+        <item>Gym</item>
+        <item>Terrace</item>
+        <item>Balcony</item>
+        <item>Room with Bathroom</item>
+        <item>Outdoor Furniture</item>
+        <item>Dishwasher</item>
+        <item>Coffee Maker</item>
+        <item>Towels Included</item>
+        <item>Access to Common Areas</item>
+        <item>Sofa Bed</item>
+        <item>Additional Cleaning Service</item>
+        <item>Nearby Public Transport</item>
+        <item>Nearby Mountain</item>
+        <item>Workspace</item>
+        <item>Entertainment</item>
+        <item>Fireplace</item>
+        <item>High-Speed WiFi</item>
+    </string-array>
+    <string name="Propietario">Owner</string>
+    <string name="Rent">Rent</string>
+
+    <string name="humedad">Humidity:</string>
+
+    <string name="FechaInicio">Start Date</string>
+    <string name="FechaFinal">End Date</string>
+    <string name="biometric_prompt_title">Authentication</string>
+    <string name="biometric_prompt_subtitle">Use your fingerprint to log in</string>
+    <string name="biometric_prompt_cancel">Cancel</string>
+    <string name="biometric_no_hardware">Device not compatible with biometrics</string>
+    <string name="biometric_invalid_fingerprint">Invalid fingerprint</string>
+    <string name="biometric_valid_fingerprint">Valid fingerprint</string>
+    <string name="biometric_authentication_error">Authentication error</string>
+    <string name="Monitoreo">House Monitoring and Control</string>
+    <string name="Bano">Bathroom</string>
+    <string name="Fuego">Fire</string>
+    <string name="Sismos">Earthquakes</string>
+    <string name="Puerta">Door</string>
+    <string name="Humedad">Humidity</string>
+    <string name="Sala">Hall</string>
+    <string name="Pila">Sink</string>
+
+    <string name="FireAlert_Message">
+        *FIRE ALERT*\n\n
+        High levels of fire have been detected in the home. Please follow these steps immediately:\n\n
+        1. Ensure all occupants evacuate the building.\n
+        2. Call emergency services at *911*.\n
+        3. If safe, attempt to extinguish the fire using a fire extinguisher.\n
+        4. Wait for emergency services to arrive at the location.\n\n
+        _Safety comes first! Do not attempt to control the fire without proper equipment._\n\n
+        This message was sent automatically by the _*IntelliHome*_ monitoring system.
+    </string>
+
+    <string name="EarthquakeAlert_Message">
+        *EARTHQUAKE ALERT*\n\n
+        Seismic activity has been detected in the area. Please follow these safety steps:\n\n
+        1. Stay calm and find a safe location.\n
+        2. Stay away from windows, mirrors, and objects that could fall.\n
+        3. If indoors, get under a sturdy table or next to a structural wall.\n
+        4. If outdoors, move away from buildings, trees, and power lines.\n\n
+        *Remember:* Wait until the shaking stops before evacuating the building and avoid using elevators.\n\n
+        This message was sent automatically by the _*IntelliHome*_ monitoring system.
+    </string>
+
+    <string name="FireAlert_Title">FIRE ALERT</string>
+    <string name="EarthquakeAlert_Title">EARTHQUAKE ALERT</string>
+    <string name="label_price_total">Total Price:</string>
+    <string name="label_reservation_dates">Reservation Dates:</string>
+    <string name="button_confirm">Confirm</string>
+    <string name="toast_house_rented">House rented successfully</string>
+    <string name="seleccion_fecha_inicio">Select start date</string>
+    <string name="seleccion_fecha_fin">Select end date</string>
+    <string name="check_in">Check-In</string>
+    <string name="check_out">Check-Out</string>
+    <string name="alquilar">Rent</string>
+    <string name="error_fecha_no_seleccionada">Please select both dates</string>
+    <string name="error_checkboxes_no_seleccionados">Please select check-in and check-out</string>
+    <string name="error_fecha_inicio_mayor">Start date must be before end date</string>
+    <string name="error_parse_fecha">Error processing dates</string>
+
 
 </resources>

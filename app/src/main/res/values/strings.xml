@@ -26,11 +26,11 @@
     <string name="casaplaRegisterActivity">Casa en la playa</string>
     <string name="cabañaRegisterActivity">Cabaña</string>
     <string name="pisocciuRegisterActivity">Piso en la ciudad</string>
-    <string name="x4RegisterActivity">4x4</string>
+    <string name="x4RegisterActivity">Hatchback</string>
     <string name="sedanRegisterActivity">Sedán</string>
     <string name="pickupRegisterActivity">PickUp</string>
     <string name="suvRegisterActivity">SUV</string>
-    <string name="camionetaRegisterActivity">Camioneta</string>
+    <string name="camionetaRegisterActivity">Convertible</string>
     <string name="sanjoseRegisterActivity">San José</string>
     <string name="alajuelaRegisterActivity">Alajuela</string>
     <string name="herediaRegisterActivity">Heredia</string>
@@ -49,7 +49,7 @@
     <string name="mincaractcontraRegisterActivity">• Mínimo 8 caracteres</string>
     <string name="tomarfotoRegisterActivity">Tomar foto</string>
     <string name="selectgaleRegisterActivity">Seleccionar de la galería</string>
-    <string name="selectimaRegisterActivity">Seleccionar imagen</string>
+    <string name="selectimaRegisterActivity">Seleccionar imágen</string>
     <string name="accesoimaRegisterActivity">Permiso de acceso a imágenes denegado</string>
     <string name="elegirrolRegisterActivity">Debe elegir un rol en la aplicación</string>
     <string name="campoobliRegisterActivity">Este campo es obligatorio </string>
@@ -109,4 +109,146 @@
     <string name="section12">12. Contacto</string>
     <string name="section12_content">Para cualquier pregunta o inquietud sobre estos términos, por favor contáctenos en intellihome@gmail.com.</string>
     <string name="btn_continue">Continuar</string>
+    <string name="signUp">Registrarse</string>
+    <string name="configuraciones">Configuraciones</string>
+    <string name="publicar_casa">Publicar Casa</string>
+    <string name="monitorear_viviendas">Monitorear Viviendas</string>
+    <string name="perfil">Perfil</string>
+    <string name="buscar">Buscar</string>
+    <string name="pagina_principal">Página Principal</string>
+    <string name="open_nav_drawer">Abrir Menú</string>
+    <string name="close_nav_drawer">Cerar Menú</string>
+    <string name="descripcionTitle">Descripción</string>
+    <string name="descripcionHint">Ingrese una descripción...</string>
+    <string name="numHabitacionesTitle">Num. Habitaciones</string>
+    <string name="precioPorNocheTitle">Precio por noche</string>
+    <string name="precioPorNocheHint">Ingrese el precio por noche</string>
+    <string name="imagenesDeLaCasaTitle">Imágenes de la casa</string>
+    <string name="reglasDeUsoTitle">Reglas de uso</string>
+    <string name="amenidadesTitle">Amenidades</string>
+    <string name="btnAdd">+</string>
+    <string name="tipoCasaHint">Tipo de casa</string>
+    <string name="vehiculoHint">Vehículo</string>
+    <string name="checkboxHours">Check In 3:00pm / Check Out 11:00am</string>
+    <string name="btnPublish">Publicar</string>
+    <string name="reglasHint">Reglas #</string>
+    <string name="amenidadHint">Amenidad #</string>
+    <string name="descripcionHint2">Descripción</string>
+    <string name="precioPorNocheHint2">Precio por noche</string>
+    <string name="numHabitaciones">Número de habitaciones</string>
+    <string name="btnAddReglas">Añadir Regla</string>
+    <string name="btnAddAmenidades">Añadir Amenidad</string>
+    <string name="btnPhoto">Añadir Foto</string>
+    <string name="ubicacion">Ubicación</string>
+    <string name="elegir_ubicaci_n">Elegir ubicación</string>
+    <string name="hint_latitud">Latitud: </string>
+    <string name="hint_longitud">Longitud: </string>
+    <string name="aceptar">Aceptar</string>
+    <string name="maxFotoCasa">Hay un maximo de 10 fotos por casa</string>
+    <string name="publicarCasa">Publicando la casa...</string>
+    <string name="validarDescripcion">La descripción no puede estar vacía</string>
+    <string name="validarPrecio">El precio no puede estar vacío</string>
+    <string name="validarUbicacion">Debe elegir una ubicación</string>
+    <string name="validarFoto">Debe añadir al menos una foto</string>
+    <string name="validarReglas">Debe añadir al menos una regla de uso</string>
+    <string name="validarAmenidades">Debe seleccionar al menos una amenidad</string>
+    <string name="validarcheckInCheckOut">Debe aceptar los términos de check-in y check-out</string>
+    <string name="ok">Ok</string>
+    <string name="seleccionAmenidades">Selecciona Amenidades</string>
+    <string name="amenidadSeleccionadas">Amenidades seleccionadas: </string>
+    <string name="amenidadesSeleccionadas">Amenidades seleccionadas: </string>
+    <string name="errorUbicacion">No se obtuvo la ubicación</string>
+    <string name="labelTitulo">Titulo de la residencia</string>
+    <string name="inputTitulo">Ingrese un titulo para su residencia</string>
+    <string name="errorTitulo">El titulo no puede estar vacío</string>
+    <string-array name="amenities_array">
+        <item>Cocina Equipada</item>
+        <item>Calefacción</item>
+        <item>Aire Acondicionado</item>
+        <item>WiFi Gratuito</item>
+        <item>Televisión Por Cable</item>
+        <item>Lavadora y Secadora</item>
+        <item>Jardín</item>
+        <item>Piscina</item>
+        <item>Zona BBQ</item>
+        <item>Seguridad</item>
+        <item>Gimnasio</item>
+        <item>Terraza</item>
+        <item>Balcón</item>
+        <item>Habitación con Baño</item>
+        <item>Muebles de Exterior</item>
+        <item>Lavavajillas</item>
+        <item>Cafetera</item>
+        <item>Toallas incluidas</item>
+        <item>Acceso a Áreas Comunes</item>
+        <item>Sofá Cama</item>
+        <item>Servicio de limpieza Adicional</item>
+        <item>Transporte Público Cercano</item>
+        <item>Montaña Cercana</item>
+        <item>Área de Trabajo</item>
+        <item>Entretenimiento</item>
+        <item>Chimenea</item>
+        <item>WiFi de alta velocidad</item>
+    </string-array>
+    <string name="Propietario">Propietario</string>
+    <string name="Rent">Alquilar</string>
+
+    <string name="humedad">Húmedad:</string>
+
+    <string name="FechaInicio">Fecha Inicio</string>
+    <string name="FechaFinal">Fecha Final</string>
+    <string name="biometric_prompt_title">Autenticación</string>
+    <string name="biometric_prompt_subtitle">Usa tu huella para ingresar</string>
+    <string name="biometric_prompt_cancel">Cancelar</string>
+    <string name="biometric_no_hardware">Dispositivo no compatible con biometría</string>
+    <string name="biometric_invalid_fingerprint">Huella invalida</string>
+    <string name="biometric_valid_fingerprint">Huella valida</string>
+    <string name="biometric_authentication_error">Error en la autenticación</string>
+    <string name="Monitoreo">Monitoreo y Control de Casa</string>
+    <string name="Bano">Baño</string>
+    <string name="Fuego">Fuego</string>
+    <string name="Sismos">Sismos</string>
+    <string name="Puerta">Puerta</string>
+    <string name="Humedad">Humedad</string>
+    <string name="Sala">Sala</string>
+    <string name="Pila">Pila</string>
+
+    <string name="FireAlert_Message">
+        *ALERTA DE INCENDIO*\n\n
+        Se han detectado niveles altos de fuego en la vivienda. Por favor, siga los siguientes pasos inmediatamente:\n\n
+        1. Asegúrese de que todos los ocupantes evacuen el lugar.\n
+        2. Llame a los servicios de emergencia al _911_.\n
+        3. Si es seguro hacerlo, intente apagar el fuego utilizando un extintor.\n
+        4. Espere a que los servicios de emergencia lleguen al lugar.\n\n
+        _¡La seguridad es lo primero! No intente controlar el incendio sin el equipo adecuado._\n\n
+        Este mensaje ha sido enviado automáticamente por el sistema de monitoreo _*IntelliHome*_.
+    </string>
+
+    <string name="EarthquakeAlert_Message">
+        *ALERTA DE SISMO*\n\n
+        Se ha detectado actividad sísmica en la zona. Por favor, siga estos pasos de seguridad:\n\n
+        1. Mantenga la calma y busque un lugar seguro.\n
+        2. Aléjese de ventanas, espejos y objetos que puedan caer.\n
+        3. Si está en el interior, colóquese debajo de una mesa resistente o al lado de una pared estructural.\n
+        4. Si está en el exterior, aléjese de edificios, árboles y cables de electricidad.\n\n
+        *Recuerde:* Espere a que el temblor termine antes de evacuar el edificio y evite usar ascensores.\n\n
+        Este mensaje ha sido enviado automáticamente por el sistema de monitoreo _*IntelliHome*_.
+    </string>
+    <string name="FireAlert_Title">ALERTA DE FUEGO</string>
+    <string name="EarthquakeAlert_Title">ALERTA DE SISMO</string>
+    <string name="label_price_total">Precio total:</string>
+    <string name="label_reservation_dates">Fechas de reserva:</string>
+    <string name="button_confirm">Confirmar</string>
+    <string name="toast_house_rented">Casa alquilada exitosamente</string>
+    <string name="seleccion_fecha_inicio">Selecciona la fecha de inicio</string>
+    <string name="seleccion_fecha_fin">Selecciona la fecha de finalización</string>
+    <string name="check_in">Check-In</string>
+    <string name="check_out">Check-Out</string>
+    <string name="alquilar">Alquilar</string>
+    <string name="error_fecha_no_seleccionada">Por favor, selecciona ambas fechas</string>
+    <string name="error_checkboxes_no_seleccionados">Por favor, selecciona check-in y check-out</string>
+    <string name="error_fecha_inicio_mayor">La fecha de inicio debe ser anterior a la fecha final</string>
+    <string name="error_parse_fecha">Error al procesar las fechas</string>
+
+
 </resources>

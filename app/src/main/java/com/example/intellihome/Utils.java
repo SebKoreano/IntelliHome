@@ -1,8 +1,13 @@
 package com.example.intellihome;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Collections;
+import java.util.List;
 //import org.apache.http.conn.util.InetAddressUtils;
 
 //Code by: exploitr - https://stackoverflow.com/users/8572503/exploitr
@@ -37,9 +42,9 @@ public class Utils {
      * Load UTF8withBOM or any ansi text file.
      * @param filename which to be converted to string
      * @return String value of File
-     * @throws java.io.IOException if error occurs
+     * @throws IOException if error occurs
      */
-    public static String loadFileAsString(String filename) throws java.io.IOException {
+    public static String loadFileAsString(String filename) throws IOException {
         final int BUFLEN=1024;
         BufferedInputStream is = new BufferedInputStream(new FileInputStream(filename), BUFLEN);
         try {
